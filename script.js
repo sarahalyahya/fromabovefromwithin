@@ -4,6 +4,11 @@
 
 document.documentElement.classList.remove('no-js');
 
+const gate = document.getElementById('gate');
+document.getElementById('launch').addEventListener('click', function(){
+  gate.hidden = true;
+  window.scrollTo(0, 0);
+});
 
 
 const BEHAVIOURS = {
