@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>From above from within</title>
 <link rel="stylesheet" href="style.css">
+<script type="module">
+  import { ModelViewerElement } from 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
+  ModelViewerElement.meshoptDecoderLocation = 'assets/meshopt_decoder.js';
+</script>
 </head>
 <body>
 
@@ -14,7 +18,8 @@
 
   <section class="scene" data-scene="opening" data-screens="3" data-register="satellite">
     <div class="stage">
-      <p class="prose">text text text text </p>
+      <!-- <p class="prose">text text text text </p> -->
+      <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom interaction-prompt="none"  exposure="0.9" shadow-intensity="0" environment-image="neutral" camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
     </div>
   </section>
 

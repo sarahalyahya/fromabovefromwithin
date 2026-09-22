@@ -23,6 +23,17 @@ const BEHAVIOURS = {
 
   */
 
+  opening: function(stage){
+    const mv = stage.querySelector('model-viewer');
+    return{
+        update: function(p){
+            // mv.cameraOrbit = (p*90) + 'deg 75deg 55%'
+            mv.cameraOrbit = (100 + p * 360) + 'deg 78deg 55%';
+
+        }
+    }
+  }
+
 };
 
 
@@ -52,10 +63,7 @@ const SCENES = Array.prototype.map.call(
   }
 );
 
-/* Behaviours run lazily, when the visitor is near. Nothing heavy is
-   built at load. Scenes are never torn down once mounted — exit() is
-   enough to stop what's expensive, and tearing down would throw away
-   whatever state the scene had. */
+
 function mount(s){
   if (s.mounted) return;
   s.mounted = true;
@@ -66,13 +74,7 @@ function mount(s){
 }
 
 
-/* ============================================================
-   THE CLOCK
-   ------------------------------------------------------------
-   One place owns scroll position. Nothing else may read
-   window.scrollY — everything asks the clock. That rule is what
-   lets you reorder scenes in the HTML without touching any of them.
-   ============================================================ */
+
 let filmLen = 0;
 let VH = window.innerHeight;
 
