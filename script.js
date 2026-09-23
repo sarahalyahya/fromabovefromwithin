@@ -7,7 +7,14 @@ document.documentElement.classList.remove('no-js');
 const gate = document.getElementById('gate');
 document.getElementById('launch').addEventListener('click', function(){
   gate.hidden = true;
-  window.scrollTo(0, 0);
+
+  
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+ 
+  buildTimeline();
+  readScroll();
+  requestAnimationFrame(render);
 });
 
 
@@ -27,6 +34,8 @@ const BEHAVIOURS = {
   }
 
   */
+
+  
 
   opening: function(stage){
     const mv = stage.querySelector('model-viewer');
@@ -57,6 +66,9 @@ const SCENES = Array.prototype.map.call(
     return {
       el: el,
       stage: stage,
+      vo:    stage.querySelector('audio'),
+      subs:  Array.prototype.slice.call(stage.querySelectorAll('.sub')),
+      shown: null,
       id: el.dataset.scene || '',
       register: el.dataset.register || '',
       screens: parseFloat(el.dataset.screens) || 3,
@@ -84,7 +96,7 @@ let filmLen = 0;
 let VH = window.innerHeight;
 
 /* data-screens is in window-heights, converted to pixels here and
-   redone on resize, so the pacing means the same thing on your
+   redone on resize, so the pacing means the same thing on 
    laptop and on a kiosk screen. */
 function buildTimeline(){
   VH = window.innerHeight;
@@ -111,6 +123,19 @@ const EDGE = 0.15;          /* fraction of a scene spent fading in / out */
 
 let currentScene = null;
 
+
+function caption(s, t){
+  let now = null;
+  for (let i = 0; i < s.subs.length; i++){
+    if (t >= parseFloat(s.subs[i].dataset.t)) now = s.subs[i];
+  }
+  if (now === s.shown) return;
+  if (s.shown) s.shown.removeAttribute('data-on');
+  if (now)     now.setAttribute('data-on', '');
+  s.shown = now;
+}
+
+
 function render(){
   SCENES.forEach(function(s){
     const p = (raw - s.start) / s.len;
@@ -132,12 +157,20 @@ function render(){
       const first = (s.active === null);
       s.active = active;
       s.el.dataset.active = active ? 'true' : 'false';
+
+      if (s.vo){
+        if (active) s.vo.play().catch(function(){});
+        else if (!first){ s.vo.pause(); s.vo.currentTime = 0; caption(s, -1); }
+      }
       if (s.api){
         if (active && s.api.enter) s.api.enter();
         else if (!active && !first && s.api.exit) s.api.exit();
       }
       if (active) currentScene = s;
     }
+
+   
+    if (near && s.vo && !s.vo.paused) caption(s, s.vo.currentTime);
 
     if (near && s.api && s.api.update) s.api.update(local, fade);
   });
@@ -180,7 +213,7 @@ window.addEventListener('resize', function(){
 
 buildTimeline();
 readScroll();
-requestAnimationFrame(render);
+
 
 film.SCENES = SCENES;   /* console: film.SCENES shows the measured timeline */
 

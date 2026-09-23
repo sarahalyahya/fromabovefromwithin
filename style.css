@@ -144,6 +144,25 @@ model-viewer.fill{
     opacity: var(--fade,1);
 }
 
+.subs{
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 14vh;
+  padding: 0 8vw;
+  text-align: center;
+}
+.sub{
+  display: none;
+  max-width: 28em;
+  margin: 0 auto;
+  font-family: var(--serif);
+  font-size: var(--t-vo);
+  line-height: 1.5;
+  background-color: #175002;
+  color: white;
+}
+.sub[data-on]{ display: block; }
+
 
 
 @media (prefers-reduced-motion: reduce){
