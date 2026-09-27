@@ -16,13 +16,22 @@
     <button id="launch" type="button">Launch</button>
 </div>
 
+<!-- ambience bus lives here, outside #film, so it never resets on a scene change
+     <audio id="ambience" class="ambience" src="assets/audio/ambience.m4a" loop preload="auto"></audio> -->
+
 <main id="film">
 
-  <section class="scene" data-scene="opening" data-screens="7" data-register="satellite">
+  <!-- Every scene gets a VO. Until its clip exists, subtitles are driven by
+       scroll: sentence i holds from p = i/n to p = (i+1)/n.
+       To retime a scene to its audio: uncomment its <audio class="vo">, then
+       put data-t="seconds" on each .sub. That scene alone switches to the mix;
+       the others keep scrolling. -->
+
+  <section class="scene" data-scene="castle" data-screens="7">
     <div class="stage">
       <!-- <p class="prose">text text text text </p> -->
       <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom interaction-prompt="none"  exposure="0.9" shadow-intensity="0" environment-image="neutral" camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
-      <audio src="assets/audio/converted.wav" preload="auto"></audio>
+      <audio class="vo" src="assets/audio/converted.wav" preload="auto"></audio>
 
       <div class="subs" lang="en">
          <p class="sub" data-t="0">This is Qal’at al Shqif Arnoun, also known as Beaufort Castle in southern Lebanon's Nabatieh Governorate</p>
@@ -33,58 +42,305 @@
     </div>
   </section>
 
-  <section class="scene" data-scene="resolution" data-screens="3" data-register="satellite">
+
+  <section class="scene" data-scene="overlook" data-screens="12">
     <div class="stage">
-      <!-- <img class="fill" src="assets/img/sat.jpg" alt=""> -->
-      <p class="prose"></p>
+      <!-- Maybe we are zooming in on it, and then a spotlight is changing direction
+           based on the narration, showing each side. // or maybe load 360 degree
+           imgs from google earth and rotate also, there's a few -->
+      <!-- <audio class="vo" src="assets/audio/02-overlook.m4a" preload="auto"></audio> -->
+      <div class="placeholder">overlook</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">The 900 year-old fortress stands 700 meters above sea level;</p>
+        <p class="sub">it sits on a 300m cliff of karstic limestone, porous and riddled with crevices.</p>
+        <p class="sub">The castle overlooks the immediate southern Lebanese landscape, the surrounding villages in Nabatieh governorate,</p>
+        <p class="sub">as well as the Litani River, the Beqaa Valley,</p>
+        <p class="sub">and, to the south of it, the modern colonial settlements of the Galilee in occupied Palestine.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="archive" data-screens="3" data-register="satellite">
+
+  <section class="scene" data-scene="drone-footage" data-screens="18">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- podcast clip plays on the source bus, under the VO. Maybe just a wave form here.
+           Then: first video on one side of the screen, black background.
+           Second video on the other side of the screen, black background.
+           [I want to say it's like a commercial drone that produces sexy footage,
+           more descriptive here] -->
+      <!-- the podcast excerpt takes its turn in the spoken track rather than
+           running under it, so its lines are timed against this scene's one
+           voice clock like any other sub -->
+      <!-- <audio class="vo" src="assets/audio/03-drone-footage.m4a" preload="auto"></audio> -->
+      <!-- <video class="fill" src="assets/video/idf-commercial-drone.mp4" muted loop playsinline></video> -->
+      <!-- <video class="fill" src="assets/video/idf-armed-drone.mp4" muted loop playsinline></video> -->
+      <div class="placeholder">drone-footage</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">The castle has been sought out throughout history for its elevated position, its view from above.</p>
+
+        <p class="sub quote">When you’re standing there, the view is incredible, you know I’m no military expert,</p>
+        <p class="sub quote">but I can see why it would be quite useful,</p>
+        <p class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.</p>
+        <p class="sub quote">Just behind you, 15 minutes' drive away, is the major South Lebanese city of Nabatieh.</p>
+
+        <p class="sub">In May 2026, the Israeli occupation forces announced that they had seized Qal’at al Shaqif Arnoun,</p>
+        <p class="sub">releasing two videos as part of their announcement.</p>
+        <p class="sub">The first was aerial footage of the ruins, seemingly captured by a commercial drone,</p>
+        <p class="sub">taken in the register of content designed to be packaged and shared.</p>
+        <p class="sub">The second video begins at a similar angle,</p>
+        <p class="sub">but this one carries crosshairs at the center of the frame, indicating that it’s footage from an armed drone.</p>
+        <p class="sub">For several seconds, the crosshairs track Israeli soldiers descending the castle’s stairs.</p>
+        <p class="sub">The image is confusing.</p>
+        <p class="sub">Briefly, I am watching the soldiers through their own apparatus.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="hover" data-screens="3" data-register="commercial drone">
+
+  <section class="scene" data-scene="all-altitudes" data-screens="10">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- Israeli footage looping, maybe both videos side by side, but at the last
+           line I zoom out to that satellite layer stack I have -->
+      <!-- <audio class="vo" src="assets/audio/04-all-altitudes.m4a" preload="auto"></audio> -->
+      <div class="placeholder">all-altitudes</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Having complete visual command of what you are trying to conquer</p>
+        <p class="sub">is an essential foundation of the infrastructure of domination.</p>
+        <p class="sub">Historically, it could have meant seizing the highest fortress.</p>
+        <p class="sub">Now it is one register of many that can go above it.</p>
+        <p class="sub">The commercial drone, the fighter drone.</p>
+        <p class="sub">Or even higher: satellite imagery.</p>
+        <p class="sub">Over time, more optimized and automated.</p>
+        <p class="sub">Perhaps the message here is that a watchful eye exists at all altitudes.</p>
+        <p class="sub">Absolute vertical exposure as an offensive weapon.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="survey" data-screens="3" data-register="commercial drone">
+
+  <section class="scene" data-scene="feed" data-screens="5">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- Zoom back into an ig feed scrolling scrolling scrolling -->
+      <!-- <audio class="vo" src="assets/audio/05-feed.m4a" preload="auto"></audio> -->
+      <!-- <video class="fill" src="assets/video/feed-scroll.mp4" muted loop playsinline></video> -->
+      <div class="placeholder">feed</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">On the receiving end, this vertical exposure has also become routine for us,</p>
+        <p class="sub">to process the wreckage and horror.</p>
+        <p class="sub">One satellite before-and-after diptych after another on the feed.</p>
+        <p class="sub">We are simultaneously enraged and increasingly distant,</p>
+        <p class="sub">“watching life on earth as if seated in the atmosphere supervising.”</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="the-stack" data-screens="3" data-register="armed drone">
+
+  <section class="scene" data-scene="planet" data-screens="8">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- black screen. Email? Or mission screenshot? I can be more animated and
+           have like an email OS UI but too much i think.
+           Then a question — smth like: What kind of image is a withheld image? -->
+      <!-- <audio class="vo" src="assets/audio/06-planet.m4a" preload="auto"></audio> -->
+      <div class="placeholder">planet</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">On April 4, 2026, the American commercial satellite company Planet Labs sent an email to its users.</p>
+        <p class="sub">Imagery of what it called the "designated area of interest" in the "Middle East conflict"</p>
+        <p class="sub">would be indefinitely withheld.</p>
+        <p class="sub">On their website, they state:</p>
+        <p class="sub quote">“Planet is driven by a mission to image all of Earth’s landmass every day,</p>
+        <p class="sub quote">and make global change visible, accessible and actionable.”</p>
+        <p class="sub">The firm now releases imagery on a case-by-case basis.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="strike" data-screens="3" data-register="armed drone">
+
+  <section class="scene" data-scene="kyl-bingaman" data-screens="6">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- black background. Something to explain what the 2-meter resolution
+           means, like a pixel comparison -->
+      <!-- <audio class="vo" src="assets/audio/07-kyl-bingaman.m4a" preload="auto"></audio> -->
+      <div class="placeholder">kyl-bingaman</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">This restriction has a precedent.</p>
+        <p class="sub">Between 1997 and 2020, the Kyl-Bingaman Amendment in US law</p>
+        <p class="sub">had prevented satellite companies from distributing high-resolution imagery of occupied Palestine.</p>
+        <p class="sub">Imagery was capped at a 2-meter-per-pixel resolution,</p>
+        <p class="sub">allowing people to identify the general urban landscape, like a neighborhood,</p>
+        <p class="sub">but not, for example, differentiate a car from a tank.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="handheld" data-screens="3" data-register="soldier">
+
+  <section class="scene" data-scene="govmap" data-screens="5">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- maybe just loading the imgs fading in -->
+      <!-- <audio class="vo" src="assets/audio/08-govmap.m4a" preload="auto"></audio> -->
+      <div class="placeholder">govmap</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">In contrast, Israel’s official public mapping service, GovMap, briefly, and some say mistakenly,</p>
+        <p class="sub">published high-resolution aerial images of Northern Gaza from 2025.</p>
+        <p class="sub">The images revealed extensive destruction, as well as military outposts.</p>
+        <p class="sub">Most images have a 13cm per pixel resolution.</p>
+        <p class="sub">Shortly after, the service re-blurred these images.</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="descent" data-screens="3" data-register="the crevice">
+
+  <section class="scene" data-scene="visibility" data-screens="12">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- maybe an image of the castle aerially, and we zoom zoom zooom zoom on a pixel.
+           Last line alt: What would it take to look from outside this arrangement? -->
+      <!-- <audio class="vo" src="assets/audio/09-visibility.m4a" preload="auto"></audio> -->
+      <div class="placeholder">visibility</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">One must question how, and maybe why, these mistakes, these lapses in visibility, take place.</p>
+        <p class="sub">At this point, it is no secret who decides how much detail is too much for us to see,</p>
+        <p class="sub">or when the aerial shutter needs to be completely closed.</p>
+        <p class="sub">Satellite and aerial imagery reach us seemingly neutral,</p>
+        <p class="sub">but they carry the logic of their Cold War origins.</p>
+        <p class="sub">When we see too little, it serves a purpose, and when we see too much, it does too.</p>
+        <p class="sub">What must we do to escape being under the mercy of a vague visual regime?</p>
+      </div>
     </div>
   </section>
 
-  <section class="scene" data-scene="beneath" data-screens="3" data-register="the crevice">
+
+  <section class="scene" data-scene="crevices" data-screens="4">
     <div class="stage">
-      <p class="prose"></p>
+      <!-- continues the zoom: we are inside the pixel now -->
+      <!-- <audio class="vo" src="assets/audio/10-crevices.m4a" preload="auto"></audio> -->
+      <div class="placeholder">crevices</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Perhaps we, the people of the land, look to the crevices,</p>
+        <p class="sub">to what is smaller than the highest resolution image we can get our hands on,</p>
+        <p class="sub">to what the image could not resolve.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="scene" data-scene="tabsoun" data-screens="12">
+    <div class="stage">
+      <!-- the pixel is clearer, and the video of the animal roaming around the
+           castle loads within it if that makes sense.
+           Then a collage of first-hand footage of the animal scattered on the screen -->
+      <!-- <audio class="vo" src="assets/audio/11-tabsoun.m4a" preload="auto"></audio> -->
+      <!-- <video class="fill" src="assets/video/tabsoun-01.mp4" muted loop playsinline></video> -->
+      <div class="placeholder">tabsoun</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Within the karstic cliffs of the South, the same porous limestone the castle was carved into, riddled with fissures,</p>
+        <p class="sub">lives an animal called the Tabsoun in Arabic, which has its own appetite for a high lookout.</p>
+        <p class="sub">It’s a small mammal that lives in colonies</p>
+        <p class="sub">and sleeps in crevices too narrow for anything larger to enter or image.</p>
+        <p class="sub">Locals catch a glimpse of it when it comes out to bask in the sun, and endearingly rush to photograph it.</p>
+        <p class="sub">One of the colony always keeps watch from a high rock,</p>
+        <p class="sub">and at the first sign of danger it calls, and the others disappear into stone.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="scene" data-scene="witness" data-screens="5">
+    <div class="stage">
+      <!-- visual note tbd -->
+      <!-- <audio class="vo" src="assets/audio/12-witness.m4a" preload="auto"></audio> -->
+      <div class="placeholder">witness</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Local grassroots organizations, like Green Southerners, have described the Tabsoun as a silent witness,</p>
+        <p class="sub">a symbol of the ecological cost of this war.</p>
+        <p class="sub">I wonder, has the Tabsoun, from within the cavities of the terrain,</p>
+        <p class="sub">somehow seen more than an all-seeing visual regime?</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="scene" data-scene="sharon-1982" data-screens="15">
+    <div class="stage">
+      <!-- black screen, then:
+           https://en.wikipedia.org/wiki/File:1982_Lebanon_War_IX.jpg
+           load this image and zoom into the holes and crevices -->
+      <!-- <audio class="vo" src="assets/audio/13-sharon-1982.m4a" preload="auto"></audio> -->
+      <!-- <img class="fill" src="assets/img/1982-lebanon-war-ix.jpg" alt=""> -->
+      <div class="placeholder">sharon-1982</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Perhaps it’s always been watching those who have no regard for it.</p>
+        <p class="sub">Colonies of one kind have lived in this cliff for generations.</p>
+        <p class="sub">Colonial powers of another kind have attempted to occupy the castle above it.</p>
+        <p class="sub">In June 1982, during the Israeli invasion of Lebanon, Ariel Sharon, then Israeli Minister of Defense,</p>
+        <p class="sub">descended by helicopter onto the castle with an army of photographers,</p>
+        <p class="sub">declaring a battle won without losses.</p>
+        <p class="sub">He was unaware that some of his soldiers had been killed,</p>
+        <p class="sub">and that none of the castle’s local guardians had surrendered.</p>
+        <p class="sub">One of them, wounded, was still in the rubble.</p>
+        <p class="sub">Perhaps, beside him in the rock, lay a Tabsoun or two, or a whole colony,</p>
+        <p class="sub">invisible yet seeing.</p>
+        <p class="sub">Seeing more than the army's cameras, more than their documentarians,</p>
+        <p class="sub">more than those who wrote the story afterwards.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="scene" data-scene="into-the-rock" data-screens="16">
+    <div class="stage">
+      <!-- [I'm stumped here…something textural or something…idk]
+           Muin Taher's Arabic testimony belongs somewhere in this scene — left out
+           of the subtitles for now, it's in script.md -->
+      <!-- <audio class="vo" src="assets/audio/14-into-the-rock.m4a" preload="auto"></audio> -->
+      <div class="placeholder">into-the-rock</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">The castle’s defenders had gone into the rock too.</p>
+        <p class="sub">In 1982, local Fighters and students dug trenches and tunnels into the cliff,</p>
+        <p class="sub">and under shelling, they learned to count the seconds between a shell being fired and landing,</p>
+        <p class="sub">and to work inside that interval.</p>
+        <p class="sub">Muin Taher, whose battalion held the castle in that battle,</p>
+        <p class="sub">states that while digging, they found the remains of dozens of men</p>
+        <p class="sub">who had died defending this ground against the Crusaders decades ago.</p>
+        <p class="sub">They reburied them where they lay.</p>
+        <p class="sub">Years later, in a restoration campaign of the site,</p>
+        <p class="sub">Taher writes in his testimony about the unearthing of the remains of two of those who fought beside him in 1982.</p>
+        <p class="sub">Fighters of previous battles become inseparable from the landscape,</p>
+        <p class="sub">as do the more-than-human elements accompanying them.</p>
+        <p class="sub">No image from above can resolve that.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="scene" data-scene="return" data-screens="12">
+    <div class="stage">
+      <!-- back to the May 2026 footage. I can point in the footage at the level
+           above them. Then the footage cuts to the soldier's body camera -->
+      <!-- <audio class="vo" src="assets/audio/15-return.m4a" preload="auto"></audio> -->
+      <!-- <video class="fill" src="assets/video/idf-bodycam.mp4" muted loop playsinline></video> -->
+      <div class="placeholder">return</div>
+
+      <div class="subs" lang="en">
+        <p class="sub">Returning to the footage released by the Israeli occupation to announce their capture of the castle in May 2026,</p>
+        <p class="sub">I want to ask the same naive question:</p>
+        <p class="sub">Were they being watched from beneath by the remains of those who defended this land before,</p>
+        <p class="sub">or up there by a Tabsoun or two, or a whole colony?</p>
+        <p class="sub">After the drone scenes, the footage cuts to the ground, to a soldier’s own body camera.</p>
+        <p class="sub">Even with a watchful eye at every altitude, I believe the occupation forces are wondering the same thing.</p>
+        <p class="sub">Who can see us from angles we cannot even fathom or imagine?</p>
+      </div>
     </div>
   </section>
 

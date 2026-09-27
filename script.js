@@ -37,7 +37,7 @@ const BEHAVIOURS = {
 
   
 
-  opening: function(stage){
+  castle: function(stage){
     const mv = stage.querySelector('model-viewer');
     return{
         update: function(p){
@@ -66,8 +66,11 @@ const SCENES = Array.prototype.map.call(
     return {
       el: el,
       stage: stage,
-      vo:    stage.querySelector('audio'),
+      vo:    stage.querySelector('audio.vo'),
       subs:  Array.prototype.slice.call(stage.querySelectorAll('.sub')),
+      timed: !!stage.querySelector('.sub[data-t]'),
+      gain:  0,                        /* where the voice is in its ramp */
+      rewind: false,                   /* was the top the way out? */
       shown: null,
       id: el.dataset.scene || '',
       register: el.dataset.register || '',
@@ -120,23 +123,44 @@ function readScroll(){
 
 const MOUNT_MARGIN = 1.5;   /* window-heights either side */
 const EDGE = 0.15;          /* fraction of a scene spent fading in / out */
+const VOICE_FADE = 0.6;     /* seconds a voice takes to ramp out */
 
 let currentScene = null;
 
 
+function show(s, el){
+  if (el === s.shown) return;
+  if (s.shown) s.shown.removeAttribute('data-on');
+  if (el)      el.setAttribute('data-on', '');
+  s.shown = el;
+}
+
+/* the mix drives the subtitles: last sentence whose data-t has passed */
 function caption(s, t){
   let now = null;
   for (let i = 0; i < s.subs.length; i++){
     if (t >= parseFloat(s.subs[i].dataset.t)) now = s.subs[i];
   }
-  if (now === s.shown) return;
-  if (s.shown) s.shown.removeAttribute('data-on');
-  if (now)     now.setAttribute('data-on', '');
-  s.shown = now;
+  show(s, now);
+}
+
+/* until a scene is timed, scroll drives them instead:
+   sentence i holds from p = i/n to p = (i+1)/n */
+function captionByScroll(s, p){
+  const n = s.subs.length;
+  if (!n) return;
+  let i = Math.floor(p * n);
+  if (i < 0) i = 0;
+  if (i > n - 1) i = n - 1;
+  show(s, s.subs[i]);
 }
 
 
-function render(){
+let last = 0;
+function render(now){
+  const dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
+  last = now;
+
   SCENES.forEach(function(s){
     const p = (raw - s.start) / s.len;
     const local = p < 0 ? 0 : p > 1 ? 1 : p;
@@ -159,8 +183,16 @@ function render(){
       s.el.dataset.active = active ? 'true' : 'false';
 
       if (s.vo){
-        if (active) s.vo.play().catch(function(){});
-        else if (!first){ s.vo.pause(); s.vo.currentTime = 0; caption(s, -1); }
+        if (active){
+          s.gain = 1;                  /* coming back cancels a ramp in progress */
+          s.rewind = false;
+          s.vo.volume = 1;
+          s.vo.play().catch(function(){});
+        } else if (!first){
+          /* out the top means you went back to the beginning, so the voice
+             starts over next time; out the bottom just parks it where it was */
+          s.rewind = (p < 0);
+        }
       }
       if (s.api){
         if (active && s.api.enter) s.api.enter();
@@ -170,7 +202,20 @@ function render(){
     }
 
    
-    if (near && s.vo && !s.vo.paused) caption(s, s.vo.currentTime);
+    if (near){
+      if (s.timed){ if (s.vo && !s.vo.paused) caption(s, s.vo.currentTime); }
+      else        captionByScroll(s, local);
+    }
+
+    /* ramp a departing voice down over VOICE_FADE, then park it */
+    if (s.vo && !s.active && s.gain > 0){
+      s.gain = Math.max(0, s.gain - dt / VOICE_FADE);
+      s.vo.volume = s.gain;
+      if (s.gain === 0){
+        s.vo.pause();
+        if (s.rewind){ s.vo.currentTime = 0; caption(s, -1); s.rewind = false; }
+      }
+    }
 
     if (near && s.api && s.api.update) s.api.update(local, fade);
   });

@@ -147,7 +147,7 @@ model-viewer.fill{
 .subs{
   position: absolute;
   left: 0; right: 0;
-  bottom: 14vh;
+  bottom: 9vh;
   padding: 0 8vw;
   text-align: center;
 }
@@ -158,10 +158,25 @@ model-viewer.fill{
   font-family: var(--serif);
   font-size: var(--t-vo);
   line-height: 1.5;
-  background-color: #175002;
+  /* background-color: #175002; */
   color: white;
 }
 .sub[data-on]{ display: block; }
+
+/* stands in for a scene's visuals until they exist */
+.placeholder{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--ground-lift);
+  color: var(--stone);
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  opacity: var(--fade, 1);
+}
 
 
 
