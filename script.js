@@ -39,13 +39,104 @@ const BEHAVIOURS = {
 
   castle: function(stage){
     const mv = stage.querySelector('model-viewer');
-    return{
-        update: function(p){
-            // mv.cameraOrbit = (p*90) + 'deg 75deg 55%'
-            mv.cameraOrbit = (100 + p * 360) + 'deg 78deg 55%';
+    // mv.cameraOrbit = (p*90) + 'deg 75deg 55%'
 
-        }
+    /* The move is in two parts. Up to HOLD we turn around the castle; after it
+       the turn stops and we start lifting and pulling back. The scene fades out
+       part way through that climb, and scene 2 picks it up from there. */
+    const HOLD = 0.8;
+
+    const SPIN_FROM = 100, SPIN_TO = 740;   /* degrees around (y axis) */
+    const PHI_FROM  = 78,  PHI_TO  = 45;    /* 90 is eye level, 0 is straight down */
+    const R_FROM    = 55,  R_TO    = 95;    /* per cent of the framing distance */
+
+    function mix(a, b, t){ return a + (b - a) * t; }
+    function easeOut(t){ return 1 - (1 - t) * (1 - t); }   /* slow into the stop */
+    function smooth(t){ return t * t * (3 - 2 * t); }      /* ease both ends */
+
+    return {
+      update: function(p){
+        const spin = easeOut(Math.min(p / HOLD, 1));
+        const lift = p < HOLD ? 0 : smooth((p - HOLD) / (1 - HOLD));
+
+        mv.cameraOrbit =
+          mix(SPIN_FROM, SPIN_TO, spin) + 'deg ' +
+          mix(PHI_FROM,  PHI_TO,  lift) + 'deg ' +
+          mix(R_FROM,    R_TO,    lift) + '%';
+      }
+    };
+  },
+
+  overlook: function(stage){
+
+    /* one row per direction, in the order they light. p is where the fan
+       starts coming up, will retime based on vo l8r */
+    const CUES = [
+      { fan: 'nabatieh', p: 0.42 },
+      { fan: 'beqaa',    p: 0.66 },
+      { fan: 'galilee',  p: 0.84 }
+    ];
+
+    const RISE = 0.05;   /* progress a fan takes to come up */
+    const LIT  = 0.9;    /* opacity of the newest direction */
+    const DIM  = 0.35;   /* opacity once a later one has lit */
+
+    const fans = CUES.map(function(c){
+      return stage.querySelector('[data-fan="' + c.fan + '"]');
+    });
+
+    function ramp(p, at){              /* 0 before at, 1 once RISE has passed */
+      const k = (p - at) / RISE;
+      return k < 0 ? 0 : k > 1 ? 1 : k;
     }
+
+    const mv  = stage.querySelector('model-viewer');
+    const box = stage.querySelector('#castle-box');
+
+    /* Scene 1 left the camera at 370deg 45deg 95%, filling the stage. Over
+       SETTLE we tilt to straight down and shrink the box the model lives in
+       until it sits inside the outline. The box does the zooming out. */
+    const SETTLE = 0.35;
+
+    const BOX_FROM = { x:   0, y:   0, w: 1000, h: 1000 };
+    const BOX_TO   = { x: 324, y: 217, w:  327, h:  480 };
+
+    const PHI_FROM = 45,  PHI_TO = 3;    /* 0 is straight down; 3 dodges the pole */
+    const R_FROM   = 95,  R_TO   = 121;  /* dial this to fit the outline */
+    const THETA_FROM    = 370, THETA_TO = 336; 
+
+    function mix(a, b, t){ return a + (b - a) * t; }
+    function smooth(t){ return t * t * (3 - 2 * t); }
+
+
+
+    return {
+      update: function(p){
+        for (let i = 0; i < CUES.length; i++){
+          if (!fans[i]) continue;
+          const up   = ramp(p, CUES[i].p);
+          /* the NEXT cue coming up is what dims this one */
+          const next = CUES[i + 1] ? ramp(p, CUES[i + 1].p) : 0;
+          fans[i].setAttribute('opacity',
+            (up * (LIT - (LIT - DIM) * next)).toFixed(3));
+        }
+
+        const land = smooth(Math.min(p / SETTLE, 1));
+
+        if (box){
+          box.setAttribute('x',      mix(BOX_FROM.x, BOX_TO.x, land));
+          box.setAttribute('y',      mix(BOX_FROM.y, BOX_TO.y, land));
+          box.setAttribute('width',  mix(BOX_FROM.w, BOX_TO.w, land));
+          box.setAttribute('height', mix(BOX_FROM.h, BOX_TO.h, land));
+        }
+        if (mv) mv.cameraOrbit =
+          mix(THETA_FROM, THETA_TO, land) + 'deg ' +
+          mix(PHI_FROM, PHI_TO, land) + 'deg ' +
+          mix(R_FROM, R_TO, land) + '%';
+
+
+      }
+    };
   }
 
 };

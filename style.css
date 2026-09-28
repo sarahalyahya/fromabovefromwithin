@@ -9,11 +9,11 @@
   --accent:      #da1317;    /* accent */
 
   --serif: Georgia, 'Times New Roman', serif;          /* vo caption */
-  --sans:  'Helvetica Neue', Arial, sans-serif;        /* the interface */
+  --sans:  'Cabin','Helvetica Neue', Arial, sans-serif;        /* the interface */
 
   /* type scale */
---t-vo:  clamp(1.19rem, 2.2vw, 5rem);
---t-ui:  clamp(0.69rem, 0.9vw, 2.2rem);
+--t-vo:  clamp(1.3rem, 2.2vw, 5rem);
+--t-ui:  clamp(0.74rem, 0.9vw, 2.2rem);
   --track:   .08em;   /* letter-spacing */
 }
 
@@ -155,13 +155,65 @@ model-viewer.fill{
   display: none;
   max-width: 28em;
   margin: 0 auto;
-  font-family: var(--serif);
+  font-family: var(--sans);
+  font-weight: 500; 
   font-size: var(--t-vo);
   line-height: 1.5;
   /* background-color: #175002; */
   color: white;
 }
 .sub[data-on]{ display: block; }
+
+/* drawn scenes: an svg laid into the stage like any other fill layer */
+.diagram{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--fade, 1);
+}
+
+.castle-3d{
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  --poster-color: transparent;
+}
+
+
+/* a beam is a wide throw with a narrow hot axis inside it.  */
+.beam-spread{ fill: url(#beam-fade); }
+.beam-core{   fill: url(#beam-hot); }
+
+.castle-outline{
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  opacity: .85;
+}
+
+/* svg text scales with the viewBox, so these are user units, not px */
+.fan-label{
+  fill: var(--bone);
+  font-family: var(--sans);
+  font-size: 16px;
+  letter-spacing: .05em;
+}
+.ref-label{
+  fill: var(--stone);
+  font-family: var(--sans);
+  font-size: 14px;
+  letter-spacing: .05em;
+}
+.ref-line{
+  fill: none;
+  stroke: var(--stone);
+  stroke-width: 1;
+  opacity: .4;
+}
+.ref-dashed{ stroke-dasharray: 6 7; }
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{

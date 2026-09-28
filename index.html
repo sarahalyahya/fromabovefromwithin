@@ -9,7 +9,9 @@
   import { ModelViewerElement } from 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
   ModelViewerElement.meshoptDecoderLocation = 'assets/meshopt_decoder.js';
 </script>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 <body>
 
 <div id="gate">
@@ -27,11 +29,11 @@
        put data-t="seconds" on each .sub. That scene alone switches to the mix;
        the others keep scrolling. -->
 
-  <section class="scene" data-scene="castle" data-screens="7">
+  <section class="scene" data-scene="castle" data-screens="11">
     <div class="stage">
       <!-- <p class="prose">text text text text </p> -->
       <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom interaction-prompt="none"  exposure="0.9" shadow-intensity="0" environment-image="neutral" camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
-      <audio class="vo" src="assets/audio/converted.wav" preload="auto"></audio>
+      <audio class="vo" src="assets/audio/VO_1.wav" preload="auto"></audio>
 
       <div class="subs" lang="en">
          <p class="sub" data-t="0">This is Qal’at al Shqif Arnoun, also known as Beaufort Castle in southern Lebanon's Nabatieh Governorate</p>
@@ -45,18 +47,79 @@
 
   <section class="scene" data-scene="overlook" data-screens="12">
     <div class="stage">
-      <!-- Maybe we are zooming in on it, and then a spotlight is changing direction
-           based on the narration, showing each side. // or maybe load 360 degree
-           imgs from google earth and rotate also, there's a few -->
+      <!-- The castle looks out. As the narration names a direction, a spotlight fan
+           sweeps out that way and its label fades in. Angles are measured from north,
+           0 = up, clockwise, and converted in the paths below as
+           x = 500 + R*sin(a), y = 460 - R*cos(a). Castle at 500,460. Fan radius 420. -->
+
+      <svg class="diagram" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          >
+          <radialGradient id="beam-fade" gradientUnits="userSpaceOnUse"
+                          cx="500" cy="460" r="800">
+            <stop offset="0"   stop-color="#5a5b52" stop-opacity="0.45"></stop>
+            <stop offset="0.5" stop-color="#3a3b34" stop-opacity="0.30"></stop>
+            <stop offset="1"   stop-color="#1e1f1b" stop-opacity="0.12"></stop>
+          </radialGradient>
+          <radialGradient id="beam-hot" gradientUnits="userSpaceOnUse"
+                          cx="500" cy="460" r="800">
+            <stop offset="0"   stop-color="#8a877e" stop-opacity="0.60"></stop>
+            <stop offset="0.5" stop-color="#5f6057" stop-opacity="0.40"></stop>
+            <stop offset="1"   stop-color="#33342d" stop-opacity="0.18"></stop>
+          </radialGradient>
+                    <!-- the wedge defined once & pointing straight up.  -->
+          <g id="beam">
+            <path class="beam-spread" d="M500,460 L100.0,-232.8 A800,800 0 0 1 900.0,-232.8 Z"></path>
+            <path class="beam-core"   d="M500,460 L347.4,-325.3 A800,800 0 0 1 652.6,-325.3 Z"></path>
+          </g>
+
+        </defs>
+
+        <!-- spotlight beams, lit by BEHAVIOURS.overlook -->
+                <g data-fan="nabatieh" opacity="0" transform="rotate(327 500 460)">
+          <use href="#beam"></use>
+          <text x="500" y="-2" text-anchor="middle" transform="rotate(-327 500 -2)" class="fan-label">NABATIEH</text>
+        </g>
+        <g data-fan="beqaa" opacity="0" transform="rotate(36 500 460)">
+          <use href="#beam"></use>
+          <text x="500" y="-2" text-anchor="middle" transform="rotate(-36 500 -2)" class="fan-label">BEQAA VALLEY</text>
+        </g>
+        <g data-fan="galilee" opacity="0" transform="rotate(180 500 460)">
+          <use href="#beam"></use>
+          <text x="500" y="-80" text-anchor="middle" transform="rotate(-180 500 -2)" class="fan-label">GALILEE</text>
+        </g>
+
+        <!-- beaufort coords for my reference;  33.324,35.532       -->
+        <!-- reference lines, visible throughout -->
+        <path class="ref-line" d="M605,-10 C665,170 545,300 575,455 C605,610 700,720 655,1010"></path>
+        <path class="ref-line ref-dashed" d="M-10,820 C250,800 520,790 700,720 C800,680 900,640 1010,590"></path>
+        <text x="625" y="105" text-anchor="start" class="ref-label">LITANI</text>
+
+       
+          <foreignObject id="castle-box" x="324" y="217" width="327" height="480">
+          <model-viewer class="castle-3d" src="assets/beaufort-optimized.glb"
+            disable-zoom interaction-prompt="none"
+            exposure="0.9" shadow-intensity="0" environment-image="neutral"
+            camera-orbit="370deg 45deg 95%" orientation="0deg -90deg 0deg"
+            field-of-view="35deg"></model-viewer>
+        </foreignObject>
+
+        <!-- the castle:traced from mapbox -->
+        <path class="castle-outline" d="M512.6,336.8 L541.8,338.8 L567.2,336.8 L564.0,352.5 L560.7,378.5 L558.1,407.7 L562.0,430.5 L569.2,452.0 L559.4,465.0 L553.6,482.5 L545.1,499.5 L541.8,521.6 L540.5,547.6 L535.3,555.4 L512.6,553.4 L508.7,560.6 L480.1,570.3 L447.5,576.8 L424.8,574.2 L405.9,572.9 L409.8,551.5 L422.2,526.8 L431.9,495.5 L438.4,468.9 L448.2,448.7 L457.9,429.9 L465.8,413.6 L472.9,403.2 L480.7,390.2 L487.2,374.6 L493.7,357.7 L500.2,346.0 Z"></path>
+        <circle cx="500" cy="460" r="3.5" fill="#e6e3dc"></circle>
+      </svg>
+
+
+  
+
       <!-- <audio class="vo" src="assets/audio/02-overlook.m4a" preload="auto"></audio> -->
-      <div class="placeholder">overlook</div>
 
       <div class="subs" lang="en">
-        <p class="sub">The 900 year-old fortress stands 700 meters above sea level;</p>
+        <p class="sub">The 12th century fortress stands 700 meters above sea level;</p>
         <p class="sub">it sits on a 300m cliff of karstic limestone, porous and riddled with crevices.</p>
         <p class="sub">The castle overlooks the immediate southern Lebanese landscape, the surrounding villages in Nabatieh governorate,</p>
         <p class="sub">as well as the Litani River, the Beqaa Valley,</p>
-        <p class="sub">and, to the south of it, the modern colonial settlements of the Galilee in occupied Palestine.</p>
+        <p class="sub">and, to the south of it, the Galilee in occupied Palestine.</p>
       </div>
     </div>
   </section>
@@ -64,14 +127,13 @@
 
   <section class="scene" data-scene="drone-footage" data-screens="18">
     <div class="stage">
-      <!-- podcast clip plays on the source bus, under the VO. Maybe just a wave form here.
+      <!-- podcast excerpt takes its turn in the spoken track rather than running
+           under it, so its lines time against this scene's one voice clock.
+           Maybe just a wave form while it plays.
            Then: first video on one side of the screen, black background.
-           Second video on the other side of the screen, black background.
+           Second video on the other side, black background.
            [I want to say it's like a commercial drone that produces sexy footage,
            more descriptive here] -->
-      <!-- the podcast excerpt takes its turn in the spoken track rather than
-           running under it, so its lines are timed against this scene's one
-           voice clock like any other sub -->
       <!-- <audio class="vo" src="assets/audio/03-drone-footage.m4a" preload="auto"></audio> -->
       <!-- <video class="fill" src="assets/video/idf-commercial-drone.mp4" muted loop playsinline></video> -->
       <!-- <video class="fill" src="assets/video/idf-armed-drone.mp4" muted loop playsinline></video> -->
