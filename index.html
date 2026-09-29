@@ -126,7 +126,7 @@
 
 
   <section class="scene" data-scene="drone-footage" data-screens="18">
-    <div class="stage">
+    <div class="stage" id="drone-footage-stg">
       <!-- podcast excerpt takes its turn in the spoken track rather than running
            under it, so its lines time against this scene's one voice clock.
            Maybe just a wave form while it plays.
@@ -135,8 +135,15 @@
            [I want to say it's like a commercial drone that produces sexy footage,
            more descriptive here] -->
       <audio class="vo" src="assets/audio/PodcastAudio.m4a" preload="auto"></audio>
-      <!-- <video class="fill" src="assets/video/idf-commercial-drone.mp4" muted loop playsinline></video> -->
-      <!-- <video class="fill" src="assets/video/idf-armed-drone.mp4" muted loop playsinline></video> -->
+      <div class="clip">
+        <video id="drone-commercial" src="assets/video/i_dronefootage.mp4"  muted loop playsinline></video>
+        <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
+      </div>
+
+      <div class="clip">
+        <video id="drone-crosshair"  src="assets/video/i_dronecrosshair_p1.mp4"  muted loop playsinline></video>
+         <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
+      </div>
 
       <div class="subs" lang="en">
         
@@ -155,9 +162,9 @@
 
         <p class="sub">In May 2026, the Israeli occupation forces announced that they had seized Qal’at al Shaqif Arnoun,</p>
         <p class="sub">releasing two videos as part of their announcement.</p>
-        <p class="sub">The first was aerial footage of the ruins, seemingly captured by a commercial drone,</p>
+        <p class="sub" data-cue="drone-commercial">The first was aerial footage of the ruins, seemingly captured by a commercial drone,</p>
         <p class="sub">taken in the register of content designed to be packaged and shared.</p>
-        <p class="sub">The second video begins at a similar angle,</p>
+        <p class="sub" data-cue="drone-crosshair">The second video begins at a similar angle,</p>
         <p class="sub">but this one carries crosshairs at the center of the frame, indicating that it’s footage from an armed drone.</p>
         <p class="sub">For several seconds, the crosshairs track Israeli soldiers descending the castle’s stairs.</p>
         <p class="sub">The image is confusing.</p>

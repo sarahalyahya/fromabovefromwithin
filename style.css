@@ -232,6 +232,44 @@ model-viewer.fill{
 }
 .ref-dashed{ stroke-dasharray: 6 7; }
 
+
+.stage#drone-footage-stg{
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  padding: 0 5vw;
+  gap: 5rem; 
+}
+
+.clip{
+   position: relative;
+   width: 100%;
+ }           
+ 
+ .clip video {
+  display: block; 
+  width: 100%;
+  aspect-ratio: 16/9;
+  opacity: 0;
+  transition: opacity .6s;
+ }
+
+ .clip video[data-on]{
+  opacity: var(--fade,1);
+ }
+
+.clip .credit{ 
+  display: none; 
+  top: .6em; 
+  right: .6em; }
+
+.clip .credit-detail{
+  left: auto;
+  right:0;
+}
+
+video[data-on] + .credit{ 
+  display: grid; }
+
+
 /* stands in for a scene's visuals until they exist */
 .placeholder{
   position: absolute;

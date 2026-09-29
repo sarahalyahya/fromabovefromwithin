@@ -246,6 +246,26 @@ function captionByScroll(s, p){
   show(s, s.subs[i]);
 }
 
+/* to run vids based on sub cue*/
+
+function cue(s){
+  const now = s.subs.indexOf(s.shown);
+  s.subs.forEach(function(sub, i){
+    if (!sub.dataset.cue) return; 
+    const v = document.getElementById(sub.dataset.cue);
+    const on = now >= i; 
+    if (on === v.hasAttribute('data-on')) return; 
+    if (on){
+      v.setAttribute('data-on', '');
+      v.currentTime = 0; 
+      v.play().catch(function(){});
+    } else{
+      v.removeAttribute('data-on');
+      v.pause();
+    }
+  });
+}
+
 
 let last = 0;
 function render(now){
@@ -296,6 +316,7 @@ function render(now){
     if (near){
       if (s.timed){ if (s.vo && !s.vo.paused) caption(s, s.vo.currentTime); }
       else        captionByScroll(s, local);
+      cue(s);
     }
 
     /* ramp a departing voice down over VOICE_FADE, then park it */
@@ -304,7 +325,11 @@ function render(now){
       s.vo.volume = s.gain;
       if (s.gain === 0){
         s.vo.pause();
-        if (s.rewind){ s.vo.currentTime = 0; caption(s, -1); s.rewind = false; }
+        if (s.rewind){ 
+          s.vo.currentTime = 0; 
+          caption(s, -1); 
+          cue(s);
+          s.rewind = false; }
       }
     }
 
