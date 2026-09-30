@@ -274,12 +274,17 @@ video[data-on] + .credit{
   z-index: 2;  }
 
 
-  /* satellite stack  */
+  /* satellite stack, trying to have it in the bg throughout without having to copy nd paste  */
   .stack-view{
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
     inset: 0;
     perspective: 1500px;
-    opacity: var(--fade,1);
+    /* opacity: var(--fade,1); */
+  }
+ 
+  .scene[data-stack] {
+    pointer-events: none;
   }
 
   .stack{
@@ -298,9 +303,33 @@ video[data-on] + .credit{
     position: absolute;
     inset:0;
     background: var(--ground);
-    outline: 2px solid var(--ink);
+    --edge: 4px; 
+    outline: var(--edge) solid var(--ink);
     transform: translateZ(calc(var(--k)*var(--spread)*200px));
+    transform-style: preserve-3d;
+  }
 
+  /* kinda like a shadow dropping between eahc layer */
+.layer::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;               /* above the layer's image */
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent 45%);
+}
+
+
+  .layer::after{
+  content: '';
+  position: absolute;
+  left: calc(-1*var(--edge)); 
+  right:  calc(-1*var(--edge));
+  top: calc(100% + var(--edge));                    /* starts at the layer's outline's bottom edge */
+  height: 14px;                 /* slab thickness */
+  transform-origin: top;
+  transform: rotateX(-90deg);   /* folds it back, under the layer */
+  background-color: var(--stone);
   }
 
   .layer:not(.pivot){
@@ -308,6 +337,10 @@ video[data-on] + .credit{
     pointer-events: none;
      
 
+  }
+
+  .stage-placeholder{
+    opacity: 60%;
   }
 
   .pair{

@@ -139,21 +139,49 @@ const BEHAVIOURS = {
     };
   },
 
-  'drone-footage': function(stage){
-  const stack = stage.querySelector('.stack');
+  //this is for repeating stack
+//   'drone-footage': function(stage){
+//   const stack = stage.querySelector('.stack');
 
-//  where the zoom out starts
+// //  where the zoom out starts
+//   const FROM = 0.75, TO = 0.9;
+
+//   /* where the stack ends up visually */
+//   // const END = { pull: 1.1, tilt: -10, turn: -54, spread: 1 };
+
+//     const END = { pull: 1, tilt: 65, turn: 0, spread: 1 };
+
+//   function smooth(t){ return t * t * (3 - 2 * t); }
+
+//   return {
+//     update: function(p){
+//       const k = (p - FROM) / (TO - FROM);
+//       const out = smooth(k < 0 ? 0 : k > 1 ? 1 : k);
+//       stack.style.setProperty('--pull',   out * END.pull);
+//       stack.style.setProperty('--tilt',   out * END.tilt);
+//       stack.style.setProperty('--turn',   out * END.turn);
+//       stack.style.setProperty('--spread', out * END.spread);
+//     }
+//   };
+// }
+
+
+//this is for one stack hidden in the bg:
+
+'drone-footage': function(stage, s){
+  const view  = stackView;
+  const stack = view.querySelector('.stack');
+
   const FROM = 0.75, TO = 0.9;
-
-  /* where the stack ends up visually */
-  // const END = { pull: 1.1, tilt: -10, turn: -54, spread: 1 };
-
-    const END = { pull: 1, tilt: 65, turn: 0, spread: 1 };
+  const END = { pull: 1, tilt: 65, turn: 0, spread: 1 };
 
   function smooth(t){ return t * t * (3 - 2 * t); }
 
   return {
-    update: function(p){
+    update: function(p, fade){
+      if (!s.active) return;
+      view.style.opacity = p < 0.5 ? fade : 1;
+
       const k = (p - FROM) / (TO - FROM);
       const out = smooth(k < 0 ? 0 : k > 1 ? 1 : k);
       stack.style.setProperty('--pull',   out * END.pull);
@@ -162,7 +190,8 @@ const BEHAVIOURS = {
       stack.style.setProperty('--spread', out * END.spread);
     }
   };
-}
+},
+
 
 
 };
@@ -170,6 +199,8 @@ const BEHAVIOURS = {
 
 /* reading scenes from html */
 const film = document.getElementById('film');
+const stackView = document.getElementById('stack');
+
 
 const SCENES = Array.prototype.map.call(
   film.querySelectorAll('.scene'),
@@ -369,6 +400,7 @@ function render(now){
   });
 
   updateHud();
+  stackView.hidden = !(currentScene && currentScene.el.hasAttribute('data-stack')); //is there a stack at all?
   requestAnimationFrame(render);
 }
 

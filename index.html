@@ -21,7 +21,34 @@
 <!-- ambience bus lives here, outside #film, so it never resets on a scene change
      <audio id="ambience" class="ambience" src="assets/audio/ambience.m4a" loop preload="auto"></audio> -->
 
-<main id="film">
+<main id="film"> 
+
+   <div class="stack-view" id="stack" hidden> 
+        <div class="stack">
+          <div class="layer" style="--k:-2"><img src="assets/img/scene1-ss.png" class="fill stage-placeholder" alt=""></div>
+          <div class="layer" style="--k:-1"><img src="assets/img/scene2-ss.png" class="fill stage-placeholder" alt=""></div>
+          <div class="layer pivot" style="--k:0">
+            <div class="pair">
+               <div class="clip">
+        <video id="drone-commercial" src="assets/video/i_dronefootage.mp4"  muted loop playsinline></video>
+        <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
+      </div>
+
+      <div class="clip">
+        <video id="drone-crosshair"  src="assets/video/i_dronecrosshair_p1.mp4"  muted loop playsinline></video>
+         <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
+      </div>
+
+            </div>
+        <!-- <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+        <p data-t=13.7 class="sub quote">but I can see why it would be quite useful,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+        <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+        <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of Nabatieh."   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p> -->
+          </div>
+            <div class="layer" style="--k:1"><div class="placeholder">satellite</div></div>
+
+        </div>
+      </div>
 
   <!-- Every scene gets a VO. Until its clip exists, subtitles are driven by
        scroll: sentence i holds from p = i/n to p = (i+1)/n.
@@ -54,7 +81,7 @@
 
       <svg class="diagram" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          >
+          
           <radialGradient id="beam-fade" gradientUnits="userSpaceOnUse"
                           cx="500" cy="460" r="800">
             <stop offset="0"   stop-color="#5a5b52" stop-opacity="0.45"></stop>
@@ -125,7 +152,7 @@
   </section>
 
 
-  <section class="scene" data-scene="drone-footage" data-screens="28">
+  <section class="scene" data-scene="drone-footage" data-screens="28" data-stack>
     <div class="stage" id="drone-footage-stg">
       <!-- podcast excerpt takes its turn in the spoken track rather than running
            under it, so its lines time against this scene's one voice clock.
@@ -135,7 +162,7 @@
            [I want to say it's like a commercial drone that produces sexy footage,
            more descriptive here] -->
       <audio class="vo" src="assets/audio/VO_3.mp3" preload="auto"></audio>
-      <div class="stack-view"> 
+      <!-- <div class="stack-view"> 
         <div class="stack">
           <div class="layer" style="--k:-1"><div class="placeholder">castle</div></div>
           <div class="layer pivot" style="--k:0">
@@ -151,15 +178,15 @@
       </div>
 
             </div>
-        <!-- <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+        <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=13.7 class="sub quote">but I can see why it would be quite useful,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of Nabatieh."   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p> -->
-          </div>
+          <!-- </div>
             <div class="layer" style="--k:1"><div class="placeholder">satellite</div></div>
 
         </div>
-      </div>
+      </div> --> 
       
      
 
@@ -168,8 +195,7 @@
         <p data-t=0.3 class="sub">The castle has been sought after throughout history for its elevated position, its view from above.</p>
 
       
-        </span>
-      </span>
+       
        
       
         <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
@@ -192,7 +218,7 @@
   </section>
 
 
-  <section class="scene" data-scene="all-altitudes" data-screens="10">
+  <section class="scene" data-scene="all-altitudes" data-screens="10" data-stack>
     <div class="stage">
       <!-- Israeli footage looping, maybe both videos side by side, but at the last
            line I zoom out to that satellite layer stack I have -->
@@ -214,7 +240,7 @@
   </section>
 
 
-  <section class="scene" data-scene="feed" data-screens="5">
+  <section class="scene" data-scene="feed" data-screens="5" data-stack>
     <div class="stage">
       <!-- Zoom back into an ig feed scrolling scrolling scrolling -->
       <!-- <audio class="vo" src="assets/audio/05-feed.m4a" preload="auto"></audio> -->
@@ -232,7 +258,7 @@
   </section>
 
 
-  <section class="scene" data-scene="planet" data-screens="8">
+  <section class="scene" data-scene="planet" data-screens="8" data-stack>
     <div class="stage">
       <!-- black screen. Email? Or mission screenshot? I can be more animated and
            have like an email OS UI but too much i think.
@@ -253,7 +279,7 @@
   </section>
 
 
-  <section class="scene" data-scene="kyl-bingaman" data-screens="6">
+  <section class="scene" data-scene="kyl-bingaman" data-screens="6" data-stack>
     <div class="stage">
       <!-- black background. Something to explain what the 2-meter resolution
            means, like a pixel comparison -->
@@ -272,7 +298,7 @@
   </section>
 
 
-  <section class="scene" data-scene="govmap" data-screens="5">
+  <section class="scene" data-scene="govmap" data-screens="5" data-stack>
     <div class="stage">
       <!-- maybe just loading the imgs fading in -->
       <!-- <audio class="vo" src="assets/audio/08-govmap.m4a" preload="auto"></audio> -->
