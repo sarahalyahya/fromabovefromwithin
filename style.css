@@ -179,6 +179,9 @@ model-viewer.fill{
 
  
 }
+.subs{ pointer-events: none; }
+.subs .credit{ pointer-events: auto; }
+
 
 
 /* drawn scenes: an svg laid into the stage like any other fill layer */
@@ -267,8 +270,54 @@ model-viewer.fill{
 }
 
 video[data-on] + .credit{ 
-  display: grid; }
+  display: grid;
+  z-index: 2;  }
 
+
+  /* satellite stack  */
+  .stack-view{
+    position: absolute;
+    inset: 0;
+    perspective: 1500px;
+    opacity: var(--fade,1);
+  }
+
+  .stack{
+    --pull:0;
+    --tilt: 0;
+    --turn: 0; 
+    --spread:0; 
+    position: absolute; 
+    inset: 0; 
+    transform-style: preserve-3d; 
+    transform: translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg));
+
+  }
+
+  .layer{
+    position: absolute;
+    inset:0;
+    background: var(--ground);
+    outline: 2px solid var(--ink);
+    transform: translateZ(calc(var(--k)*var(--spread)*200px));
+
+  }
+
+  .layer:not(.pivot){
+    opacity: var(--spread);
+    pointer-events: none;
+     
+
+  }
+
+  .pair{
+    height: 100%;
+    display: grid;
+    place-items: center; 
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 5rem;
+    padding: 0 5vw;
+  }
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{

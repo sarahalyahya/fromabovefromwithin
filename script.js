@@ -137,7 +137,33 @@ const BEHAVIOURS = {
 
       }
     };
-  }
+  },
+
+  'drone-footage': function(stage){
+  const stack = stage.querySelector('.stack');
+
+//  where the zoom out starts
+  const FROM = 0.75, TO = 0.9;
+
+  /* where the stack ends up visually */
+  // const END = { pull: 1.1, tilt: -10, turn: -54, spread: 1 };
+
+    const END = { pull: 1, tilt: 65, turn: 0, spread: 1 };
+
+  function smooth(t){ return t * t * (3 - 2 * t); }
+
+  return {
+    update: function(p){
+      const k = (p - FROM) / (TO - FROM);
+      const out = smooth(k < 0 ? 0 : k > 1 ? 1 : k);
+      stack.style.setProperty('--pull',   out * END.pull);
+      stack.style.setProperty('--tilt',   out * END.tilt);
+      stack.style.setProperty('--turn',   out * END.turn);
+      stack.style.setProperty('--spread', out * END.spread);
+    }
+  };
+}
+
 
 };
 
@@ -154,6 +180,12 @@ const SCENES = Array.prototype.map.call(
       stage.className = 'stage';
       el.appendChild(stage);
     }
+
+    // come back to these if podcast quote needed in the layer that zooms back 
+    // const subs  = Array.prototype.slice.call(stage.querySelectorAll('.sub'));
+    // const timed = subs.some(function(el){ return el.hasAttribute('data-t'); });
+    // if (timed) subs.sort(function(a, b){ return parseFloat(a.dataset.t) - parseFloat(b.dataset.t); });
+
     return {
       el: el,
       stage: stage,
