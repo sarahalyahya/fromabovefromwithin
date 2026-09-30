@@ -18,6 +18,8 @@ document.getElementById('launch').addEventListener('click', function(){
 });
 
 
+const STACK_REST = {pull: 1, tilt: 65, turn: 0, spread: 1, lift: 8};
+
 const BEHAVIOURS = {
 
   /*  example 
@@ -173,7 +175,7 @@ const BEHAVIOURS = {
   const stack = view.querySelector('.stack');
 
   const FROM = 0.75, TO = 0.9;
-  const END = { pull: 1, tilt: 65, turn: 0, spread: 1 };
+  const END = STACK_REST;
 
   function smooth(t){ return t * t * (3 - 2 * t); }
 
@@ -188,8 +190,31 @@ const BEHAVIOURS = {
       stack.style.setProperty('--tilt',   out * END.tilt);
       stack.style.setProperty('--turn',   out * END.turn);
       stack.style.setProperty('--spread', out * END.spread);
+      stack.style.setProperty('--lift', out * END.lift);
+
     }
   };
+},
+
+'all-altitudes': function(stage,s){
+  const stack = stackView.querySelector('.stack');
+  const SWAY = 6;
+  const CYCLES = 2; 
+
+  return{
+    update: function(p){
+      if (!s.active) return; 
+      const w = Math.sin(p * CYCLES * 2 * Math.PI); 
+      stackView.style.opacity = 1; 
+      stack.style.setProperty('--pull', STACK_REST.pull);
+      stack.style.setProperty('--tilt', STACK_REST.tilt);
+      stack.style.setProperty('--turn', STACK_REST.turn + w*SWAY);
+      stack.style.setProperty('--spread', STACK_REST.spread);
+      stack.style.setProperty('--lift', STACK_REST.lift);
+
+
+    }
+  }
 },
 
 

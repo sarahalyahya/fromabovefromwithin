@@ -288,6 +288,7 @@ video[data-on] + .credit{
   }
 
   .stack{
+    --lift: 0;
     --pull:0;
     --tilt: 0;
     --turn: 0; 
@@ -295,7 +296,8 @@ video[data-on] + .credit{
     position: absolute; 
     inset: 0; 
     transform-style: preserve-3d; 
-    transform: translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg));
+    /* transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg)); */
+    transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateY(calc(var(--turn)*1deg)) rotateX(calc(var(--tilt)*1deg));
 
   }
 
@@ -320,17 +322,17 @@ video[data-on] + .credit{
 }
 
 
-  .layer::after{
+   .layer::after{
   content: '';
   position: absolute;
   left: calc(-1*var(--edge)); 
   right:  calc(-1*var(--edge));
   top: calc(100% + var(--edge));                    /* starts at the layer's outline's bottom edge */
-  height: 14px;                 /* slab thickness */
+   height: 14px;                 /* slab thickness */
   transform-origin: top;
   transform: rotateX(-90deg);   /* folds it back, under the layer */
   background-color: var(--stone);
-  }
+  } 
 
   .layer:not(.pivot){
     opacity: var(--spread);
