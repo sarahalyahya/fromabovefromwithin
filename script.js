@@ -18,7 +18,21 @@ document.getElementById('launch').addEventListener('click', function(){
 });
 
 
-const STACK_REST = {pull: 1, tilt: 65, turn: 0, spread: 1, lift: 8};
+const STACK_REST = {pull: 1, tilt: 79, turn: 0, spread: 1, lift: 15};
+
+function poseStack(pose){
+  const stack = stackView.querySelector('.stack');
+  stack.style.setProperty('--pull',   pose.pull);
+  stack.style.setProperty('--tilt',   pose.tilt);
+  stack.style.setProperty('--turn',   pose.turn);
+  stack.style.setProperty('--spread', pose.spread);
+  stack.style.setProperty('--lift',   pose.lift);
+  stackView.querySelectorAll('.layer').forEach(function(l){
+    l.style.setProperty('--pop', 0);
+  });
+}
+
+
 
 const BEHAVIOURS = {
 
@@ -141,6 +155,9 @@ const BEHAVIOURS = {
     };
   },
 
+  
+
+
   //this is for repeating stack
 //   'drone-footage': function(stage){
 //   const stack = stage.querySelector('.stack');
@@ -186,11 +203,19 @@ const BEHAVIOURS = {
 
       const k = (p - FROM) / (TO - FROM);
       const out = smooth(k < 0 ? 0 : k > 1 ? 1 : k);
-      stack.style.setProperty('--pull',   out * END.pull);
-      stack.style.setProperty('--tilt',   out * END.tilt);
-      stack.style.setProperty('--turn',   out * END.turn);
-      stack.style.setProperty('--spread', out * END.spread);
-      stack.style.setProperty('--lift', out * END.lift);
+      // stack.style.setProperty('--pull',   out * END.pull);
+      // stack.style.setProperty('--tilt',   out * END.tilt);
+      // stack.style.setProperty('--turn',   out * END.turn);
+      // stack.style.setProperty('--spread', out * END.spread);
+      // stack.style.setProperty('--lift', out * END.lift);
+
+     
+      poseStack({ pull:   out * END.pull,
+            tilt:   out * END.tilt,
+            turn:   out * END.turn,
+            spread: out * END.spread,
+            lift:   out * END.lift });
+
 
     }
   };
@@ -206,16 +231,43 @@ const BEHAVIOURS = {
       if (!s.active) return; 
       const w = Math.sin(p * CYCLES * 2 * Math.PI); 
       stackView.style.opacity = 1; 
-      stack.style.setProperty('--pull', STACK_REST.pull);
-      stack.style.setProperty('--tilt', STACK_REST.tilt);
-      stack.style.setProperty('--turn', STACK_REST.turn + w*SWAY);
-      stack.style.setProperty('--spread', STACK_REST.spread);
-      stack.style.setProperty('--lift', STACK_REST.lift);
+      poseStack({ pull: STACK_REST.pull, tilt: STACK_REST.tilt,
+            turn: STACK_REST.turn + w * SWAY,
+            spread: STACK_REST.spread, lift: STACK_REST.lift });
+
 
 
     }
   }
 },
+
+'feed': function(stage, s){
+  const layer = stackView.querySelector('[data-layer="feed"]');
+  const strip = layer.querySelector('.feed-strip');
+  const posts = strip.querySelectorAll('.post').length;
+  const IN = 0.15, OUT = 0.85;   /* out by IN, starts going back at OUT */
+
+  function smooth(t){ return t * t * (3 - 2 * t); }
+
+  return {
+    update: function(p){
+      if (!s.active) return;
+      stackView.style.opacity = 1;
+      poseStack(STACK_REST);
+
+      /* how far out the layer is */
+      let t = Math.min(p / IN, (1 - p) / (1 - OUT));
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      layer.style.setProperty('--pop', smooth(t));
+
+      /* how far through the feed we are, only while the layer is fully out */
+      let q = (p - IN) / (OUT - IN);
+      q = q < 0 ? 0 : q > 1 ? 1 : q;
+      strip.style.setProperty('--scroll', q * (posts - 1));
+    }
+  };
+},
+
 
 
 

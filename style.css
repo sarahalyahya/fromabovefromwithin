@@ -274,12 +274,14 @@ video[data-on] + .credit{
   z-index: 2;  }
 
 
+
   /* satellite stack, trying to have it in the bg throughout without having to copy nd paste  */
   .stack-view{
     /* position: absolute; */
     position: fixed;
     inset: 0;
-    perspective: 1500px;
+    --depth: 140vh;              /* one number for perspective and pull; ~1500px on a 1080 screen */
+    perspective: var(--depth);
     /* opacity: var(--fade,1); */
   }
  
@@ -297,17 +299,24 @@ video[data-on] + .credit{
     inset: 0; 
     transform-style: preserve-3d; 
     /* transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg)); */
-    transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateY(calc(var(--turn)*1deg)) rotateX(calc(var(--tilt)*1deg));
+    transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull) * -1 * var(--depth))) rotateY(calc(var(--turn)*1deg)) rotateX(calc(var(--tilt)*1deg));
 
   }
 
   .layer{
+    --pop: 0; 
+    transform:
+    rotateX(calc(var(--tilt) * var(--pop) * -1deg))
+    rotateY(calc(var(--turn) * var(--pop) * -1deg))
+    translateZ(calc(var(--pull) * var(--pop) * var(--depth)))
+    translateY(calc(var(--lift) * var(--pop) * 1vh))
+    translateZ(calc(var(--k) * var(--spread) * 18vh * (1 - var(--pop))));
     position: absolute;
     inset:0;
     background: var(--ground);
     --edge: 4px; 
     outline: var(--edge) solid var(--ink);
-    transform: translateZ(calc(var(--k)*var(--spread)*200px));
+    /* transform: translateZ(calc(var(--k)*var(--spread)*200px)); */
     transform-style: preserve-3d;
   }
 
@@ -328,7 +337,7 @@ video[data-on] + .credit{
   left: calc(-1*var(--edge)); 
   right:  calc(-1*var(--edge));
   top: calc(100% + var(--edge));                    /* starts at the layer's outline's bottom edge */
-   height: 14px;                 /* slab thickness */
+   height: 1.3vh;                 /* slab thickness */
   transform-origin: top;
   transform: rotateX(-90deg);   /* folds it back, under the layer */
   background-color: var(--stone);
@@ -340,6 +349,14 @@ video[data-on] + .credit{
      
 
   }
+
+.layer > .inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+
 
   .stage-placeholder{
     opacity: 60%;
@@ -353,6 +370,84 @@ video[data-on] + .credit{
     gap: 5rem;
     padding: 0 5vw;
   }
+
+
+/* feed scene */
+.feed-strip{
+  --imgWidth: min(80vw, 52vh);
+  --bar: calc(var(--imgWidth) * .12);
+  --gap: calc(var(--imgWidth) * .12);
+  --icon: calc(var(--imgWidth) * .065);
+  --scroll: 0;   
+
+  position: absolute;
+  left: 50%; 
+  top: calc(50% - (var(--imgWidth) + 2 * var(--bar)) / 2); 
+  width: var(--imgWidth);
+  translate: -50% 0;
+  transform: translateY(calc(var(--scroll) * -1 * (var(--imgWidth) + 2 * var(--bar) + var(--gap))));
+  display: grid;
+  gap: var(--gap);
+}
+
+/* .post{
+  aspect-ratio: 1;
+  margin-bottom: 2rem;
+  border: 2px solid var(--ink);
+} */
+
+.post{ border: 2px solid var(--ink); }
+
+.post-head, .post-foot{
+  height: var(--bar);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--icon) * .5);
+  padding: 0 calc(var(--icon) * .5);
+}
+
+.avatar{
+  width: var(--icon);
+  height: var(--icon);
+  border: 2px solid var(--ink);
+  border-radius: 70%;
+ }
+
+.handle{
+  background: var(--ink);
+  color: var(--ground);
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: var(--t-ui);
+  padding: .1em .45em;
+}
+
+.post-img{ display: block; width: 100%; aspect-ratio: 1; }
+
+.post-foot svg{
+  width: var(--icon); height: var(--icon);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linejoin: miter;
+}
+
+/* creds for posts*/
+
+.post-media{
+  position:relative;
+}
+
+.post-media .credit{
+  top: 0.6em;
+  right:3.5em;
+  pointer-events: auto;
+}
+
+.post-media .credit-detail{
+  left: auto;
+  right: 0; 
+}
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{
