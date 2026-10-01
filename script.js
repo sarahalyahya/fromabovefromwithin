@@ -268,6 +268,55 @@ const BEHAVIOURS = {
   };
 },
 
+'planet': function(stage, s){
+  const layer = stackView.querySelector('[data-layer="planet"]');
+  const email = layer.querySelector('.email');
+  const hls = layer.querySelectorAll('.hl');
+  const subs = s.subs;
+  const outAt = subs.findIndex(function(el){
+    return el.hasAttribute('data-email-out');
+  }); 
+  const at = Array.prototype.map.call(hls, function(h){
+      return subs.findIndex(function(el){
+        return el.dataset.hl === h.dataset.hl;
+      });
+    });
+  const IN = 0.1, OUT = 0.9;   /* out by IN, starts going back at OUT */
+  const LOAD = 0.15; //how long it takes email 2 load 
+
+
+  function smooth(t){ return t * t * (3 - 2 * t); }
+  function clamp01(x){ return x < 0? 0: x > 1? 1: x;}
+
+  return {
+    update: function(p){
+      if (!s.active) return;
+      stackView.style.opacity = 1;
+      poseStack(STACK_REST);
+      layer.style.setProperty('--pop', smooth(clamp01(Math.min(p / IN, (1 - p) / (1 - OUT)))));
+
+      // load email in once the layer is out 
+      email.style.setProperty('--load', clamp01((p - IN) / LOAD));
+
+
+      // light whichever highlight the current subtitle names */
+      const now = subs.indexOf(s.shown); //which sub r we on
+      hls.forEach(function(h,i){
+        if (at[i] !== -1 && now >= at[i]){
+          h.setAttribute('data-on','');
+        } else{
+          h.removeAttribute('data-on');
+        }
+      });
+     if (outAt !== -1 && now >= outAt) {
+      email.setAttribute('data-out','');
+     } else{
+      email.removeAttribute('data-out');
+     }
+    }
+  }
+},
+
 
 
 

@@ -432,6 +432,14 @@ video[data-on] + .credit{
   stroke-linejoin: miter;
 }
 
+[data-layer="feed"] .inner{
+  --subs-top: calc(9vh + 2 * 1.5 * var(--t-vo));   /* bottom gap + two lines of subtitle */
+  mask-image: linear-gradient(to bottom,
+    #000        calc(100% - (var(--subs-top) + 12vh) * var(--pop)),
+    transparent calc(100% - (var(--subs-top) + 2vh)  * var(--pop)));
+}
+
+
 /* creds for posts*/
 
 .post-media{
@@ -448,6 +456,61 @@ video[data-on] + .credit{
   left: auto;
   right: 0; 
 }
+
+
+/*planet email section */
+.email{
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  translate: -50% -50%;
+  width: fit-content;
+  overflow: hidden;
+  transition: opacity .6s;
+}
+
+.email[data-out]{
+  opacity: 0; 
+}
+
+.email img{
+  display: block;
+  max-width: 70vw;
+  max-height: 75vh; 
+}
+.hl{
+  position: absolute;
+  left: var(--x);
+  top: calc(var(--y) + var(--h));
+  width: var(--w); 
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+
+  transition: transform .9s ease-out;
+}
+.hl[data-on]{ 
+  transform: scaleX(1);
+  transition-delay: var(--delay, 0s);
+  /* outline: 3px solid var(--accent); */
+
+}
+
+.email .credit{
+   bottom: .6em; 
+   right: .6em;
+    pointer-events: auto; 
+  }
+
+.email .credit-detail{ 
+  top: auto; 
+  bottom: 160%; 
+  left: auto; 
+  right: 0; 
+}
+
+
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{
@@ -519,6 +582,21 @@ video[data-on] + .credit{
   left: 100%;                  
   margin-left: .6em;
 }
+
+.sub .credit{
+  position: relative;           
+  display: inline-grid;          
+  vertical-align: middle;
+  margin-left: .4em;
+}
+.sub .credit-detail{ 
+  top: auto; 
+  bottom: 160%; }   /* subtitles are at the bottom, so open upward */
+
+.sub.quote .credit{ 
+  position: absolute; 
+}        
+
 
 
 @media (prefers-reduced-motion: reduce){

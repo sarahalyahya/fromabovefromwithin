@@ -1,238 +1,278 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>From above from within</title>
-<link rel="stylesheet" href="style.css">
-<script type="module">
-  import { ModelViewerElement } from 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
-  ModelViewerElement.meshoptDecoderLocation = 'assets/meshopt_decoder.js';
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From above from within</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import { ModelViewerElement } from 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
+    ModelViewerElement.meshoptDecoderLocation = 'assets/meshopt_decoder.js';
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet">
+
 <body>
 
-<div id="gate">
+  <div id="gate">
     <button id="launch" type="button">Launch</button>
-</div>
+  </div>
 
-<!-- ambience bus lives here, outside #film, so it never resets on a scene change
+  <!-- ambience bus lives here, outside #film, so it never resets on a scene change
      <audio id="ambience" class="ambience" src="assets/audio/ambience.m4a" loop preload="auto"></audio> -->
 
-<main id="film"> 
+  <main id="film">
 
-   <div class="stack-view" id="stack" hidden> 
-        <div class="stack">
-          <div class="layer" style="--k:-3"><img src="assets/img/scene1-ss.png" class="fill stage-placeholder" alt=""></div>
-          <div class="layer" style="--k:-2"><img src="assets/img/scene2-ss.png" class="fill stage-placeholder" alt=""></div>
-          <div class="layer" style="--k:-1"><img src="assets/img/Satellite-placeholder.png" class="fill stage-placeholder" alt="" style="object-fit: contain"></div>
+    <div class="stack-view" id="stack" hidden>
+      <div class="stack">
+        <div class="layer" style="--k:-3"><img src="assets/img/scene1-ss.png" class="fill stage-placeholder" alt="">
+        </div>
+        <div class="layer" style="--k:-2"><img src="assets/img/scene2-ss.png" class="fill stage-placeholder" alt="">
+        </div>
+        <div class="layer" style="--k:-1"><img src="assets/img/Satellite-placeholder.png" class="fill stage-placeholder"
+            alt="" style="object-fit: contain"></div>
 
-          <div class="layer pivot" style="--k:0">
-            <div class="pair">
-               <div class="clip">
-        <video id="drone-commercial" src="assets/video/i_dronefootage.mp4"  muted loop playsinline></video>
-        <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
-      </div>
-
-      <div class="clip">
-        <video id="drone-crosshair"  src="assets/video/i_dronecrosshair_p1.mp4"  muted loop playsinline></video>
-         <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
-      </div>
-
+        <div class="layer pivot" style="--k:0">
+          <div class="pair">
+            <div class="clip">
+              <video id="drone-commercial" src="assets/video/i_dronefootage.mp4" muted loop playsinline></video>
+              <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
             </div>
-        <!-- <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+
+            <div class="clip">
+              <video id="drone-crosshair" src="assets/video/i_dronecrosshair_p1.mp4" muted loop playsinline></video>
+              <span class="credit" tabindex="0"><span class="credit-detail">iof, May 2026</span></span>
+            </div>
+
+          </div>
+          <!-- <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=13.7 class="sub quote">but I can see why it would be quite useful,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of Nabatieh."   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p> -->
-          </div>
-            <div class="layer" data-layer="feed" style="--k:1">
-              <div class="inner">
-                <div class="feed-strip">
-                  <article class="post">
-                    <header class="post-head">
-                      <span class="avatar"></span>
-                      <span class="handle">Bint Jbeil</span>
-                    </header>
-                    <div class="post-media">
-                       <img class="post-img" src="assets/img/01-bintjbeil.png" alt="">
-                       <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
+        </div>
+        <div class="layer" data-layer="feed" style="--k:1">
+          <div class="inner">
+            <div class="feed-strip">
+              <article class="post">
+                <header class="post-head">
+                  <span class="avatar"></span>
+                  <span class="handle">Bint Jbeil</span>
+                </header>
+                <div class="post-media">
+                  <img class="post-img" src="assets/img/01-bintjbeil.png" alt="">
+                  <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
 
-                    </div>
-                    <footer class="post-foot">
-                      <svg viewBox="0 0 24 24"><path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z"/></svg>
-                      <svg viewBox="0 0 24 24"><path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z"/></svg>
-                    </footer>
-                    </article>
-                     
-                     <article class="post">
-                    <header class="post-head">
-                      <span class="avatar"></span>
-                      <span class="handle">Rafah</span>
-                    </header>
-                    <div class="post-media">
-                      <img class="post-img" src="assets/img/02-talalsultan.png" alt="">
-                      <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
-
-                    </div>
-                    <footer class="post-foot">
-                      <svg viewBox="0 0 24 24"><path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z"/></svg>
-                      <svg viewBox="0 0 24 24"><path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z"/></svg>
-                    </footer>
-                    </article>
-                     <article class="post">
-                    <header class="post-head">
-                      <span class="avatar"></span>
-                      <span class="handle">Bint Jbeil</span>
-                    </header>
-                    <div class="post-media"> 
-                      <img class="post-img" src="assets/img/03-yaroun.png" alt="">
-                       <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
-
-                    </div>
-                    <footer class="post-foot">
-                      <svg viewBox="0 0 24 24"><path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z"/></svg>
-                      <svg viewBox="0 0 24 24"><path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z"/></svg>
-                    </footer>
-                    </article>
-                     <article class="post">
-                    <header class="post-head">
-                      <span class="avatar"></span>
-                      <span class="handle">Rafah</span>
-                    </header>
-                    <div class="post-media">
-                     <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
-                    <img class="post-img" src="assets/img/04-suwaiydeyah.png" alt="">
-
-                    </div>
-                    <footer class="post-foot">
-                      <svg viewBox="0 0 24 24"><path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z"/></svg>
-                      <svg viewBox="0 0 24 24"><path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z"/></svg>
-                    </footer>
-                    </article>
-                  </div>
-                 
                 </div>
-              </div>
+                <footer class="post-foot">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z" />
+                  </svg>
+                </footer>
+              </article>
+
+              <article class="post">
+                <header class="post-head">
+                  <span class="avatar"></span>
+                  <span class="handle">Rafah</span>
+                </header>
+                <div class="post-media">
+                  <img class="post-img" src="assets/img/02-talalsultan.png" alt="">
+                  <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
+
+                </div>
+                <footer class="post-foot">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z" />
+                  </svg>
+                </footer>
+              </article>
+              <article class="post">
+                <header class="post-head">
+                  <span class="avatar"></span>
+                  <span class="handle">Bint Jbeil</span>
+                </header>
+                <div class="post-media">
+                  <img class="post-img" src="assets/img/03-yaroun.png" alt="">
+                  <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
+
+                </div>
+                <footer class="post-foot">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z" />
+                  </svg>
+                </footer>
+              </article>
+              <article class="post">
+                <header class="post-head">
+                  <span class="avatar"></span>
+                  <span class="handle">Rafah</span>
+                </header>
+                <div class="post-media">
+                  <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
+                  <img class="post-img" src="assets/img/04-suwaiydeyah.png" alt="">
+
+                </div>
+                <footer class="post-foot">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 20 L4 12 A5 5 0 0 1 12 6 A5 5 0 0 1 20 12 Z" />
+                  </svg>
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 5 H20 V16 H10 L6 20 V16 H4 Z" />
+                  </svg>
+                </footer>
+              </article>
             </div>
 
+          </div>
+        </div>
+        <div class="layer" data-layer="planet" style="--k:2">
+          <div class="inner">
+            <div class="email">
+              <img src="assets/img/planetemail.png" alt="">
+              <span class="hl" data-hl="aoi" style="--x:13.4%; --y:47.3%; --w:26.0%; --h:2.2%"></span>
+              <span class="hl" data-hl="aoi" style="--x:70.8%; --y:49.5%; --w:19.2%; --h:2.2%; --delay:0.9s"></span>
+              <span class="hl" data-hl="aoi" style="--x:2.9%;  --y:51.5%; --w:14.4%; --h:2.2%; --delay:1.8s"></span>
+              <span class="hl" data-hl="withheld" style="--x:36.4%; --y:49.5%; --w:28.9%; --h:2.2%"></span>
+              <span class="credit" tabindex="0"><span class="credit-detail">Planet Labs, email to users, April 2026</span></span>
+
+            </div>
+          </div>
         </div>
       </div>
 
-  <!-- Every scene gets a VO. Until its clip exists, subtitles are driven by
+    </div>
+    </div>
+
+    <!-- Every scene gets a VO. Until its clip exists, subtitles are driven by
        scroll: sentence i holds from p = i/n to p = (i+1)/n.
        To retime a scene to its audio: uncomment its <audio class="vo">, then
        put data-t="seconds" on each .sub. That scene alone switches to the mix;
        the others keep scrolling. -->
 
-  <section class="scene" data-scene="castle" data-screens="11">
-    <div class="stage">
-      <!-- <p class="prose">text text text text </p> -->
-      <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom interaction-prompt="none"  exposure="0.9" shadow-intensity="0" environment-image="neutral" camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
-      <audio class="vo" src="assets/audio/VO_1.wav" preload="auto"></audio>
+    <section class="scene" data-scene="castle" data-screens="11">
+      <div class="stage">
+        <!-- <p class="prose">text text text text </p> -->
+        <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom
+          interaction-prompt="none" exposure="0.9" shadow-intensity="0" environment-image="neutral"
+          camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
+        <audio class="vo" src="assets/audio/VO_1.wav" preload="auto"></audio>
 
-      <div class="subs" lang="en">
-         <p class="sub" data-t="0">This is Qal’at al Shqif Arnoun, also known as Beaufort Castle in southern Lebanon's Nabatieh Governorate</p>
-        <p class="sub" data-t="7.0">The word Shqif, of Syriac origin, refers to the high towering rock, or steep cliff, that the castle was built into. </p>
-        <p class="sub" data-t="15.0">On July 31st 2026, Israeli forces carried out detonations in the area near the castle, using roughly 700 tonnes of explosives. </p>
+        <div class="subs" lang="en">
+          <p class="sub" data-t="0">This is Qal’at al Shqif Arnoun, also known as Beaufort Castle in southern Lebanon's
+            Nabatieh Governorate</p>
+          <p class="sub" data-t="7.0">The word Shqif, of Syriac origin, refers to the high towering rock, or steep
+            cliff, that the castle was built into. </p>
+          <p class="sub" data-t="15.0">On July 31st 2026, Israeli forces carried out detonations in the area near the
+            castle, using roughly 700 tonnes of explosives. </p>
 
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="overlook" data-screens="12">
-    <div class="stage">
-      <!-- The castle looks out. As the narration names a direction, a spotlight fan
+    <section class="scene" data-scene="overlook" data-screens="12">
+      <div class="stage">
+        <!-- The castle looks out. As the narration names a direction, a spotlight fan
            sweeps out that way and its label fades in. Angles are measured from north,
            0 = up, clockwise, and converted in the paths below as
            x = 500 + R*sin(a), y = 460 - R*cos(a). Castle at 500,460. Fan radius 420. -->
 
-      <svg class="diagram" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          
-          <radialGradient id="beam-fade" gradientUnits="userSpaceOnUse"
-                          cx="500" cy="460" r="800">
-            <stop offset="0"   stop-color="#5a5b52" stop-opacity="0.45"></stop>
-            <stop offset="0.5" stop-color="#3a3b34" stop-opacity="0.30"></stop>
-            <stop offset="1"   stop-color="#1e1f1b" stop-opacity="0.12"></stop>
-          </radialGradient>
-          <radialGradient id="beam-hot" gradientUnits="userSpaceOnUse"
-                          cx="500" cy="460" r="800">
-            <stop offset="0"   stop-color="#8a877e" stop-opacity="0.60"></stop>
-            <stop offset="0.5" stop-color="#5f6057" stop-opacity="0.40"></stop>
-            <stop offset="1"   stop-color="#33342d" stop-opacity="0.18"></stop>
-          </radialGradient>
-                    <!-- the wedge defined once & pointing straight up.  -->
-          <g id="beam">
-            <path class="beam-spread" d="M500,460 L100.0,-232.8 A800,800 0 0 1 900.0,-232.8 Z"></path>
-            <path class="beam-core"   d="M500,460 L347.4,-325.3 A800,800 0 0 1 652.6,-325.3 Z"></path>
+        <svg class="diagram" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+
+            <radialGradient id="beam-fade" gradientUnits="userSpaceOnUse" cx="500" cy="460" r="800">
+              <stop offset="0" stop-color="#5a5b52" stop-opacity="0.45"></stop>
+              <stop offset="0.5" stop-color="#3a3b34" stop-opacity="0.30"></stop>
+              <stop offset="1" stop-color="#1e1f1b" stop-opacity="0.12"></stop>
+            </radialGradient>
+            <radialGradient id="beam-hot" gradientUnits="userSpaceOnUse" cx="500" cy="460" r="800">
+              <stop offset="0" stop-color="#8a877e" stop-opacity="0.60"></stop>
+              <stop offset="0.5" stop-color="#5f6057" stop-opacity="0.40"></stop>
+              <stop offset="1" stop-color="#33342d" stop-opacity="0.18"></stop>
+            </radialGradient>
+            <!-- the wedge defined once & pointing straight up.  -->
+            <g id="beam">
+              <path class="beam-spread" d="M500,460 L100.0,-232.8 A800,800 0 0 1 900.0,-232.8 Z"></path>
+              <path class="beam-core" d="M500,460 L347.4,-325.3 A800,800 0 0 1 652.6,-325.3 Z"></path>
+            </g>
+
+          </defs>
+
+          <!-- spotlight beams, lit by BEHAVIOURS.overlook -->
+          <g data-fan="nabatieh" opacity="0" transform="rotate(327 500 460)">
+            <use href="#beam"></use>
+            <text x="500" y="-2" text-anchor="middle" transform="rotate(-327 500 -2)" class="fan-label">NABATIEH</text>
+          </g>
+          <g data-fan="beqaa" opacity="0" transform="rotate(36 500 460)">
+            <use href="#beam"></use>
+            <text x="500" y="-2" text-anchor="middle" transform="rotate(-36 500 -2)" class="fan-label">BEQAA
+              VALLEY</text>
+          </g>
+          <g data-fan="galilee" opacity="0" transform="rotate(180 500 460)">
+            <use href="#beam"></use>
+            <text x="500" y="-80" text-anchor="middle" transform="rotate(-180 500 -2)" class="fan-label">GALILEE</text>
           </g>
 
-        </defs>
+          <!-- beaufort coords for my reference;  33.324,35.532       -->
+          <!-- reference lines, visible throughout -->
+          <path class="ref-line" d="M605,-10 C665,170 545,300 575,455 C605,610 700,720 655,1010"></path>
+          <path class="ref-line ref-dashed" d="M-10,820 C250,800 520,790 700,720 C800,680 900,640 1010,590"></path>
+          <text x="625" y="105" text-anchor="start" class="ref-label">LITANI</text>
 
-        <!-- spotlight beams, lit by BEHAVIOURS.overlook -->
-                <g data-fan="nabatieh" opacity="0" transform="rotate(327 500 460)">
-          <use href="#beam"></use>
-          <text x="500" y="-2" text-anchor="middle" transform="rotate(-327 500 -2)" class="fan-label">NABATIEH</text>
-        </g>
-        <g data-fan="beqaa" opacity="0" transform="rotate(36 500 460)">
-          <use href="#beam"></use>
-          <text x="500" y="-2" text-anchor="middle" transform="rotate(-36 500 -2)" class="fan-label">BEQAA VALLEY</text>
-        </g>
-        <g data-fan="galilee" opacity="0" transform="rotate(180 500 460)">
-          <use href="#beam"></use>
-          <text x="500" y="-80" text-anchor="middle" transform="rotate(-180 500 -2)" class="fan-label">GALILEE</text>
-        </g>
 
-        <!-- beaufort coords for my reference;  33.324,35.532       -->
-        <!-- reference lines, visible throughout -->
-        <path class="ref-line" d="M605,-10 C665,170 545,300 575,455 C605,610 700,720 655,1010"></path>
-        <path class="ref-line ref-dashed" d="M-10,820 C250,800 520,790 700,720 C800,680 900,640 1010,590"></path>
-        <text x="625" y="105" text-anchor="start" class="ref-label">LITANI</text>
-
-       
           <foreignObject id="castle-box" x="324" y="217" width="327" height="480">
-          <model-viewer class="castle-3d" src="assets/beaufort-optimized.glb"
-            disable-zoom interaction-prompt="none"
-            exposure="0.9" shadow-intensity="0" environment-image="neutral"
-            camera-orbit="370deg 45deg 95%" orientation="0deg -90deg 0deg"
-            field-of-view="35deg"></model-viewer>
-        </foreignObject>
+            <model-viewer class="castle-3d" src="assets/beaufort-optimized.glb" disable-zoom interaction-prompt="none"
+              exposure="0.9" shadow-intensity="0" environment-image="neutral" camera-orbit="370deg 45deg 95%"
+              orientation="0deg -90deg 0deg" field-of-view="35deg"></model-viewer>
+          </foreignObject>
 
-        <!-- the castle:traced from mapbox -->
-        <path class="castle-outline" d="M512.6,336.8 L541.8,338.8 L567.2,336.8 L564.0,352.5 L560.7,378.5 L558.1,407.7 L562.0,430.5 L569.2,452.0 L559.4,465.0 L553.6,482.5 L545.1,499.5 L541.8,521.6 L540.5,547.6 L535.3,555.4 L512.6,553.4 L508.7,560.6 L480.1,570.3 L447.5,576.8 L424.8,574.2 L405.9,572.9 L409.8,551.5 L422.2,526.8 L431.9,495.5 L438.4,468.9 L448.2,448.7 L457.9,429.9 L465.8,413.6 L472.9,403.2 L480.7,390.2 L487.2,374.6 L493.7,357.7 L500.2,346.0 Z"></path>
-        <circle cx="500" cy="460" r="3.5" fill="#e6e3dc"></circle>
-      </svg>
+          <!-- the castle:traced from mapbox -->
+          <path class="castle-outline"
+            d="M512.6,336.8 L541.8,338.8 L567.2,336.8 L564.0,352.5 L560.7,378.5 L558.1,407.7 L562.0,430.5 L569.2,452.0 L559.4,465.0 L553.6,482.5 L545.1,499.5 L541.8,521.6 L540.5,547.6 L535.3,555.4 L512.6,553.4 L508.7,560.6 L480.1,570.3 L447.5,576.8 L424.8,574.2 L405.9,572.9 L409.8,551.5 L422.2,526.8 L431.9,495.5 L438.4,468.9 L448.2,448.7 L457.9,429.9 L465.8,413.6 L472.9,403.2 L480.7,390.2 L487.2,374.6 L493.7,357.7 L500.2,346.0 Z">
+          </path>
+          <circle cx="500" cy="460" r="3.5" fill="#e6e3dc"></circle>
+        </svg>
 
 
-  
 
-      <audio class="vo" src="assets/audio/VO_2.m4a" preload="auto"></audio>
 
-      <div class="subs" lang="en">
-        <p class="sub">The 12th century fortress stands 700 meters above sea level;</p>
-        <p class="sub">it sits on a 300m cliff of karstic limestone, porous and riddled with crevices.</p>
-        <p class="sub">The castle overlooks the immediate southern Lebanese landscape, the surrounding villages in Nabatieh governorate,</p>
-        <p class="sub">as well as the Litani River, the Beqaa Valley,</p>
-        <p class="sub">and, to the south of it, the Galilee in occupied Palestine.</p>
+        <audio class="vo" src="assets/audio/VO_2.m4a" preload="auto"></audio>
+
+        <div class="subs" lang="en">
+          <p class="sub">The 12th century fortress stands 700 meters above sea level;</p>
+          <p class="sub">it sits on a 300m cliff of karstic limestone, porous and riddled with crevices.</p>
+          <p class="sub">The castle overlooks the immediate southern Lebanese landscape, the surrounding villages in
+            Nabatieh governorate,</p>
+          <p class="sub">as well as the Litani River, the Beqaa Valley,</p>
+          <p class="sub">and, to the south of it, the Galilee in occupied Palestine.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="drone-footage" data-screens="28" data-stack>
-    <div class="stage" id="drone-footage-stg">
-      <!-- podcast excerpt takes its turn in the spoken track rather than running
+    <section class="scene" data-scene="drone-footage" data-screens="28" data-stack>
+      <div class="stage" id="drone-footage-stg">
+        <!-- podcast excerpt takes its turn in the spoken track rather than running
            under it, so its lines time against this scene's one voice clock.
            Maybe just a wave form while it plays.
            Then: first video on one side of the screen, black background.
            Second video on the other side, black background.
            [I want to say it's like a commercial drone that produces sexy footage,
            more descriptive here] -->
-      <audio class="vo" src="assets/audio/VO_3.mp3" preload="auto"></audio>
-      <!-- <div class="stack-view"> 
+        <audio class="vo" src="assets/audio/VO_3.mp3" preload="auto"></audio>
+        <!-- <div class="stack-view"> 
         <div class="stack">
           <div class="layer" style="--k:-1"><div class="placeholder">castle</div></div>
           <div class="layer pivot" style="--k:0">
@@ -252,289 +292,315 @@
         <p data-t=13.7 class="sub quote">but I can see why it would be quite useful,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
         <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of Nabatieh."   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p> -->
-          <!-- </div>
+        <!-- </div>
             <div class="layer" style="--k:1"><div class="placeholder">satellite</div></div>
 
         </div>
-      </div> --> 
-      
-     
+      </div> -->
 
-      <div class="subs" lang="en">
-        
-        <p data-t=0.3 class="sub">The castle has been sought after throughout history for its elevated position, its view from above.</p>
 
-      
-       
-       
-      
-        <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no military expert,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
-        <p data-t=13.7 class="sub quote">but I can see why it would be quite useful,   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
-        <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just amazing and really quite impressive.   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
-        <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of Nabatieh."   <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
-      
 
-        <p data-t=33.2 class="sub">In May 2026, the Israeli occupation forces announced that they had seized Qal’at al Shqif </p>
-        <p data-t=39.2 class="sub">releasing two videos as part of their announcement</p>
-        <p data-t=43.0 class="sub" data-cue="drone-commercial">The first was aerial footage of the ruins, seemingly captured by a commercial drone,</p>
-        <p data-t=48.1 class="sub">taken in the register of content designed to be packaged and shared</p>
-        <p data-t=55.0 class="sub" data-cue="drone-crosshair">The second video begins at a similar angle,</p>
-        <p data-t=58.1 class="sub">but this one carries crosshairs at the center of the frame, indicating that it’s footage from an armed drone</p>
-        <p data-t=66.5 class="sub">For several seconds, the crosshairs track Israeli soldiers descending the castle’s stairs</p>
-        <p data-t=71.7 class="sub">The image is confusing</p>
-        <p data-t=73.5 class="sub">Briefly, I am watching the soldiers through their own apparatus</p>
+        <div class="subs" lang="en">
+
+          <p data-t=0.3 class="sub">The castle has been sought after throughout history for its elevated position, its
+            view from above.</p>
+
+
+
+
+
+          <p data-t=8.1 class="sub quote">"When you’re standing there, the view is incredible, and you know I’m no
+            military expert, <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode,
+                date</span></span></p>
+          <p data-t=13.7 class="sub quote">but I can see why it would be quite useful, <span class="credit"
+              tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
+          <p data-t=16.8 class="sub quote">the view of south Lebanon, the northern parts of Israel on one side, are just
+            amazing and really quite impressive. <span class="credit" tabindex="0"><span class="credit-detail">Podcast,
+                episode, date</span></span></p>
+          <p data-t=27.0 class="sub quote">Just behind you, 15 minutes drive away, is the major South Lebanese city of
+            Nabatieh." <span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode,
+                date</span></span></p>
+
+
+          <p data-t=33.2 class="sub">In May 2026, the Israeli occupation forces announced that they had seized Qal’at al
+            Shqif </p>
+          <p data-t=39.2 class="sub">releasing two videos as part of their announcement</p>
+          <p data-t=43.0 class="sub" data-cue="drone-commercial">The first was aerial footage of the ruins, seemingly
+            captured by a commercial drone,</p>
+          <p data-t=48.1 class="sub">taken in the register of content designed to be packaged and shared</p>
+          <p data-t=55.0 class="sub" data-cue="drone-crosshair">The second video begins at a similar angle,</p>
+          <p data-t=58.1 class="sub">but this one carries crosshairs at the center of the frame, indicating that it’s
+            footage from an armed drone</p>
+          <p data-t=66.5 class="sub">For several seconds, the crosshairs track Israeli soldiers descending the castle’s
+            stairs</p>
+          <p data-t=71.7 class="sub">The image is confusing</p>
+          <p data-t=73.5 class="sub">Briefly, I am watching the soldiers through their own apparatus</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="all-altitudes" data-screens="10" data-stack>
-    <div class="stage">
-      <!-- Israeli footage looping, maybe both videos side by side, but at the last
+    <section class="scene" data-scene="all-altitudes" data-screens="10" data-stack>
+      <div class="stage">
+        <!-- Israeli footage looping, maybe both videos side by side, but at the last
            line I zoom out to that satellite layer stack I have -->
-      <!-- <audio class="vo" src="assets/audio/04-all-altitudes.m4a" preload="auto"></audio> -->
+        <audio class="vo" src="assets/audio/VO_4.mp3" preload="auto"></audio>
 
-      <div class="subs" lang="en">
-        <p class="sub">Having complete visual command of what you are trying to conquer</p>
-        <p class="sub">is an essential foundation of the infrastructure of domination</p>
-        <p class="sub">Historically, it could have meant seizing the highest fortress</p>
-        <p class="sub">Now it is one register of many that can go above it</p>
-        <p class="sub">The commercial drone, the fighter drone</p>
-        <p class="sub">Or even higher: satellite imagery</p>
-        <p class="sub">Over time, more optimized and automated</p>
-        <p class="sub">Perhaps the message here is that a watchful eye exists at all altitudes</p>
-        <p class="sub">Absolute vertical exposure as an offensive weapon</p>
+        <div class="subs" lang="en">
+          <p data-t=0.3 class="sub">Having complete visual command of what you are trying to conquer</p>
+          <p data-t=4.0 class="sub">is an essential piece of the infrastructure of domination</p>
+          <p data-t=8.0 class="sub">Historically, it could have meant seizing the highest fortress</p>
+          <p data-t=12.0 class="sub">Now, it is one register of many that can go above it</p>
+          <p data-t=15.5 class="sub">The commercial drone, the fighter drone</p>
+          <p data-t=19.0 class="sub">or even higher: satellite imagery</p>
+          <p data-t=21.1 class="sub">over time, more optimized and automated</p>
+          <p data-t=25.2 class="sub">Perhaps the message here is that a watchful eye exists at all altitudes</p>
+          <p data-t=30.2 class="sub">Absolute vertical exposure as an offensive weapon</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="feed" data-screens="10" data-stack>
-    <div class="stage">
-      <!-- Zoom back into an ig feed scrolling scrolling scrolling -->
-      <!-- <audio class="vo" src="assets/audio/05-feed.m4a" preload="auto"></audio> -->
-      <!-- <video class="fill" src="assets/video/feed-scroll.mp4" muted loop playsinline></video> -->
+    <section class="scene" data-scene="feed" data-screens="10" data-stack>
+      <div class="stage">
+        <!-- Zoom back into an ig feed scrolling scrolling scrolling -->
+        <audio class="vo" src="assets/audio/VO_5.mp3" preload="auto"></audio>
+        <!-- <video class="fill" src="assets/video/feed-scroll.mp4" muted loop playsinline></video> -->
 
-      <div class="subs" lang="en">
-        <p class="sub">On the receiving end, this vertical exposure has also become routine for us,</p>
-        <p class="sub">to process the wreckage and horror</p>
-        <p class="sub">One satellite before-and-after diptych after another on the feed</p>
-        <p class="sub">We are simultaneously enraged and increasingly distant,</p>
-        <p class="sub">“watching life on earth as if seated in the atmosphere supervising”<span class="credit" tabindex="0"><span class="credit-detail">Podcast, episode, date</span></span></p>
-        
+        <div class="subs" lang="en">
+          <p data-t=0.5 class="sub">On the receiving end, encountering documents of this vertical exposure</p>
+          <p data-t=4.5 class="sub">has become routine for us, to process the wreckage and horror</p>
+          <p data-t=8.9 class="sub">One satellite before-and-after diptych on the feed, then another</p>
+          <p data-t=13.3 class="sub">We are simultaneously enraged and increasingly distant,</p>
+          <p data-t=17.3 class="sub">“watching life on earth as if seated in the atmosphere <span style="white-space: nowrap">supervising”<span class="credit" tabindex="0"><span class="credit-detail">…</span></span></span></p>
+</p>
 
+
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="planet" data-screens="8" data-stack>
-    <div class="stage">
-      <!-- black screen. Email? Or mission screenshot? I can be more animated and
+    <section class="scene" data-scene="planet" data-screens="8" data-stack>
+      <div class="stage">
+        <!-- black screen. Email? Or mission screenshot? I can be more animated and
            have like an email OS UI but too much i think.
            Then a question — smth like: What kind of image is a withheld image? -->
-      <!-- <audio class="vo" src="assets/audio/06-planet.m4a" preload="auto"></audio> -->
-      <div class="placeholder">planet</div>
+        <audio class="vo" src="assets/audio/VO_6.mp3" preload="auto"></audio>
 
-      <div class="subs" lang="en">
-        <p class="sub">On April 4, 2026, the American commercial satellite company Planet Labs sent an email to its users.</p>
-        <p class="sub">Imagery of what it called the "designated area of interest" in the "Middle East conflict"</p>
-        <p class="sub">would be indefinitely withheld.</p>
-        <p class="sub">On their website, they state:</p>
-        <p class="sub quote">“Planet is driven by a mission to image all of Earth’s landmass every day,</p>
-        <p class="sub quote">and make global change visible, accessible and actionable.”</p>
-        <p class="sub">The firm now releases imagery on a case-by-case basis.</p>
+        <div class="subs" lang="en">
+          <p data-t=0.5 class="sub">On April 4, 2026, the American commercial satellite company Planet Labs sent an email to its
+            users.</p>
+          <p data-t=7.9 class="sub" data-hl="aoi">Imagery of what it called the "designated area of interest" in the "Middle East conflict"</p>
+          <p data-t=13.2 class="sub" data-hl="withheld">would be indefinitely withheld.</p>
+          <p data-t=16.4 class="sub" data-email-out>On their website, they state:</p>
+          <p data-t=18.4 class="sub quote">“Planet is driven by a mission to image all of Earth’s landmass every day,</p>
+          <p data-t=22.6 class="sub quote">and make global change visible, accessible and actionable.”</p>
+          <p data-t=28.2 class="sub" >The firm now releases these images on a case-by-case basis.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="kyl-bingaman" data-screens="6" data-stack>
-    <div class="stage">
-      <!-- black background. Something to explain what the 2-meter resolution
+    <section class="scene" data-scene="kyl-bingaman" data-screens="6" data-stack>
+      <div class="stage">
+        <!-- black background. Something to explain what the 2-meter resolution
            means, like a pixel comparison -->
-      <!-- <audio class="vo" src="assets/audio/07-kyl-bingaman.m4a" preload="auto"></audio> -->
-      <div class="placeholder">kyl-bingaman</div>
+        <!-- <audio class="vo" src="assets/audio/07-kyl-bingaman.m4a" preload="auto"></audio> -->
+        <div class="placeholder">kyl-bingaman</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">This restriction has a precedent.</p>
-        <p class="sub">Between 1997 and 2020, the Kyl-Bingaman Amendment in US law</p>
-        <p class="sub">had prevented satellite companies from distributing high-resolution imagery of occupied Palestine.</p>
-        <p class="sub">Imagery was capped at a 2-meter-per-pixel resolution,</p>
-        <p class="sub">allowing people to identify the general urban landscape, like a neighborhood,</p>
-        <p class="sub">but not, for example, differentiate a car from a tank.</p>
+        <div class="subs" lang="en">
+          <p class="sub">This restriction has a precedent.</p>
+          <p class="sub">Between 1997 and 2020, the Kyl-Bingaman Amendment in US law</p>
+          <p class="sub">had prevented satellite companies from distributing high-resolution imagery of occupied
+            Palestine.</p>
+          <p class="sub">Imagery was capped at a 2-meter-per-pixel resolution,</p>
+          <p class="sub">allowing people to identify the general urban landscape, like a neighborhood,</p>
+          <p class="sub">but not, for example, differentiate a car from a tank.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="govmap" data-screens="5" data-stack>
-    <div class="stage">
-      <!-- maybe just loading the imgs fading in -->
-      <!-- <audio class="vo" src="assets/audio/08-govmap.m4a" preload="auto"></audio> -->
-      <div class="placeholder">govmap</div>
+    <section class="scene" data-scene="govmap" data-screens="5" data-stack>
+      <div class="stage">
+        <!-- maybe just loading the imgs fading in -->
+        <!-- <audio class="vo" src="assets/audio/08-govmap.m4a" preload="auto"></audio> -->
+        <div class="placeholder">govmap</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">In contrast, Israel’s official public mapping service, GovMap, briefly, and some say mistakenly,</p>
-        <p class="sub">published high-resolution aerial images of Northern Gaza from 2025.</p>
-        <p class="sub">The images revealed extensive destruction, as well as military outposts.</p>
-        <p class="sub">Most images have a 13cm per pixel resolution.</p>
-        <p class="sub">Shortly after, the service re-blurred these images.</p>
+        <div class="subs" lang="en">
+          <p class="sub">In contrast, Israel’s official public mapping service, GovMap, briefly, and some say
+            mistakenly,</p>
+          <p class="sub">published high-resolution aerial images of Northern Gaza from 2025.</p>
+          <p class="sub">The images revealed extensive destruction, as well as military outposts.</p>
+          <p class="sub">Most images have a 13cm per pixel resolution.</p>
+          <p class="sub">Shortly after, the service re-blurred these images.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="visibility" data-screens="12">
-    <div class="stage">
-      <!-- maybe an image of the castle aerially, and we zoom zoom zooom zoom on a pixel.
+    <section class="scene" data-scene="visibility" data-screens="12">
+      <div class="stage">
+        <!-- maybe an image of the castle aerially, and we zoom zoom zooom zoom on a pixel.
            Last line alt: What would it take to look from outside this arrangement? -->
-      <!-- <audio class="vo" src="assets/audio/09-visibility.m4a" preload="auto"></audio> -->
-      <div class="placeholder">visibility</div>
+        <!-- <audio class="vo" src="assets/audio/09-visibility.m4a" preload="auto"></audio> -->
+        <div class="placeholder">visibility</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">One must question how, and maybe why, these mistakes, these lapses in visibility, take place.</p>
-        <p class="sub">At this point, it is no secret who decides how much detail is too much for us to see,</p>
-        <p class="sub">or when the aerial shutter needs to be completely closed.</p>
-        <p class="sub">Satellite and aerial imagery reach us seemingly neutral,</p>
-        <p class="sub">but they carry the logic of their Cold War origins.</p>
-        <p class="sub">When we see too little, it serves a purpose, and when we see too much, it does too.</p>
-        <p class="sub">What must we do to escape being under the mercy of a vague visual regime?</p>
+        <div class="subs" lang="en">
+          <p class="sub">One must question how, and maybe why, these mistakes, these lapses in visibility, take place.
+          </p>
+          <p class="sub">At this point, it is no secret who decides how much detail is too much for us to see,</p>
+          <p class="sub">or when the aerial shutter needs to be completely closed.</p>
+          <p class="sub">Satellite and aerial imagery reach us seemingly neutral,</p>
+          <p class="sub">but they carry the logic of their Cold War origins.</p>
+          <p class="sub">When we see too little, it serves a purpose, and when we see too much, it does too.</p>
+          <p class="sub">What must we do to escape being under the mercy of a vague visual regime?</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="crevices" data-screens="4">
-    <div class="stage">
-      <!-- continues the zoom: we are inside the pixel now -->
-      <!-- <audio class="vo" src="assets/audio/10-crevices.m4a" preload="auto"></audio> -->
-      <div class="placeholder">crevices</div>
+    <section class="scene" data-scene="crevices" data-screens="4">
+      <div class="stage">
+        <!-- continues the zoom: we are inside the pixel now -->
+        <!-- <audio class="vo" src="assets/audio/10-crevices.m4a" preload="auto"></audio> -->
+        <div class="placeholder">crevices</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">Perhaps we, the people of the land, look to the crevices,</p>
-        <p class="sub">to what is smaller than the highest resolution image we can get our hands on,</p>
-        <p class="sub">to what the image could not resolve.</p>
+        <div class="subs" lang="en">
+          <p class="sub">Perhaps we, the people of the land, look to the crevices,</p>
+          <p class="sub">to what is smaller than the highest resolution image we can get our hands on,</p>
+          <p class="sub">to what the image could not resolve.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="tabsoun" data-screens="12">
-    <div class="stage">
-      <!-- the pixel is clearer, and the video of the animal roaming around the
+    <section class="scene" data-scene="tabsoun" data-screens="12">
+      <div class="stage">
+        <!-- the pixel is clearer, and the video of the animal roaming around the
            castle loads within it if that makes sense.
            Then a collage of first-hand footage of the animal scattered on the screen -->
-      <!-- <audio class="vo" src="assets/audio/11-tabsoun.m4a" preload="auto"></audio> -->
-      <!-- <video class="fill" src="assets/video/tabsoun-01.mp4" muted loop playsinline></video> -->
-      <div class="placeholder">tabsoun</div>
+        <!-- <audio class="vo" src="assets/audio/11-tabsoun.m4a" preload="auto"></audio> -->
+        <!-- <video class="fill" src="assets/video/tabsoun-01.mp4" muted loop playsinline></video> -->
+        <div class="placeholder">tabsoun</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">Within the karstic cliffs of the South, the same porous limestone the castle was carved into, riddled with fissures,</p>
-        <p class="sub">lives an animal called the Tabsoun in Arabic, which has its own appetite for a high lookout.</p>
-        <p class="sub">It’s a small mammal that lives in colonies</p>
-        <p class="sub">and sleeps in crevices too narrow for anything larger to enter or image.</p>
-        <p class="sub">Locals catch a glimpse of it when it comes out to bask in the sun, and endearingly rush to photograph it.</p>
-        <p class="sub">One of the colony always keeps watch from a high rock,</p>
-        <p class="sub">and at the first sign of danger it calls, and the others disappear into stone.</p>
+        <div class="subs" lang="en">
+          <p class="sub">Within the karstic cliffs of the South, the same porous limestone the castle was carved into,
+            riddled with fissures,</p>
+          <p class="sub">lives an animal called the Tabsoun in Arabic, which has its own appetite for a high lookout.
+          </p>
+          <p class="sub">It’s a small mammal that lives in colonies</p>
+          <p class="sub">and sleeps in crevices too narrow for anything larger to enter or image.</p>
+          <p class="sub">Locals catch a glimpse of it when it comes out to bask in the sun, and endearingly rush to
+            photograph it.</p>
+          <p class="sub">One of the colony always keeps watch from a high rock,</p>
+          <p class="sub">and at the first sign of danger it calls, and the others disappear into stone.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="witness" data-screens="5">
-    <div class="stage">
-      <!-- visual note tbd -->
-      <!-- <audio class="vo" src="assets/audio/12-witness.m4a" preload="auto"></audio> -->
-      <div class="placeholder">witness</div>
+    <section class="scene" data-scene="witness" data-screens="5">
+      <div class="stage">
+        <!-- visual note tbd -->
+        <!-- <audio class="vo" src="assets/audio/12-witness.m4a" preload="auto"></audio> -->
+        <div class="placeholder">witness</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">Local grassroots organizations, like Green Southerners, have described the Tabsoun as a silent witness,</p>
-        <p class="sub">a symbol of the ecological cost of this war.</p>
-        <p class="sub">I wonder, has the Tabsoun, from within the cavities of the terrain,</p>
-        <p class="sub">somehow seen more than an all-seeing visual regime?</p>
+        <div class="subs" lang="en">
+          <p class="sub">Local grassroots organizations, like Green Southerners, have described the Tabsoun as a silent
+            witness,</p>
+          <p class="sub">a symbol of the ecological cost of this war.</p>
+          <p class="sub">I wonder, has the Tabsoun, from within the cavities of the terrain,</p>
+          <p class="sub">somehow seen more than an all-seeing visual regime?</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="sharon-1982" data-screens="15">
-    <div class="stage">
-      <!-- black screen, then:
+    <section class="scene" data-scene="sharon-1982" data-screens="15">
+      <div class="stage">
+        <!-- black screen, then:
            https://en.wikipedia.org/wiki/File:1982_Lebanon_War_IX.jpg
            load this image and zoom into the holes and crevices -->
-      <!-- <audio class="vo" src="assets/audio/13-sharon-1982.m4a" preload="auto"></audio> -->
-      <!-- <img class="fill" src="assets/img/1982-lebanon-war-ix.jpg" alt=""> -->
-      <div class="placeholder">sharon-1982</div>
+        <!-- <audio class="vo" src="assets/audio/13-sharon-1982.m4a" preload="auto"></audio> -->
+        <!-- <img class="fill" src="assets/img/1982-lebanon-war-ix.jpg" alt=""> -->
+        <div class="placeholder">sharon-1982</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">Perhaps it’s always been watching those who have no regard for it.</p>
-        <p class="sub">Colonies of one kind have lived in this cliff for generations.</p>
-        <p class="sub">Colonial powers of another kind have attempted to occupy the castle above it.</p>
-        <p class="sub">In June 1982, during the Israeli invasion of Lebanon, Ariel Sharon, then Israeli Minister of Defense,</p>
-        <p class="sub">descended by helicopter onto the castle with an army of photographers,</p>
-        <p class="sub">declaring a battle won without losses.</p>
-        <p class="sub">He was unaware that some of his soldiers had been killed,</p>
-        <p class="sub">and that none of the castle’s local guardians had surrendered.</p>
-        <p class="sub">One of them, wounded, was still in the rubble.</p>
-        <p class="sub">Perhaps, beside him in the rock, lay a Tabsoun or two, or a whole colony,</p>
-        <p class="sub">invisible yet seeing.</p>
-        <p class="sub">Seeing more than the army's cameras, more than their documentarians,</p>
-        <p class="sub">more than those who wrote the story afterwards.</p>
+        <div class="subs" lang="en">
+          <p class="sub">Perhaps it’s always been watching those who have no regard for it.</p>
+          <p class="sub">Colonies of one kind have lived in this cliff for generations.</p>
+          <p class="sub">Colonial powers of another kind have attempted to occupy the castle above it.</p>
+          <p class="sub">In June 1982, during the Israeli invasion of Lebanon, Ariel Sharon, then Israeli Minister of
+            Defense,</p>
+          <p class="sub">descended by helicopter onto the castle with an army of photographers,</p>
+          <p class="sub">declaring a battle won without losses.</p>
+          <p class="sub">He was unaware that some of his soldiers had been killed,</p>
+          <p class="sub">and that none of the castle’s local guardians had surrendered.</p>
+          <p class="sub">One of them, wounded, was still in the rubble.</p>
+          <p class="sub">Perhaps, beside him in the rock, lay a Tabsoun or two, or a whole colony,</p>
+          <p class="sub">invisible yet seeing.</p>
+          <p class="sub">Seeing more than the army's cameras, more than their documentarians,</p>
+          <p class="sub">more than those who wrote the story afterwards.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="into-the-rock" data-screens="16">
-    <div class="stage">
-      <!-- [I'm stumped here…something textural or something…idk]
+    <section class="scene" data-scene="into-the-rock" data-screens="16">
+      <div class="stage">
+        <!-- [I'm stumped here…something textural or something…idk]
            Muin Taher's Arabic testimony belongs somewhere in this scene — left out
            of the subtitles for now, it's in script.md -->
-      <!-- <audio class="vo" src="assets/audio/14-into-the-rock.m4a" preload="auto"></audio> -->
-      <div class="placeholder">into-the-rock</div>
+        <!-- <audio class="vo" src="assets/audio/14-into-the-rock.m4a" preload="auto"></audio> -->
+        <div class="placeholder">into-the-rock</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">The castle’s defenders had gone into the rock too.</p>
-        <p class="sub">In 1982, local Fighters and students dug trenches and tunnels into the cliff,</p>
-        <p class="sub">and under shelling, they learned to count the seconds between a shell being fired and landing,</p>
-        <p class="sub">and to work inside that interval.</p>
-        <p class="sub">Muin Taher, whose battalion held the castle in that battle,</p>
-        <p class="sub">states that while digging, they found the remains of dozens of men</p>
-        <p class="sub">who had died defending this ground against the Crusaders decades ago.</p>
-        <p class="sub">They reburied them where they lay.</p>
-        <p class="sub">Years later, in a restoration campaign of the site,</p>
-        <p class="sub">Taher writes in his testimony about the unearthing of the remains of two of those who fought beside him in 1982.</p>
-        <p class="sub">Fighters of previous battles become inseparable from the landscape,</p>
-        <p class="sub">as do the more-than-human elements accompanying them.</p>
-        <p class="sub">No image from above can resolve that.</p>
+        <div class="subs" lang="en">
+          <p class="sub">The castle’s defenders had gone into the rock too.</p>
+          <p class="sub">In 1982, local Fighters and students dug trenches and tunnels into the cliff,</p>
+          <p class="sub">and under shelling, they learned to count the seconds between a shell being fired and landing,
+          </p>
+          <p class="sub">and to work inside that interval.</p>
+          <p class="sub">Muin Taher, whose battalion held the castle in that battle,</p>
+          <p class="sub">states that while digging, they found the remains of dozens of men</p>
+          <p class="sub">who had died defending this ground against the Crusaders decades ago.</p>
+          <p class="sub">They reburied them where they lay.</p>
+          <p class="sub">Years later, in a restoration campaign of the site,</p>
+          <p class="sub">Taher writes in his testimony about the unearthing of the remains of two of those who fought
+            beside him in 1982.</p>
+          <p class="sub">Fighters of previous battles become inseparable from the landscape,</p>
+          <p class="sub">as do the more-than-human elements accompanying them.</p>
+          <p class="sub">No image from above can resolve that.</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
 
-  <section class="scene" data-scene="return" data-screens="12">
-    <div class="stage">
-      <!-- back to the May 2026 footage. I can point in the footage at the level
+    <section class="scene" data-scene="return" data-screens="12">
+      <div class="stage">
+        <!-- back to the May 2026 footage. I can point in the footage at the level
            above them. Then the footage cuts to the soldier's body camera -->
-      <!-- <audio class="vo" src="assets/audio/15-return.m4a" preload="auto"></audio> -->
-      <!-- <video class="fill" src="assets/video/idf-bodycam.mp4" muted loop playsinline></video> -->
-      <div class="placeholder">return</div>
+        <!-- <audio class="vo" src="assets/audio/15-return.m4a" preload="auto"></audio> -->
+        <!-- <video class="fill" src="assets/video/idf-bodycam.mp4" muted loop playsinline></video> -->
+        <div class="placeholder">return</div>
 
-      <div class="subs" lang="en">
-        <p class="sub">Returning to the footage released by the Israeli occupation to announce their capture of the castle in May 2026,</p>
-        <p class="sub">I want to ask the same naive question:</p>
-        <p class="sub">Were they being watched from beneath by the remains of those who defended this land before,</p>
-        <p class="sub">or up there by a Tabsoun or two, or a whole colony?</p>
-        <p class="sub">After the drone scenes, the footage cuts to the ground, to a soldier’s own body camera.</p>
-        <p class="sub">Even with a watchful eye at every altitude, I believe the occupation forces are wondering the same thing.</p>
-        <p class="sub">Who can see us from angles we cannot even fathom or imagine?</p>
+        <div class="subs" lang="en">
+          <p class="sub">Returning to the footage released by the Israeli occupation to announce their capture of the
+            castle in May 2026,</p>
+          <p class="sub">I want to ask the same naive question:</p>
+          <p class="sub">Were they being watched from beneath by the remains of those who defended this land before,</p>
+          <p class="sub">or up there by a Tabsoun or two, or a whole colony?</p>
+          <p class="sub">After the drone scenes, the footage cuts to the ground, to a soldier’s own body camera.</p>
+          <p class="sub">Even with a watchful eye at every altitude, I believe the occupation forces are wondering the
+            same thing.</p>
+          <p class="sub">Who can see us from angles we cannot even fathom or imagine?</p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-</main>
+  </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
+
 </html>
