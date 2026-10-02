@@ -336,6 +336,204 @@
         },
       };
     },
+
+    "kyl-bingaman": function (stage, s) {
+      const layer = stackView.querySelector('[data-layer="kyl"]');
+      const cv = layer.querySelector(".gsd"); //my cnavas
+      const ctx = cv.getContext("2d"); //the canvas drawing context, kinda like the p5.js canvas u need to keep referencing it
+
+      const IN = 0.1,
+        OUT = 0.95;
+
+      //stylistic stuff i wanna use for canvas
+      const INK = "#e6e3dc";
+      const GRID = "#6d6a63"; //grid color
+      const WEIGHT = 0.003; //0.003 of the drawing itself
+      const VIEW = 26; //this is the plot, which is 20m and then the rest is margin
+
+      const CUES = { pixel: 0.5, grid: 0.58, vehicles: 0.67, cells: 0.83 }; //when things start happening in the scene, consdier how to retime to vo later
+      const RISE = 0.05; //how much scroll is needed for fading
+
+      //vehicle sizes in m
+      const CAR = { x: 3, y: 8.1, w: 4.5, h: 1.8 };
+      const HULL = { x: 10, y: 7.2, w: 7.5, h: 3.7 };
+      const TURRET = { x: 11.8, y: 7.9, w: 3.6, h: 2.3 };
+      const BARREL = { x: 15.4, y: 8.85, w: 4.1, h: 0.4 };
+      const CELL = 2; //how many meters per 1 px
+
+      //which parts of the vehicles acc need cells (bc there r overlaps)
+
+      const BARREL_OUT = {
+        x: HULL.x + HULL.w, // starts where the hull ends
+        y: BARREL.y,
+        w: BARREL.x + BARREL.w - (HULL.x + HULL.w),
+        h: BARREL.h,
+      };
+
+      const FOOTPRINTS = [CAR, HULL, BARREL_OUT];
+
+      //helpers
+      // remember these r for refining the t-value
+      function smooth(t) {
+        return t * t * (3 - 2 * t);
+      }
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
+      }
+      function ramp(p, at) {
+        return clamp01((p - at) / RISE);
+      } // 0 before `at`, 1 once RISE has passed
+
+      function label(text, x, y) {
+        // x, y in metres
+        ctx.save(); // remember the metre setup
+        ctx.translate(x, y); // go to the spot
+        ctx.scale(1 / k, 1 / k); // undo the metre scale: back to pixels
+        ctx.fillText(text, 0, 0); // so the font size is real pixels
+        ctx.restore(); // back to metres
+      }
+
+      function outline(r) {
+        ctx.strokeRect(r.x, r.y, r.w, r.h); //with r being whichever one of the vehicles it is
+      }
+
+      // share of the cell at (cx, cy) that rectangle r covers, 0 to 1
+      function coverage(cx, cy, r) {
+        const ox = Math.max(
+          0,
+          Math.min(cx + CELL, r.x + r.w) - Math.max(cx, r.x),
+        );
+        const oy = Math.max(
+          0,
+          Math.min(cy + CELL, r.y + r.h) - Math.max(cy, r.y),
+        );
+        return (ox * oy) / (CELL * CELL);
+      }
+
+      const CELLS = [];
+       // each row
+      for (let y = 0; y < 20; y += CELL) {
+        // each cell in it
+        for (let x = 0; x < 20; x += CELL) {
+          
+          let a = 0;
+          FOOTPRINTS.forEach(function (r) {
+            a += coverage(x, y, r);
+          }); // add up every vehicle in this cell
+          if (a > 0) CELLS.push({ x: x, y: y, a: Math.min(a, 1) }); // keep only cells something touches
+        }
+      }
+
+      let DPR, k, px, left, top, fontPx; //they will be set in resize and then read in draw
+      let last = -1;
+
+      function resize() {
+        //this is to figure out sizing based on window resizing
+        DPR = Math.min(window.devicePixelRatio || 1, 2); //how many real screen pixels make up one css pixel
+        const W = window.innerWidth; //screen size in css px
+        const H = window.innerHeight;
+
+        cv.width = W * DPR; //how may px the canvas holds
+        cv.height = H * DPR;
+
+        //the drawing is here in screen px
+        const size = Math.min(W * 0.9, H * 0.68); // how much height od the screen it takes, and margins on the sides
+        k = size / VIEW; //px per m
+        px = Math.max(1.5, size * WEIGHT); //this is a line weight that changes based on screen size
+        left = (W - size) / 2;
+        top = H * 0.06;
+        fontPx = Math.max(12, size * 0.022); // ~16px on 1080p, ~32px on 4
+
+        draw(Math.max(last, 0)); // redraw at wherever we were, or at the start if never drawn
+      }
+
+      function draw(p) {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        //i want to work in "meters" for ease so:
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); //this is setting my horizontal & vertical scale
+        ctx.translate(left + 3 * k, top + 3 * k); //and moving the origin pt to the top left corner of my swuare
+        ctx.scale(k, k);
+
+        ctx.font = fontPx + "px Cabin, sans-serif";
+        ctx.fillStyle = "#b8b3a8"; //--bone color from css
+        ctx.textAlign = "center";
+
+        //the grid, a line every 2m, and fades in with the scroll cue iin CUES
+
+        ctx.globalAlpha = ramp(p, CUES.grid); //sets opacity for what's coming
+        label("2m", 9, 17.7);
+        ctx.strokeStyle = GRID;
+        ctx.lineWidth = (px * 0.5) / k; //half the weight and converted to m
+        ctx.beginPath();
+        for (let m = 2; m < 20; m += 2) {
+          // m at 2,4,6,8..
+          ctx.moveTo(m, 0);
+          ctx.lineTo(m, 20); // vertical line "m" meters in
+
+          ctx.moveTo(0, m);
+          ctx.lineTo(20, m); //horizontal line "m" meters down
+        }
+        ctx.stroke();
+
+        //the clip of the land (square)
+        ctx.globalAlpha = 1;
+        label("20m", 10, -0.8);
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = px / k; // full weight, converted to metres
+        ctx.strokeRect(0, 0, 20, 20); // 20 m × 20 m
+
+        //example px
+        ctx.globalAlpha = ramp(p, CUES.pixel);
+        ctx.strokeRect(8, 14, 2, 2); //one 2m px
+
+        //dimension line
+        ctx.beginPath();
+        ctx.moveTo(8, 16.6);
+        ctx.lineTo(8, 17); // left tick
+        ctx.moveTo(8, 16.8);
+        ctx.lineTo(10, 16.8); // the line, 2 m long
+        ctx.moveTo(10, 16.6);
+        ctx.lineTo(10, 17); // right tick
+        ctx.stroke();
+
+        //the satellite cells
+        ctx.fillStyle = INK;
+        CELLS.forEach(function(c){
+          ctx.globalAlpha = ramp(p, CUES.cells) * c.a;
+          ctx.fillRect(c.x, c.y, CELL, CELL); 
+        });
+
+        //vehicles
+        ctx.globalAlpha = ramp(p, CUES.vehicles) *(1 - ramp(p, CUES.cells)) ;
+        ctx.strokeStyle = INK;
+        ctx.lineWidth = px / k;
+        outline(CAR);
+        outline(HULL);
+        outline(TURRET);
+        outline(BARREL);
+      }
+      resize();
+      window.addEventListener("resize", resize);
+      document.fonts.ready.then(resize); // redraw once Cabin has loaded incase canvas txt doesnt wait
+
+      //redrawing frame when scrolling away or in
+      return {
+        update: function (p) {
+          if (!s.active) return;
+          stackView.style.opacity = 1;
+          poseStack(STACK_REST);
+          layer.style.setProperty(
+            "--pop",
+            smooth(clamp01(Math.min(p / IN, (1 - p) / (1 - OUT)))),
+          );
+          if (p !== last) {
+            draw(p); //redraw when one has scrolled
+            last = p;
+          }
+        },
+      };
+    },
   };
 
   /* reading scenes from html */

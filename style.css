@@ -518,6 +518,13 @@ video[data-on] + .credit{
 }
 
 
+/* kyl bingaman scene */
+.gsd{
+  position: absolute;
+  inset: 0;
+  width:100%; 
+  height: 100%; 
+}
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{
