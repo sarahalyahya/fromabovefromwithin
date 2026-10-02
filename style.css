@@ -191,6 +191,7 @@ model-viewer.fill{
   width: 100%;
   height: 100%;
   opacity: var(--fade, 1);
+  overflow: visible;
 }
 
 .castle-3d{
@@ -203,8 +204,13 @@ model-viewer.fill{
 
 
 /* a beam is a wide throw with a narrow hot axis inside it.  */
-.beam-spread{ fill: url(#beam-fade); }
-.beam-core{   fill: url(#beam-hot); }
+.beam-spread{ 
+  /* fill: url(#beam-fade); */
+  fill: var(--stone); 
+ }
+.beam-core{   
+  fill: url(#beam-hot); 
+}
 
 .castle-outline{
   fill: none;
@@ -219,6 +225,7 @@ model-viewer.fill{
   fill: var(--bone);
   font-family: var(--sans);
   font-size: 16px;
+  font-weight: 400;
   letter-spacing: .05em;
 }
 .ref-label{
