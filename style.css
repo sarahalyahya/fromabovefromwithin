@@ -526,6 +526,68 @@ video[data-on] + .credit{
   height: 100%; 
 }
 
+/* govmap scene */
+.govmap{
+  --size: min(90vw,68vh);
+  position: absolute;
+  left: calc((100vw - var(--size)) / 2 + var(--size) * 3 / 26);
+  top:  calc(6vh + var(--size) * 3 / 26);
+  width: calc(var(--size) * 20 / 26); 
+  aspect-ratio: 1;
+  /* achieving that stroke width from the canvas in js */
+  outline: max(1.5px, calc(var(--size) * 0.003)) solid var(--ink);
+  opacity: 0;  
+}
+
+.govmap img{
+  position: absolute; 
+  inset: 0;
+  width: 100%;
+  height: 100%; 
+}
+
+.govmap img[data-res]{
+  image-rendering: pixelated;
+}
+
+.govmap .credit{
+  position: relative; 
+  display: inline-grid;
+  vertical-align: middle;
+  margin-left: .4em; 
+  pointer-events: auto;
+}
+
+.govmap .credit-detail{
+  top:auto;
+  bottom: 160%; 
+  left: auto;
+  right: 0; 
+}
+
+.govmap .gm-label {
+  position: absolute; 
+  bottom: calc(100% + var(--size) * 0.5 / 26);    /* half a metre above the square, as on the canvas */
+  left: 50%;
+  translate: -50% 0;
+  font-family: var(--sans);
+  font-size: max(12px, calc(var(--size) * 0.022));   /* same as fontPx */
+  color: var(--bone);
+  white-space: nowrap;
+
+}
+
+.govmap .gm-place{
+  position: absolute;
+   top: calc(100% + var(--size) * 0.6 / 26);   /* just under the square */
+  left: 0;
+  max-width: 100%;                            /* wraps within the square's width */
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+  line-height: 1.4;
+  color: var(--bone);
+}
+
 /* stands in for a scene's visuals until they exist */
 .placeholder{
   position: absolute;

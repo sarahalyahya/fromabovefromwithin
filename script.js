@@ -343,7 +343,7 @@
       const ctx = cv.getContext("2d"); //the canvas drawing context, kinda like the p5.js canvas u need to keep referencing it
 
       const IN = 0.1,
-        OUT = 0.95;
+        OUT = 1; //making it one so the layer doesnt zoom back out
 
       //stylistic stuff i wanna use for canvas
       const INK = "#e6e3dc";
@@ -533,6 +533,52 @@
           }
         },
       };
+    },
+    'govmap': function(stage,s){
+      const layer = stackView.querySelector('[data-layer="kyl"]');
+      const box = layer.querySelector('.govmap');
+      const kylCv = layer.querySelector('canvas.gsd');
+      const levels = Array.from(box.querySelectorAll('img[data-res]')).reverse();
+      const n = levels.length
+     
+
+
+      //timings
+   const SHOW = 0.08;                     // image fades in over the cells, by here
+  const CLEAR_FROM = 0.15, CLEAR_TO = 0.45;   // pixels → full
+  const BLUR_FROM  = 0.75, BLUR_TO  = 0.88;   // full → 2 m again ("re-blurred")
+  const OUT = 0.92;                           // everything to black, from here to the end
+
+      const CLEAR_STEP = (CLEAR_TO - CLEAR_FROM) /n; 
+      // const CUES = {show: 0, to1m: 0.25, toFull: 0.45, out: 0.85};
+
+      function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
+      function ramp(p, at, len){ return clamp01((p - at) / len); }
+
+      return{
+        update: function(p){
+          if (!s.active) return;
+          poseStack(STACK_REST); 
+          layer.style.setProperty('--pop',1);
+
+          const show = ramp(p, 0, SHOW); 
+          box.style.opacity = show; //fades in
+          kylCv.style.opacity = 1-show; //fades out 
+
+          levels.forEach(function(img, i){
+            const clear = 1 - ramp(p, CLEAR_FROM + i * CLEAR_STEP, CLEAR_STEP); 
+            const back = (i===0)? ramp(p, BLUR_FROM, BLUR_TO - BLUR_FROM) : 0; 
+            img.style.opacity = Math.max(clear, back); 
+          }); 
+
+          stackView.style.opacity = 1-ramp(p,OUT, 1-OUT);  
+        },
+        exit: function(){
+          box.style.opacity = 0; 
+          kylCv.style.opacity = ''; 
+        }
+      }
+
     },
   };
 
