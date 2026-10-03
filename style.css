@@ -674,6 +674,37 @@ video[data-on] + .credit{
   right: 0; 
 }
 
+/*digging scene*/
+
+.digging-vid-wrapper{
+   position:absolute;
+  left: 50%; 
+  top: 45%; 
+  translate: -50% -50%; 
+  width: min(60vw, 96vh);
+  overflow: hidden; 
+  opacity: 0; 
+  visibility: hidden; 
+}
+
+.digging-vid{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.digging-vid-wrapper .credit {
+  bottom: 0.6em;
+  right: .6em; 
+}
+.digging-vid-wrapper .credit-detail{
+  top: auto; 
+  bottom: 160%; 
+  left: auto;
+  right: 0; 
+}
+
+
 /* stands in for a scene's visuals until they exist */
 .placeholder{
   position: absolute;

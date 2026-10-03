@@ -693,7 +693,32 @@
     }
 
     },
+
+        'into-the-rock': function(stage, s){
+      const wrap = stage.querySelector('.digging-vid-wrapper');
+      const v    = wrap.querySelector('video');
+
+      const SHOW = 0.03;
+      const OUT  = 0.86;
+      const FADE = 0.04;
+
+      function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
+
+      return {
+        update: function(p){
+          const a = clamp01((p - SHOW) / FADE) * (1 - clamp01((p - OUT) / FADE));   // in, hold, out
+          wrap.style.opacity    = a;
+          wrap.style.visibility = a > 0 ? 'visible' : 'hidden';
+
+          const on = s.active && a > 0;
+          if (on && v.paused)   v.play().catch(function(){});
+          if (!on && !v.paused) v.pause();
+        },
+        exit: function(){ v.pause(); }
+      };
+    }
   };
+
 
   /* reading scenes from html */
   const film = document.getElementById("film");
