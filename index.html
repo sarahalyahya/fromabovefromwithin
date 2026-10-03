@@ -23,7 +23,7 @@
     <button id="launch" type="button">Launch Film</button>
   </div>
 
-  <!-- ambience bus lives here, outside #film, so it never resets on a scene change
+  <!-- if i ever wanna add ambient sound..
      <audio id="ambience" class="ambience" src="assets/audio/ambience.m4a" loop preload="auto"></audio> -->
 
   <main id="film">
@@ -173,11 +173,7 @@
     </div>
     </div>
 
-    <!-- Every scene gets a VO. Until its clip exists, subtitles are driven by
-       scroll: sentence i holds from p = i/n to p = (i+1)/n.
-       To retime a scene to its audio: uncomment its <audio class="vo">, then
-       put data-t="seconds" on each .sub. That scene alone switches to the mix;
-       the others keep scrolling. -->
+    <
 
     <section class="scene" data-scene="castle" data-screens="11">
       <div class="stage">
@@ -202,10 +198,7 @@
 
     <section class="scene" data-scene="overlook" data-screens="12">
       <div class="stage">
-        <!-- The castle looks out. As the narration names a direction, a spotlight fan
-           sweeps out that way and its label fades in. Angles are measured from north,
-           0 = up, clockwise, and converted in the paths below as
-           x = 500 + R*sin(a), y = 460 - R*cos(a). Castle at 500,460. Fan radius 420. -->
+       
 
         <svg class="diagram" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -282,14 +275,8 @@
 
     <section class="scene" data-scene="drone-footage" data-screens="28" data-stack>
       <div class="stage" id="drone-footage-stg">
-        <!-- podcast excerpt takes its turn in the spoken track rather than running
-           under it, so its lines time against this scene's one voice clock.
-           Maybe just a wave form while it plays.
-           Then: first video on one side of the screen, black background.
-           Second video on the other side, black background.
-           [I want to say it's like a commercial drone that produces sexy footage,
-           more descriptive here] -->
-        <audio class="vo" src="assets/audio/VO_3.mp3" preload="auto"></audio>
+        
+        <audio class="vo" src="assets/audio/VO_3.mp3" data-volume="0.7" preload="auto"></audio>
         <!-- <div class="stack-view"> 
         <div class="stack">
           <div class="layer" style="--k:-1"><div class="placeholder">castle</div></div>
@@ -360,9 +347,8 @@
 
     <section class="scene" data-scene="all-altitudes" data-screens="10" data-stack>
       <div class="stage">
-        <!-- Israeli footage looping, maybe both videos side by side, but at the last
-           line I zoom out to that satellite layer stack I have -->
-        <audio class="vo" src="assets/audio/VO_4.mp3" preload="auto"></audio>
+      
+        <audio class="vo" src="assets/audio/VO_4.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.3 class="sub">Having complete visual command of what you are trying to conquer</p>
@@ -381,9 +367,7 @@
 
     <section class="scene" data-scene="feed" data-screens="10" data-stack>
       <div class="stage">
-        <!-- Zoom back into an ig feed scrolling scrolling scrolling -->
-        <audio class="vo" src="assets/audio/VO_5.mp3" preload="auto"></audio>
-        <!-- <video class="fill" src="assets/video/feed-scroll.mp4" muted loop playsinline></video> -->
+        <audio class="vo" src="assets/audio/VO_5.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.5 class="sub">On the receiving end, encountering documents of this vertical exposure</p>
@@ -403,10 +387,8 @@
 
     <section class="scene" data-scene="planet" data-screens="8" data-stack>
       <div class="stage">
-        <!-- black screen. Email? Or mission screenshot? I can be more animated and
-           have like an email OS UI but too much i think.
-           Then a question — smth like: What kind of image is a withheld image? -->
-        <audio class="vo" src="assets/audio/VO_6.mp3" preload="auto"></audio>
+      
+        <audio class="vo" src="assets/audio/VO_6.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.5 class="sub">On April 4, 2026, the American commercial satellite company Planet Labs sent an
@@ -427,9 +409,8 @@
 
     <section class="scene" data-scene="kyl-bingaman" data-screens="18" data-stack>
       <div class="stage">
-        <!-- black background. Something to explain what the 2-meter resolution
-           means, like a pixel comparison -->
-        <audio class="vo" src="assets/audio/VO_7.mp3" preload="auto"></audio>
+      
+        <audio class="vo" src="assets/audio/VO_7.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.7 class="sub">This restriction has a precedent.</p>
@@ -452,7 +433,7 @@
     <section class="scene" data-scene="govmap" data-screens="15" data-stack>
       <div class="stage">
         <!-- maybe just loading the imgs fading in -->
-        <audio class="vo" src="assets/audio/VO_8.mp3" preload="auto"></audio>
+        <audio class="vo" src="assets/audio/VO_8.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.4 class="sub">In contrast, Israel’s official public mapping service, GovMap, briefly, and some say
@@ -469,9 +450,8 @@
 
     <section class="scene" data-scene="visibility" data-screens="17">
       <div class="stage">
-        <!-- maybe an image of the castle aerially, and we zoom zoom zooom zoom on a pixel.
-           Last line alt: What would it take to look from outside this arrangement? -->
-        <audio class="vo" src="assets/audio/VO_9.mp3" preload="auto"></audio>
+        
+        <audio class="vo" src="assets/audio/VO_9.mp3" data-volume="0.7" preload="auto"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.5 class="sub"> You have to ask how and why these lapses in visibility occur</p>
@@ -492,7 +472,6 @@
       <div class="stage">
 
         <audio class="vo" src="assets/audio/VO_10.mp3" preload="auto"></audio>
-        <!-- <video class="fill" src="assets/video/tabsoun-01.mp4" muted loop playsinline></video> -->
 
 
         <a-scene class="pano" embedded vr-mode-ui="enabled: false" loading-screen="enabled: false"
@@ -560,11 +539,9 @@
 
     <section class="scene" data-scene="sh-1982" data-screens="15">
       <div class="stage">
-        <!-- black screen, then:
-           https://en.wikipedia.org/wiki/File:1982_Lebanon_War_IX.jpg
-           load this image and zoom into the holes and crevices -->
-        <!-- <audio class="vo" src="assets/audio/13-sharon-1982.m4a" preload="auto"></audio> -->
-        <!-- <img class="fill" src="assets/img/1982-lebanon-war-ix.jpg" alt=""> -->
+        
+        <audio class="vo" src="assets/audio/VO_11.mp3" data-volume="0.7" preload="auto"></audio>
+      
         <div class="sh-img-wrapper">
                   <img class="sh-img" src="assets/img/sharon-82.png" alt="">
                   <span class="credit" tabindex="0"><span class="credit-detail">Source, date</span></span>
@@ -572,18 +549,18 @@
                 </div>
 
         <div class="subs" lang="en">
-          <p class="sub">Perhaps it’s always been watching those who have no regard for it.</p>
-          <p class="sub">Colonies of one kind have lived in this cliff for generations.</p>
-          <p class="sub">Colonial powers of another kind have attempted to occupy the castle above it.</p>
-          <p class="sub">In June 1982, during the Israeli invasion of Lebanon, Ariel Sharon, then Israeli Minister of
+          <p data-t=0.2 class="sub">Perhaps it’s always been watching those who have no regard for it</p>
+          <p data-t=5.0 class="sub">Colonies of one kind have lived in this cliff for generations</p>
+          <p data-t=9.6 class="sub">Colonial powers of another kind have attempted to occupy the castle above it.</p>
+          <p data-t=14.9 class="sub">In June 1982, during the Israeli invasion of Lebanon, Ariel Sharon, then Israeli Minister of
             Defense,</p>
-          <p class="sub">descended by helicopter onto the castle with an army of photographers,</p>
-          <p class="sub">declaring a battle won without losses.</p>
-          <p class="sub">He was unaware that some of his soldiers had been killed,</p>
-          <p class="sub">and that none of the castle’s local guardians had surrendered.</p>
-          <p class="sub">One of them, wounded, was still in the rubble.</p>
-          <p class="sub">Perhaps, beside him in the rock, lay a Tabsoun or two, or a whole colony,</p>
-          <p class="sub">invisible yet seeing.</p>
+          <p data-t=21.7 class="sub">descended by helicopter onto the castle with an army of photographers,</p>
+          <p data-t=26.0 class="sub">declaring a battle won without losses</p>
+          <p data-t=29.2 class="sub">He was unaware that some of his soldiers had been killed,</p>
+          <p data-t=32.4 class="sub">and that none of the castle’s local guardians had surrendered</p>
+          <p data-t=36.3 class="sub">One of them, wounded, was still in the rubble</p>
+          <p data-t=41.0 class="sub">Maybe, up there in the rock, lay a Hyrax or two, or a whole colony,</p>
+          <p data-t=48.1 class="sub">invisible yet seeing.</p>
           
         </div>
       </div>
@@ -593,7 +570,7 @@
     <section class="scene" data-scene="into-the-rock" data-screens="16">
       <div class="stage">
         
-        <!-- <audio class="vo" src="assets/audio/14-into-the-rock.m4a" preload="auto"></audio> -->
+        <audio class="vo" src="assets/audio/VO_12.mp3" data-volume="0.7" preload="auto"></audio>
         
         <div class="digging-vid-wrapper">
                   <video class="digging-vid" src="assets/video/digging.mp4" loop muted playsinline preload="metadata" ></video>
@@ -602,20 +579,20 @@
                 </div>
 
         <div class="subs" lang="en">
-          <p class="sub">The castle’s defenders had gone into the rock too.</p>
-          <p class="sub">In 1982, local fighters and students dug trenches and tunnels into the cliff,</p>
-          <p class="sub">and under shelling, they learned to count the seconds between a shell being fired and landing,
+          <p data-t=0.3 class="sub">The castle’s defenders had gone into the rock too.</p>
+          <p data-t=4.7 class="sub">In 1982, local fighters and students dug trenches and tunnels into the cliff,</p>
+          <p data-t=9.7 class="sub">and under shelling, they learned to count the seconds between a shell being fired and landing,
           </p>
-          <p class="sub">and to work inside that interval</p>
-          <p class="sub">Muin Taher, whose battalion held the castle in that battle,</p>
-          <p class="sub">states that while digging, they found the remains of dozens of men</p>
-          <p class="sub">who had died defending this ground against the Crusaders</p>
-          <p class="sub">They reburied them where they lay</p>
-          <p class="sub">Years later, during a restoration of the site,</p>
-          <p class="sub">the remains of two fighters from that 1982 battle were unearthed in the same ground</p>
-          <p class="sub">Fighters of previous battles become inseparable from the landscape,</p>
-          <p class="sub">as do the more-than-human elements among them</p>
-          <p class="sub">No image from above can resolve that</p>
+          <p data-t=14.7 class="sub">and to work inside that interval</p>
+          <p data-t=18.2 class="sub">Muin Taher, whose battalion held the castle in that battle,</p>
+          <p data-t=21.6 class="sub">states that while digging, they found the remains of dozens of men</p>
+          <p data-t=25.2 class="sub">who had died defending this ground against the Crusaders</p>
+          <p data-t=29.3 class="sub">They reburied them where they lay</p>
+          <p data-t=32.4 class="sub">Years later, during a restoration of the site,</p>
+          <p data-t=35.6 class="sub">the remains of two fighters from that 1982 battle were unearthed in the same ground</p>
+          <p data-t=41.8 class="sub">Fighters of previous battles become inseparable from the landscape,</p>
+          <p data-t=45.8 class="sub">as do the more-than-human elements that live among them</p>
+          <p data-t=49.7 class="sub">No image from above can resolve that</p>
         </div>
       </div>
     </section>
@@ -623,10 +600,8 @@
 
     <section class="scene" data-scene="crosshair-return" data-screens="16">
       <div class="stage">
-        <!-- back to the May 2026 footage. I can point in the footage at the level
-           above them. Then the footage cuts to the soldier's body camera -->
-        <!-- <audio class="vo" src="assets/audio/15-return.m4a" preload="auto"></audio> -->
-        <!-- <video class="fill" src="assets/video/idf-bodycam.mp4" muted loop playsinline></video> -->
+     
+        <audio class="vo" src="assets/audio/VO_13.mp3" preload="auto"></audio>
 
         <div class="crosshair-vid-wrapper">
                   <video class="crosshair-vid" src="assets/video/i_donecrosshair_uncut.mp4"  muted playsinline preload="metadata" ></video>
@@ -635,15 +610,15 @@
                 </div>
 
         <div class="subs" lang="en">
-          <p class="sub">Returning to the footage released by the Israeli occupation to announce their capture of the
+          <p data-t=0.4 class="sub">Returning to the footage released by the Israeli occupation to announce their capture of the
             castle in May 2026,</p>
-          <p class="sub">I want to ask the same naive question:</p>
-          <p class="sub">Were they being watched from beneath by the remains of those who defended this land before,</p>
-          <p class="sub">or up there by a Tabsoun or two, or a whole colony?</p>
-          <p class="sub">After the drone scenes, the footage cuts to the ground, to a soldier’s own body camera.</p>
-          <p class="sub">Even with a watchful eye at every altitude, I believe the occupation forces are wondering the
-            same thing.</p>
-          <p class="sub">Who can see us from angles we cannot even fathom or imagine?</p>
+          <p  data-t=7.1 class="sub">I want to ask the same naive question:</p>
+          <p data-t=9.9 class="sub">Were they being watched from beneath by the remains of those who defended this land before,</p>
+          <p data-t=16.4 class="sub">or up there by a Hyrax or two?</p>
+          <p data-t=20.3 class="sub">After the drone scenes, the footage cuts to the ground, to a soldier’s own body camera.</p>
+          <p data-t=26.2 class="sub">Even with a watchful eye at high altitudes, I believe the soldier is wondering the
+            same thing</p>
+          <p data-t=32.8 class="sub"><i> Who can see us from angles we cannot even fathom or imagine?</i></p>
         </div>
       </div>
     </section>

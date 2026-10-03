@@ -49,6 +49,11 @@
       stopPanoLoop(); // already started before this ran
     else pano.addEventListener("renderstart", stopPanoLoop);
   }
+ 
+document.querySelectorAll('[data-volume]').forEach(function(el){
+  el.volume = parseFloat(el.dataset.volume);
+});
+
 
   const BEHAVIOURS = {
     /*  example 
@@ -852,6 +857,7 @@
   const MOUNT_MARGIN = 1.5; /* window-heights either side */
   const EDGE = 0.15; /* fraction of a scene spent fading in / out */
   const VOICE_FADE = 0.6; /* seconds a voice takes to ramp out */
+  const VOICE_LEVEL = 0.5; 
 
   let currentScene = null;
 
@@ -933,7 +939,7 @@
           if (active) {
             s.gain = 1; /* coming back cancels a ramp in progress */
             s.rewind = false;
-            s.vo.volume = 1;
+            s.vo.volume = VOICE_LEVEL;
             s.vo.play().catch(function () {});
           } else if (!first) {
             /* out the top means you went back to the beginning, so the voice
@@ -958,7 +964,7 @@
       /* ramp a departing voice down over VOICE_FADE, then park it */
       if (s.vo && !s.active && s.gain > 0) {
         s.gain = Math.max(0, s.gain - dt / VOICE_FADE);
-        s.vo.volume = s.gain;
+        s.vo.volume = s.gain*VOICE_LEVEL;
         if (s.gain === 0) {
           s.vo.pause();
           if (s.rewind) {
@@ -973,6 +979,10 @@
       if (near && s.api && s.api.update) s.api.update(local, fade);
     });
 
+     // the idle clock only runs while nothing's being said 
+    const speaking = SCENES.some(function(s){ return s.vo && !s.vo.paused; });
+    idleFor = speaking ? 0 : idleFor + dt;
+    if (IDLE && idleFor > IDLE) location.reload();
     updateHud();
     stackView.hidden = !(
       currentScene && currentScene.el.hasAttribute("data-stack")
@@ -994,10 +1004,7 @@
       voBar  = hud.querySelector(".bar.vo i"); //vo prog
 
 
-  // the idle clock only runs while nothing's being said 
-    const speaking = SCENES.some(function(s){ return s.vo && !s.vo.paused; });
-    idleFor = speaking ? 0 : idleFor + dt;
-    if (IDLE && idleFor > IDLE) location.reload();
+ 
 
 
   function updateHud() {
