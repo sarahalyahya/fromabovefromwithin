@@ -670,55 +670,96 @@
         }, // leaving: stop them all
       };
     },
-    'sh-1982': function(stage,s){
-      const wrap = stage.querySelector('.sh-img-wrapper');
-      const img = wrap.querySelector('.sh-img');
+    "sh-1982": function (stage, s) {
+      const wrap = stage.querySelector(".sh-img-wrapper");
+      const img = wrap.querySelector(".sh-img");
 
-      const SHOW = 0.23, FADE= 0.04; //roughly where it loads 
-      const ZOOM_FROM = 0.3, ZOOM_TO = 0.8; 
+      const SHOW = 0.23,
+        FADE = 0.04; //roughly where it loads
+      const ZOOM_FROM = 0.3,
+        ZOOM_TO = 0.8;
       const MAX = 8; //how far in we go
 
-    function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
-    function smooth(t){ return t * t * (3 - 2 * t); }
-
-    return{
-      update: function(p,fade){
-        const a = clamp01((p - SHOW) / FADE) * fade;
-        wrap.style.opacity = a; 
-        wrap.style.visibility = a > 0 ? 'visible' : 'hidden'; 
-
-        const t = smooth(clamp01((p - ZOOM_FROM) / (ZOOM_TO - ZOOM_FROM))); 
-        img.style.setProperty('--zoom', Math.pow(MAX, t)); 
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
       }
-    }
-
-    },
-
-        'into-the-rock': function(stage, s){
-      const wrap = stage.querySelector('.digging-vid-wrapper');
-      const v    = wrap.querySelector('video');
-
-      const SHOW = 0.03;
-      const OUT  = 0.86;
-      const FADE = 0.04;
-
-      function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
+      function smooth(t) {
+        return t * t * (3 - 2 * t);
+      }
 
       return {
-        update: function(p){
-          const a = clamp01((p - SHOW) / FADE) * (1 - clamp01((p - OUT) / FADE));   // in, hold, out
-          wrap.style.opacity    = a;
-          wrap.style.visibility = a > 0 ? 'visible' : 'hidden';
+        update: function (p, fade) {
+          const a = clamp01((p - SHOW) / FADE) * fade;
+          wrap.style.opacity = a;
+          wrap.style.visibility = a > 0 ? "visible" : "hidden";
+
+          const t = smooth(clamp01((p - ZOOM_FROM) / (ZOOM_TO - ZOOM_FROM)));
+          img.style.setProperty("--zoom", Math.pow(MAX, t));
+        },
+      };
+    },
+
+    "into-the-rock": function (stage, s) {
+      const wrap = stage.querySelector(".digging-vid-wrapper");
+      const v = wrap.querySelector("video");
+
+      const SHOW = 0.03;
+      const OUT = 0.86;
+      const FADE = 0.04;
+
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
+      }
+
+      return {
+        update: function (p) {
+          const a =
+            clamp01((p - SHOW) / FADE) * (1 - clamp01((p - OUT) / FADE)); // in, hold, out
+          wrap.style.opacity = a;
+          wrap.style.visibility = a > 0 ? "visible" : "hidden";
 
           const on = s.active && a > 0;
-          if (on && v.paused)   v.play().catch(function(){});
+          if (on && v.paused) v.play().catch(function () {});
           if (!on && !v.paused) v.pause();
         },
-        exit: function(){ v.pause(); }
+        exit: function () {
+          v.pause();
+        },
       };
-    }
-  };
+    },
 
+    "crosshair-return": function (stage, s) {
+      const wrap = stage.querySelector(".crosshair-vid-wrapper");
+      const v = wrap.querySelector("video");
+
+      const SHOW = 0.03; // fades in almost at once
+      const FRAME = 22; // this is what image to freeze on
+      const OUT = 0.93; // and then the frozen frame fades to black
+      const FADE = 0.04;
+
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
+      }
+
+      return {
+        update: function (p) {
+          const a =
+            clamp01((p - SHOW) / FADE) * (1 - clamp01((p - OUT) / FADE)); // in, hold, out
+          wrap.style.opacity = a;
+          wrap.style.visibility = a > 0 ? "visible" : "hidden";
+
+          const on = s.active && a > 0 && v.currentTime < FRAME; // play until 22sec then hold
+          if (on && v.paused) v.play().catch(function () {});
+          if (!on && !v.paused) v.pause();
+
+          if (p < SHOW) v.currentTime = 0; // scrolled back before the clip: rewind, ready to play again
+        },
+        exit: function () {
+          v.pause();
+        },
+      };
+    },
+  };
 
   /* reading scenes from html */
   const film = document.getElementById("film");
