@@ -670,6 +670,29 @@
         }, // leaving: stop them all
       };
     },
+    'sh-1982': function(stage,s){
+      const wrap = stage.querySelector('.sh-img-wrapper');
+      const img = wrap.querySelector('.sh-img');
+
+      const SHOW = 0.23, FADE= 0.04; //roughly where it loads 
+      const ZOOM_FROM = 0.3, ZOOM_TO = 0.8; 
+      const MAX = 8; //how far in we go
+
+    function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
+    function smooth(t){ return t * t * (3 - 2 * t); }
+
+    return{
+      update: function(p,fade){
+        const a = clamp01((p - SHOW) / FADE) * fade;
+        wrap.style.opacity = a; 
+        wrap.style.visibility = a > 0 ? 'visible' : 'hidden'; 
+
+        const t = smooth(clamp01((p - ZOOM_FROM) / (ZOOM_TO - ZOOM_FROM))); 
+        img.style.setProperty('--zoom', Math.pow(MAX, t)); 
+      }
+    }
+
+    },
   };
 
   /* reading scenes from html */

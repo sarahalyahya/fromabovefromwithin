@@ -614,6 +614,8 @@ video[data-on] + .credit{
 } */
 
 
+
+
 /* the hyrax xlips */
 .hyrax{
   position: absolute;
@@ -637,6 +639,40 @@ video[data-on] + .credit{
 }
 .hyrax .credit-detail{ left: auto; right: 0; }
 
+/* sh scene */
+.sh-img-wrapper{
+  position:absolute;
+  left: 50%; 
+  top: 45%; 
+  translate: -50% -50%; 
+  width: min(70vw, 89vh);
+  overflow: hidden; 
+  opacity: 0; 
+  visibility: hidden; 
+
+}
+
+.sh-img{
+  display: block;
+  width: 100%; 
+  height: auto;
+  /* fix this to have it at the hole  */
+  transform-origin: 58.2% 75%; 
+
+  transform: scale(var(--zoom, 1));
+  image-rendering: pixelated;
+}
+
+.sh-img-wrapper .credit {
+  bottom: 0.6em;
+  right: .6em; 
+}
+.sh-img-wrapper .credit-detail{
+  top: auto; 
+  bottom: 160%; 
+  left: auto;
+  right: 0; 
+}
 
 /* stands in for a scene's visuals until they exist */
 .placeholder{
