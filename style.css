@@ -588,6 +588,56 @@ video[data-on] + .credit{
   color: var(--bone);
 }
 
+/* hyrax and pano scene */
+.pano{
+
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--fade, 1);
+
+}
+
+
+/* chose between a gradient that makes the img dark behind the text, or the black box behind the subs */
+[data-scene="tabsoun"] .subs{
+  background: linear-gradient(to top, rgba(11,12,12,.85), transparent 35%);
+}
+
+/* [data-scene="tabsoun"] .sub{
+  background: rgba(11, 12, 12, .8);   
+  padding: .1em .45em;
+  width: fit-content;                  
+  box-decoration-break: clone;         
+  -webkit-box-decoration-break: clone;
+} */
+
+
+/* the hyrax xlips */
+.hyrax{
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  translate: -50% -50%;         
+  opacity: 0;                   
+  visibility: hidden;
+}
+.hyrax video{
+  display: block;
+  width: 100%;
+  height: auto;      
+  outline: max(1.5px, 0.15vw) solid var(--ink);
+        
+}
+.hyrax .credit{
+  top: .6em;
+  right: .6em;
+}
+.hyrax .credit-detail{ left: auto; right: 0; }
+
+
 /* stands in for a scene's visuals until they exist */
 .placeholder{
   position: absolute;

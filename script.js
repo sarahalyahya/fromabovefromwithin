@@ -28,6 +28,16 @@
     });
   }
 
+  const pano = document.querySelector("a-scene");
+  function stopPanoLoop() {
+    pano.renderer.setAnimationLoop(null);
+  }
+  if (pano) {
+    if (pano.renderStarted)
+      stopPanoLoop(); // already started before this ran
+    else pano.addEventListener("renderstart", stopPanoLoop);
+  }
+
   const BEHAVIOURS = {
     /*  example 
 
@@ -411,11 +421,10 @@
       }
 
       const CELLS = [];
-       // each row
+      // each row
       for (let y = 0; y < 20; y += CELL) {
         // each cell in it
         for (let x = 0; x < 20; x += CELL) {
-          
           let a = 0;
           FOOTPRINTS.forEach(function (r) {
             a += coverage(x, y, r);
@@ -499,13 +508,13 @@
 
         //the satellite cells
         ctx.fillStyle = INK;
-        CELLS.forEach(function(c){
+        CELLS.forEach(function (c) {
           ctx.globalAlpha = ramp(p, CUES.cells) * c.a;
-          ctx.fillRect(c.x, c.y, CELL, CELL); 
+          ctx.fillRect(c.x, c.y, CELL, CELL);
         });
 
         //vehicles
-        ctx.globalAlpha = ramp(p, CUES.vehicles) *(1 - ramp(p, CUES.cells)) ;
+        ctx.globalAlpha = ramp(p, CUES.vehicles) * (1 - ramp(p, CUES.cells));
         ctx.strokeStyle = INK;
         ctx.lineWidth = px / k;
         outline(CAR);
@@ -534,51 +543,132 @@
         },
       };
     },
-    'govmap': function(stage,s){
+    govmap: function (stage, s) {
       const layer = stackView.querySelector('[data-layer="kyl"]');
-      const box = layer.querySelector('.govmap');
-      const kylCv = layer.querySelector('canvas.gsd');
-      const levels = Array.from(box.querySelectorAll('img[data-res]')).reverse();
-      const n = levels.length
-     
-
+      const box = layer.querySelector(".govmap");
+      const kylCv = layer.querySelector("canvas.gsd");
+      const levels = Array.from(
+        box.querySelectorAll("img[data-res]"),
+      ).reverse();
+      const n = levels.length;
 
       //timings
-   const SHOW = 0.08;                     // image fades in over the cells, by here
-  const CLEAR_FROM = 0.15, CLEAR_TO = 0.45;   // pixels → full
-  const BLUR_FROM  = 0.75, BLUR_TO  = 0.88;   // full → 2 m again ("re-blurred")
-  const OUT = 0.92;                           // everything to black, from here to the end
+      const SHOW = 0.08; // image fades in over the cells, by here
+      const CLEAR_FROM = 0.15,
+        CLEAR_TO = 0.45; // pixels → full
+      const BLUR_FROM = 0.75,
+        BLUR_TO = 0.88; // full → 2 m again ("re-blurred")
+      const OUT = 0.92; // everything to black, from here to the end
 
-      const CLEAR_STEP = (CLEAR_TO - CLEAR_FROM) /n; 
+      const CLEAR_STEP = (CLEAR_TO - CLEAR_FROM) / n;
       // const CUES = {show: 0, to1m: 0.25, toFull: 0.45, out: 0.85};
 
-      function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x; }
-      function ramp(p, at, len){ return clamp01((p - at) / len); }
-
-      return{
-        update: function(p){
-          if (!s.active) return;
-          poseStack(STACK_REST); 
-          layer.style.setProperty('--pop',1);
-
-          const show = ramp(p, 0, SHOW); 
-          box.style.opacity = show; //fades in
-          kylCv.style.opacity = 1-show; //fades out 
-
-          levels.forEach(function(img, i){
-            const clear = 1 - ramp(p, CLEAR_FROM + i * CLEAR_STEP, CLEAR_STEP); 
-            const back = (i===0)? ramp(p, BLUR_FROM, BLUR_TO - BLUR_FROM) : 0; 
-            img.style.opacity = Math.max(clear, back); 
-          }); 
-
-          stackView.style.opacity = 1-ramp(p,OUT, 1-OUT);  
-        },
-        exit: function(){
-          box.style.opacity = 0; 
-          kylCv.style.opacity = ''; 
-        }
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
+      }
+      function ramp(p, at, len) {
+        return clamp01((p - at) / len);
       }
 
+      return {
+        update: function (p) {
+          if (!s.active) return;
+          poseStack(STACK_REST);
+          layer.style.setProperty("--pop", 1);
+
+          const show = ramp(p, 0, SHOW);
+          box.style.opacity = show; //fades in
+          kylCv.style.opacity = 1 - show; //fades out
+
+          levels.forEach(function (img, i) {
+            const clear = 1 - ramp(p, CLEAR_FROM + i * CLEAR_STEP, CLEAR_STEP);
+            const back = i === 0 ? ramp(p, BLUR_FROM, BLUR_TO - BLUR_FROM) : 0;
+            img.style.opacity = Math.max(clear, back);
+          });
+
+          stackView.style.opacity = 1 - ramp(p, OUT, 1 - OUT);
+        },
+        exit: function () {
+          box.style.opacity = 0;
+          kylCv.style.opacity = "";
+        },
+      };
+    },
+    tabsoun: function (stage, s) {
+      const scene = stage.querySelector("a-scene");
+      const cam = stage.querySelector("a-camera");
+      const clips = Array.from(stage.querySelectorAll(".hyrax"));
+      const vids = clips.map(function (c) {
+        return c.querySelector("video");
+      });
+
+      const AT = [0.27, 0.48, 0.51, 0.54, 0.57, 0.6]; // when each clip loads, same order as the HTML
+
+      const FADE = 0.04; //how much scroll for a clip to fade itn
+      const START = { yaw: 184.1, pitch: -35.8, fov: 30 }; //from test panorma html
+      const END = { yaw: 184.1 - 43.2, pitch: 20, fov: 120 }; // = 140.9, a different view
+      const ZOOM_FROM = 0.03,
+        ZOOM_TO = 0.28;
+      const DRIFT = -40; //degrees of turn
+
+      let last = -1;
+
+      function clamp01(x) {
+        return x < 0 ? 0 : x > 1 ? 1 : x;
+      }
+      function ramp(p, at, len) {
+        return clamp01((p - at) / len);
+      }
+      function mix(a, b, t) {
+        return a + (b - a) * t;
+      } // a at t = 0, b at t = 1, in between otherwise
+
+      function smooth(t) {
+        return t * t * (3 - 2 * t);
+      }
+
+      function pose(yaw, pitch, fov) {
+        cam.setAttribute("rotation", { x: pitch, y: -yaw, z: 0 });
+        cam.setAttribute("camera", "fov", fov);
+      }
+
+      window.addEventListener("resize", function () {
+        last = -1;
+      }); // redraw at the new size if needed
+
+      return {
+        update: function (p) {
+          clips.forEach(function (c, i) {
+            const a = clamp01((p - AT[i]) / FADE);
+            c.style.opacity = a;
+            c.style.visibility = a > 0 ? "visible" : "hidden";
+
+            /* only decode a video while it is on screen */
+            const v = vids[i];
+            const on = s.active && a > 0; // visible AND you're in the scene
+            if (on && v.paused) v.play().catch(function () {});
+            if (!on && !v.paused) v.pause();
+          });
+
+          /* panorama: only redraw when something's changed */
+          if (!scene.renderStarted) return;
+          if (p === last) return;
+          last = p;
+
+          const t = smooth(clamp01((p - ZOOM_FROM) / (ZOOM_TO - ZOOM_FROM)));
+          pose(
+            mix(START.yaw, END.yaw, t) + p * DRIFT,
+            mix(START.pitch, END.pitch, t),
+            mix(START.fov, END.fov, t),
+          );
+          scene.render();
+        },
+        exit: function () {
+          vids.forEach(function (v) {
+            v.pause();
+          });
+        }, // leaving: stop them all
+      };
     },
   };
 
