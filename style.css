@@ -4,9 +4,14 @@
   --ground:      #0b0c0c;  
   --ground-lift: #141514;   
   --stone:       #6d6a63;   
-  --bone:        #b8b3a8;   /* secondary text */
-  --ink:         #e6e3dc;   /* primary text */
-  --accent:      #da1317;    /* accent */
+  --bone:        #b8b3a8;   
+  --ink:         #e6e3dc;  
+  --accent:      #da1317;  
+  --testing: #7fc4d8; 
+  --testing2: #5dff9a; 
+  --testing3: #9aa86a; 
+  --testing4: #d6b97a;
+
 
   --serif: Georgia, 'Times New Roman', serif;          /* vo caption */
   --sans:  'Cabin','Helvetica Neue', Arial, sans-serif;        /* the interface */
@@ -78,9 +83,11 @@ body{
 #hud{
   position: fixed;
   left: 8vw;
+  right: 8vw;
   bottom: 5vh;
   z-index: 100;
   display: flex;
+  justify-content: space-between; 
   align-items: center;
   gap: 1.1rem;
   font-family: var(--sans);
@@ -89,18 +96,24 @@ body{
   text-transform: uppercase;
   color: var(--stone);
   pointer-events: none;
+
+  #hud .grp{
+    display: flex; 
+    align-items: center; 
+    gap: 1em; 
+  }
 }
-#hud .reg{ color: var(--accent); }
+
 
 #hud .bar{
-  width: min(18vw, 200px);
-  height: 1px;
+  width: 14vw; 
+  height:  max(2px, 0.3vh);
   background: rgba(255,255,255,.14);
 }
 #hud .bar i{
   display: block;
   height: 100%;
-  background: var(--accent);
+  background: var(--testing3);
   transform-origin: left;
  
   transform: scaleX(0);
@@ -114,8 +127,10 @@ body{
     background: var(--ground);
     display: grid;
     place-items: center;
+    opacity: 0.85; 
 
 }
+
 
 #gate[hidden]{
     display:none;
@@ -127,10 +142,16 @@ background: none;
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--t-ui);
+  font-weight: 700;
   letter-spacing: var(--track);
   text-transform: uppercase;
   padding: 1.1em 3em;
   cursor: pointer;
+}
+
+#launch:hover{
+  color: var(--testing3); 
+  border: 1px solid var(--testing3);
 }
 
 

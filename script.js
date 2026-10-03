@@ -1,6 +1,18 @@
 (function () {
   "use strict";
 
+  history.scrollRestoration = 'manual';   // reload always starts at the top
+  window.scrollTo(0, 0);
+  // refresh when no one is using for a while
+  const IDLE = 90;    // seconds with no input and no voice playing; 0 = off (handy while working)
+  let idleFor = 0;
+
+['scroll', 'wheel', 'pointermove', 'pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
+  window.addEventListener(ev, function(){ idleFor = 0; }, { passive: true });
+});
+
+
+
   document.documentElement.classList.remove("no-js");
 
   const gate = document.getElementById("gate");
@@ -972,22 +984,26 @@
   const hud = document.createElement("div");
   hud.id = "hud";
   hud.innerHTML =
-    '<span class="n"></span><span class="reg"></span>' +
-    '<span class="id"></span><div class="bar"><i></i></div>' +
-    '<div class="bar vo"><i></i></div>';
+  '<span class="grp">Scroll <div class="bar"><i></i></div></span>' +
+  '<span class="n"></span>' +
+  '<span class="grp">Voice <div class="bar vo"><i></i></div></span>';
+
   document.body.appendChild(hud);
-  const hudN = hud.querySelector(".n"),
-    hudReg = hud.querySelector(".reg"),
-    hudId = hud.querySelector(".id"),
-    hudBar = hud.querySelector(".bar i"),
-    voBar = hud.querySelector(".bar.vo i");
+  const hudN   = hud.querySelector(".n"),
+      hudBar = hud.querySelector(".bar i"),       //scroll bar prog
+      voBar  = hud.querySelector(".bar.vo i"); //vo prog
+
+
+  // the idle clock only runs while nothing's being said 
+    const speaking = SCENES.some(function(s){ return s.vo && !s.vo.paused; });
+    idleFor = speaking ? 0 : idleFor + dt;
+    if (IDLE && idleFor > IDLE) location.reload();
+
 
   function updateHud() {
     const s = currentScene;
     if (!s) return;
     hudN.textContent = SCENES.indexOf(s) + 1 + " / " + SCENES.length;
-    hudReg.textContent = s.register;
-    hudId.textContent = s.id;
     hudBar.style.transform =
       "scaleX(" +
       Math.max(0, Math.min(1, (raw - s.start) / s.len)).toFixed(4) +
