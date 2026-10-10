@@ -967,7 +967,7 @@ video[data-on] + .credit{
   font-size: var(--t-ui);
   font-style: normal;
   line-height: 1;
-  color: var(--stone);
+  color: var(--bone);
   cursor: help;
   opacity: calc(var(--fade, 1) * .55);
   transition: opacity .2s, color .2s;
