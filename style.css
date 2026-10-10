@@ -119,7 +119,73 @@ body{
   transform: scaleX(0);
 }
 
+#pace{
+  position: fixed; 
+  right: 0.3vw; 
+  top: 40%; 
+  translate: 0 50%; 
+  z-index: 100; 
+  display: grid; 
+  justify-items:center; 
+  gap: 1em; 
+  font-family: var(--sans);
+  font-size: var(--t-ui); 
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  color: var(--bone);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
 
+#pace[data-state="scroll"], #pace[data-state="wait"]{
+  opacity: 1; 
+}
+
+#pace .say{
+  grid-area: 1/1; 
+  opacity: 0;
+  transition: opacity 1.2s; 
+}
+
+#pace[data-state="scroll"] .say-scroll, #pace[data-state="wait"] .say-wait{
+  opacity: 1; 
+}
+
+#pace .track{
+  width:  2px; 
+  margin-left: 0.05rem;
+  height: 8vh; 
+  background: rgba(255,255,255,0.14); 
+  overflow: hidden; 
+}
+
+#pace .track i{
+  display: block;
+  height: 30%; 
+  background: var(--bone);
+  animation: drop 2.4s linear infinite; 
+}
+
+#pace[data-state="wait"] .track i{
+  animation-play-state: paused;
+}
+
+@keyframes drop{
+  from{
+    transform: translateY(-100%); 
+  }
+  to{
+    transform: translateY(340%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  #pace .track i{ animation: none; }
+}
+
+/* minimal gate */
+/* 
 #gate{
     position: fixed;
     inset:0;
@@ -128,6 +194,25 @@ body{
     display: grid;
     place-items: center;
     opacity: 0.85; 
+
+}
+.gate-inner{
+  display: grid;
+  justify-items: center;
+  gap: 3rem; 
+}
+
+.guide{
+  
+-style: none;
+  text-align: center; 
+  font-family: var(--sans);
+  font-size: var(--t-ui); 
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  line-height: 2.2;
+  color: var(--bone); 
+
 
 }
 
@@ -152,6 +237,101 @@ background: none;
 #launch:hover{
   color: var(--testing3); 
   border: 1px solid var(--testing3);
+} */
+
+
+/* modal gate */
+#gate{
+    position: fixed;
+    inset:0;
+    z-index: 200;
+    background: var(--ground);
+    display: grid;
+    place-items: center;
+    opacity: 0.85; 
+}
+
+#gate[hidden]{
+    display:none;
+}
+.gate-btns{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+#guide{
+  margin: auto;              
+  max-width: 90vw;
+  padding: 8vh 7vw;
+  background: var(--ground);
+  border: 1px solid var(--stone);
+  color: var(--ink);
+}
+
+/* #guide::backdrop{
+  background: rgba(11,12,12,.85);
+} */
+
+.guide{
+  list-style:lower-roman;
+  text-align: center;
+  font-family: var(--sans);
+  /* same as sub size */
+  font-size: var(--t-vo);  
+  line-height: 2;
+}
+
+.guide li{
+  white-space: nowrap; 
+}
+
+/* .guide .guide-mark{
+  position: relative;
+  display: inline-grid; 
+  vertical-align: middle;
+  margin: 0 0.2em; 
+  font-size: .7em;
+  opacity: 1;
+  color: var(--bone);
+  cursor: default; 
+} */
+
+.guide-close{
+  position: absolute; 
+  top: 1.5vh; 
+  left: 1.5vw;
+  background: none;
+  border: none;
+  color: var(--bone);
+  font-family:var(--sans);
+  font-size: var(--t-vo);
+  line-height: 1; 
+  padding: .3em .5em;
+  cursor: pointer;
+}
+
+.guide-close:hover{
+  color: var(--testing3);
+}
+
+.gate-btn{
+  background: none;
+  border: 1px solid var(--stone);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--t-ui);
+  font-weight: 700;
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+  padding: 1.1em 3em;
+  cursor: pointer;
+}
+
+.gate-btn:hover{
+   color: var(--testing3); 
+  border: 1px solid var(--testing3);
+
 }
 
 

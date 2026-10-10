@@ -19,9 +19,46 @@
 
 <body>
 
-  <div id="gate">
-    <button id="launch" type="button">Launch Film</button>
-  </div>
+  <!-- minimal gate -->
+  <!-- <div id="gate">
+    <div class="gate-inner">
+      <ul class="guide">
+            <li> Scroll slowly to move through scenes</li>
+            <li>Hover the small circles for sources & credits</li>
+          </ul>
+          <button id="launch" type="button">Launch Film</button>
+          
+    </div>
+  </div> -->
+
+  <!-- gate w modal  -->
+   <div id="gate">
+    <div class="gate-btns">
+      
+      <button id="how" class="gate-btn" type="button">
+        Instructions
+      </button>
+      <button id="launch" class="gate-btn" type="button">
+        Launch Film
+      </button>
+    </div>
+   </div>
+   <dialog id="guide">
+    <ul class="guide">
+      <li>Scroll slowly to move through scenes</li>
+      <li>Headphones on for narration</li>
+      <li>Hover the ⓘ for sources and credits</li>
+    </ul>
+    <form method="dialog">
+      <button class="guide-close" >x</button>
+    </form>
+   </dialog>
+
+   <div id="pace"> 
+    <span class="say say-scroll">Scroll</span>
+    <span class="say say-wait">Wait</span>
+    <span class="track"><i></i></span>
+   </div>
 
   <!-- if i ever wanna add ambient sound..
      <audio id="ambience" class="ambience" src="assets/audio/ambience.m4a" loop preload="auto"></audio> -->
@@ -171,14 +208,14 @@
       </div>
 
     </div>
-    </div>
 
-    <
+
+  
 
     <section class="scene" data-scene="castle" data-screens="11">
       <div class="stage">
         <!-- <p class="prose">text text text text </p> -->
-        <model-viewer class="fill" src="assets/beaufort-optimized.glb" camera-controls disable-zoom
+        <model-viewer class="fill" src="assets/beaufort-optimized.glb"  disable-zoom
           interaction-prompt="none" exposure="0.9" shadow-intensity="0" environment-image="neutral"
           camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
         <audio class="vo" src="assets/audio/VO_1.wav" preload="auto"></audio>

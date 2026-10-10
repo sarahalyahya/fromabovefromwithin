@@ -15,9 +15,16 @@
 
   document.documentElement.classList.remove("no-js");
 
+  const guide = document.getElementById("guide");
+    document.getElementById("how").addEventListener("click", function(){
+      guide.showModal();
+    });
+
   const gate = document.getElementById("gate");
   document.getElementById("launch").addEventListener("click", function () {
     gate.hidden = true;
+
+    
 
     window.scrollTo({ top: 0, behavior: "instant" });
 
@@ -984,6 +991,7 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     idleFor = speaking ? 0 : idleFor + dt;
     if (IDLE && idleFor > IDLE) location.reload();
     updateHud();
+    updatePace(dt);
     stackView.hidden = !(
       currentScene && currentScene.el.hasAttribute("data-stack")
     ); //is there a stack at all?
@@ -1004,7 +1012,10 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       voBar  = hud.querySelector(".bar.vo i"); //vo prog
 
 
- 
+  
+
+
+
 
 
   function updateHud() {
@@ -1023,6 +1034,47 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     voBar.style.transform = "scaleX(" + v.toFixed(4) + ")";
   }
 
+
+  const pace = document.getElementById("pace");
+  const AHEAD = 0.15; // this is how far the scroll can run ahead of the voice
+  const NUDGE = 4; //this is how many seconds of stillness after the voice ends before "scroll" shows up
+
+  let still = 0;
+  let lastRaw = 0;
+
+
+  function updatePace(dt){
+    const s = currentScene; 
+
+   //this is a stillness timer. raw is how far one has scrolled, if it hasnt changed since last scnene. 
+    //it adds current time to "still" if nothing has change, to track stillness
+    //otherwise it resets this counter to 0
+    still = raw === lastRaw ? still + dt: 0; 
+    lastRaw = raw; 
+
+    let state ="";
+    //case 1: first scene and hasn't scrolled at all 
+    if(raw === 0 && still > 1.5){
+      state = "scroll";
+
+      //otherwise proceed if a scene is loaded, has a vo, and the audio is loaded
+    } else if (s && s.vo && isFinite(s.vo.duration)){
+
+      //these are progress values. heard is how much of the voice has played, and p is how far one has scrolled
+      const heard = s.vo.currentTime / s.vo.duration; 
+      const p = (raw - s.start) /s.len; 
+    
+      // case 2: the voice has finished and the visitor has been still for 4 secs
+     if (s.vo.ended && still > NUDGE){
+        state = "scroll"; 
+        
+      //case 3: voice is still going, but scrolling is too fast
+      } else if(!s.vo.ended && p - heard > AHEAD){
+        state = "wait";
+      }
+    }
+      pace.dataset.state = state; 
+  }
   window.addEventListener("scroll", readScroll, { passive: true });
 
   let resizeTimer = 0;
