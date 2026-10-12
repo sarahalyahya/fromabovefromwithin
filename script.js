@@ -1,30 +1,39 @@
 (function () {
   "use strict";
 
-  history.scrollRestoration = 'manual';   // reload always starts at the top
+  history.scrollRestoration = "manual"; // reload always starts at the top
   window.scrollTo(0, 0);
   // refresh when no one is using for a while
-  const IDLE = 90;    // seconds with no input and no voice playing; 0 = off (handy while working)
+  const IDLE = 90; // seconds with no input and no voice playing; 0 = off (handy while working)
   let idleFor = 0;
 
-['scroll', 'wheel', 'pointermove', 'pointerdown', 'touchstart', 'keydown'].forEach(function(ev){
-  window.addEventListener(ev, function(){ idleFor = 0; }, { passive: true });
-});
-
-
+  [
+    "scroll",
+    "wheel",
+    "pointermove",
+    "pointerdown",
+    "touchstart",
+    "keydown",
+  ].forEach(function (ev) {
+    window.addEventListener(
+      ev,
+      function () {
+        idleFor = 0;
+      },
+      { passive: true },
+    );
+  });
 
   document.documentElement.classList.remove("no-js");
 
   const guide = document.getElementById("guide");
-    document.getElementById("how").addEventListener("click", function(){
-      guide.showModal();
-    });
+  document.getElementById("how").addEventListener("click", function () {
+    guide.showModal();
+  });
 
   const gate = document.getElementById("gate");
   document.getElementById("launch").addEventListener("click", function () {
     gate.hidden = true;
-
-    
 
     window.scrollTo({ top: 0, behavior: "instant" });
 
@@ -56,11 +65,10 @@
       stopPanoLoop(); // already started before this ran
     else pano.addEventListener("renderstart", stopPanoLoop);
   }
- 
-document.querySelectorAll('[data-volume]').forEach(function(el){
-  el.volume = parseFloat(el.dataset.volume);
-});
 
+  document.querySelectorAll("[data-volume]").forEach(function (el) {
+    el.volume = parseFloat(el.dataset.volume);
+  });
 
   const BEHAVIOURS = {
     /*  example 
@@ -233,17 +241,17 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       const view = stackView;
       const stack = view.querySelector(".stack");
 
-      const FROM = 0.75, TO = 0.9;
+      const FROM = 0.75,
+        TO = 0.9;
       const intro = view.querySelector(".intro");
       const introWrap = view.querySelector(".tl-vid-wrapper");
-      const quoteAt = s.subs.findIndex(function(el){
+      const quoteAt = s.subs.findIndex(function (el) {
         return el.classList.contains("quote");
       });
-      const goneAt = s.subs.findIndex(function(el){
+      const goneAt = s.subs.findIndex(function (el) {
         return el.hasAttribute("data-intro-out");
-      }); 
+      });
       const END = STACK_REST;
-
 
       function smooth(t) {
         return t * t * (3 - 2 * t);
@@ -253,13 +261,13 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
         update: function (p, fade) {
           if (!s.active) return;
           const now = s.subs.indexOf(s.shown);
-          const state = now >= goneAt ? "gone": now >= quoteAt? "dim": ""; 
+          const state = now >= goneAt ? "gone" : now >= quoteAt ? "dim" : "";
           introWrap.dataset.state = state;
-          if(state !== "gone" && intro.paused){
-            intro.play().catch(function(){});
+          if (state !== "gone" && intro.paused) {
+            intro.play().catch(function () {});
           }
-          if (state === "gone" && !intro.paused){
-            intro.pause(); 
+          if (state === "gone" && !intro.paused) {
+            intro.pause();
           }
           view.style.opacity = p < 0.5 ? fade : 1;
 
@@ -881,7 +889,7 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
   const MOUNT_MARGIN = 1.5; /* window-heights either side */
   const EDGE = 0.15; /* fraction of a scene spent fading in / out */
   const VOICE_FADE = 0.6; /* seconds a voice takes to ramp out */
-  const VOICE_LEVEL = 0.5; 
+  const VOICE_LEVEL = 0.5;
 
   let currentScene = null;
 
@@ -988,7 +996,7 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       /* ramp a departing voice down over VOICE_FADE, then park it */
       if (s.vo && !s.active && s.gain > 0) {
         s.gain = Math.max(0, s.gain - dt / VOICE_FADE);
-        s.vo.volume = s.gain*VOICE_LEVEL;
+        s.vo.volume = s.gain * VOICE_LEVEL;
         if (s.gain === 0) {
           s.vo.pause();
           if (s.rewind) {
@@ -1003,8 +1011,10 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       if (near && s.api && s.api.update) s.api.update(local, fade);
     });
 
-     // the idle clock only runs while nothing's being said 
-    const speaking = SCENES.some(function(s){ return s.vo && !s.vo.paused; });
+    // the idle clock only runs while nothing's being said
+    const speaking = SCENES.some(function (s) {
+      return s.vo && !s.vo.paused;
+    });
     idleFor = speaking ? 0 : idleFor + dt;
     if (IDLE && idleFor > IDLE) location.reload();
     const final = SCENES[SCENES.length - 1];
@@ -1023,27 +1033,18 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     requestAnimationFrame(render);
   }
 
-
-
   /*temp*/
   const hud = document.createElement("div");
   hud.id = "hud";
   hud.innerHTML =
-  '<span class="grp">Scroll <div class="bar"><i></i></div></span>' +
-  '<span class="n"></span>' +
-  '<span class="grp">Voice <div class="bar vo"><i></i></div></span>';
+    '<span class="grp">Scroll <div class="bar"><i></i></div></span>' +
+    '<span class="n"></span>' +
+    '<span class="grp">Voice <div class="bar vo"><i></i></div></span>';
 
   document.body.appendChild(hud);
-  const hudN   = hud.querySelector(".n"),
-      hudBar = hud.querySelector(".bar i"),       //scroll bar prog
-      voBar  = hud.querySelector(".bar.vo i"); //vo prog
-
-
-  
-
-
-
-
+  const hudN = hud.querySelector(".n"),
+    hudBar = hud.querySelector(".bar i"), //scroll bar prog
+    voBar = hud.querySelector(".bar.vo i"); //vo prog
 
   function updateHud() {
     const s = currentScene;
@@ -1061,7 +1062,6 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     voBar.style.transform = "scaleX(" + v.toFixed(4) + ")";
   }
 
-
   const pace = document.getElementById("pace");
   const AHEAD = 0.15; // this is how far the scroll can run ahead of the voice
   const NUDGE = 4; //this is how many seconds of stillness after the voice ends before "scroll" shows up
@@ -1069,48 +1069,47 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
   let still = 0;
   let lastRaw = 0;
 
+  const restart = document.getElementById("restart");
+  const end = document.getElementById("end");
+  restart.addEventListener("click", function () {
+    location.reload();
+  });
 
-const restart = document.getElementById("restart");
-const end = document.getElementById("end"); 
-restart.addEventListener("click", function () { location.reload(); });
+  const RESTART_AT = 5; // seconds after the last line before the button shows
+  const END = 60; // seconds after the last line before it resets by itself
+  let endFor = 0;
 
-const RESTART_AT = 5;  // seconds after the last line before the button shows
-const END = 60;        // seconds after the last line before it resets by itself
-let endFor = 0;
+  function updatePace(dt) {
+    const s = currentScene;
 
-
-
-  function updatePace(dt){
-    const s = currentScene; 
-
-   //this is a stillness timer. raw is how far one has scrolled, if it hasnt changed since last scnene. 
+    //this is a stillness timer. raw is how far one has scrolled, if it hasnt changed since last scnene.
     //it adds current time to "still" if nothing has change, to track stillness
     //otherwise it resets this counter to 0
-    still = raw === lastRaw ? still + dt: 0; 
-    lastRaw = raw; 
+    still = raw === lastRaw ? still + dt : 0;
+    lastRaw = raw;
 
-    let state ="";
-    //case 1: first scene and hasn't scrolled at all 
-    if(raw === 0 && still > 1.5){
+    let state = "";
+    //case 1: first scene and hasn't scrolled at all
+    if (raw === 0 && still > 1.5) {
       state = "scroll";
 
       //otherwise proceed if a scene is loaded, has a vo, and the audio is loaded
-    } else if (s && s.vo && isFinite(s.vo.duration)){
-
+    } else if (s && s.vo && isFinite(s.vo.duration)) {
       //these are progress values. heard is how much of the voice has played, and p is how far one has scrolled
-      const heard = s.vo.currentTime / s.vo.duration; 
-      const p = (raw - s.start) /s.len; 
-    
+      const heard = s.vo.currentTime / s.vo.duration;
+      const p = (raw - s.start) / s.len;
+
       // case 2: the voice has finished and the visitor has been still for 4 secs
-     if (s.vo.ended && still > NUDGE){
-        state = "scroll"; 
-        
-      //case 3: voice is still going, but scrolling is too fast
-      } else if(!s.vo.ended && p - heard > AHEAD){
+      if (s.vo.ended && still > NUDGE && s !== SCENES[SCENES.length - 1]) {
+        state = "scroll";
+
+        //case 3: voice is still going, but scrolling is too fast
+      } else if (!s.vo.ended && p - heard > AHEAD) {
         state = "wait";
       }
     }
-      pace.dataset.state = state; 
+    pace.dataset.scene = s ? s.id : "";
+    pace.dataset.state = state;
   }
   window.addEventListener("scroll", readScroll, { passive: true });
 

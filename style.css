@@ -171,6 +171,17 @@ body{
   animation-play-state: paused;
 }
 
+#pace[data-scene="tabsoun"]{ 
+  color: var(--ground);
+ }
+#pace[data-scene="tabsoun"] .track{ 
+  background: rgba(11,12,12,.25); 
+}
+#pace[data-scene="tabsoun"] .track i{
+   background: var(--ground);
+  }
+
+
 @keyframes drop{
   from{
     transform: translateY(-100%); 
