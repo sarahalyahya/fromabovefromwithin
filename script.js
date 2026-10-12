@@ -233,9 +233,17 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       const view = stackView;
       const stack = view.querySelector(".stack");
 
-      const FROM = 0.75,
-        TO = 0.9;
+      const FROM = 0.75, TO = 0.9;
+      const intro = view.querySelector(".intro");
+      const introWrap = view.querySelector(".tl-vid-wrapper");
+      const quoteAt = s.subs.findIndex(function(el){
+        return el.classList.contains("quote");
+      });
+      const goneAt = s.subs.findIndex(function(el){
+        return el.hasAttribute("data-intro-out");
+      }); 
       const END = STACK_REST;
+
 
       function smooth(t) {
         return t * t * (3 - 2 * t);
@@ -244,6 +252,15 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
       return {
         update: function (p, fade) {
           if (!s.active) return;
+          const now = s.subs.indexOf(s.shown);
+          const state = now >= goneAt ? "gone": now >= quoteAt? "dim": ""; 
+          introWrap.dataset.state = state;
+          if(state !== "gone" && intro.paused){
+            intro.play().catch(function(){});
+          }
+          if (state === "gone" && !intro.paused){
+            intro.pause(); 
+          }
           view.style.opacity = p < 0.5 ? fade : 1;
 
           const k = (p - FROM) / (TO - FROM);
@@ -990,6 +1007,14 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     const speaking = SCENES.some(function(s){ return s.vo && !s.vo.paused; });
     idleFor = speaking ? 0 : idleFor + dt;
     if (IDLE && idleFor > IDLE) location.reload();
+    const final = SCENES[SCENES.length - 1];
+    const over = currentScene === final && final.vo && final.vo.ended;
+    endFor = over ? endFor + dt : 0;
+    end.toggleAttribute("data-on", endFor > RESTART_AT);
+    if (END && endFor > END) {
+      location.reload();
+    }
+
     updateHud();
     updatePace(dt);
     stackView.hidden = !(
@@ -997,6 +1022,8 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
     ); //is there a stack at all?
     requestAnimationFrame(render);
   }
+
+
 
   /*temp*/
   const hud = document.createElement("div");
@@ -1041,6 +1068,16 @@ document.querySelectorAll('[data-volume]').forEach(function(el){
 
   let still = 0;
   let lastRaw = 0;
+
+
+const restart = document.getElementById("restart");
+const end = document.getElementById("end"); 
+restart.addEventListener("click", function () { location.reload(); });
+
+const RESTART_AT = 5;  // seconds after the last line before the button shows
+const END = 60;        // seconds after the last line before it resets by itself
+let endFor = 0;
+
 
 
   function updatePace(dt){

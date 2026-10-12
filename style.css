@@ -570,6 +570,35 @@ video[data-on] + .credit{
     opacity: 60%;
   }
 
+.tl-vid-wrapper{
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  translate: -50% -50%;
+  width: 20vw;
+  transition: opacity 1.2s;
+}
+.tl-vid-wrapper[data-state="dim"]{ 
+  opacity: .35; 
+}
+.tl-vid-wrapper[data-state="gone"]{ 
+  opacity: 0; 
+}
+
+.intro{
+  display: block;
+  width: 100%;
+}
+.tl-vid-wrapper .credit{
+  top: .6em;
+  right: .6em;
+}
+.tl-vid-wrapper .credit-detail{
+  left: auto;
+  right: 0;
+}
+
+
   .pair{
     height: 100%;
     display: grid;
@@ -654,7 +683,7 @@ video[data-on] + .credit{
   position:relative;
 }
 
-.post-media .credit{
+/* .post-media .credit{
   top: 0.6em;
   right:3.5em;
   pointer-events: auto;
@@ -663,6 +692,18 @@ video[data-on] + .credit{
 .post-media .credit-detail{
   left: auto;
   right: 0; 
+} */
+
+.post-foot .credit{
+  position: relative;
+  margin-left: auto;
+  pointer-events: auto;
+}
+.post-foot .credit-detail{
+  top: auto;
+  bottom: 160%;
+  left: auto;
+  right: 0;
 }
 
 
@@ -866,7 +907,7 @@ video[data-on] + .credit{
 
 .sh-img-wrapper .credit {
   bottom: 0.6em;
-  right: .6em; 
+  left: .6em; 
 }
 .sh-img-wrapper .credit-detail{
   top: auto; 
@@ -896,7 +937,7 @@ video[data-on] + .credit{
 
 .digging-vid-wrapper .credit {
   bottom: 0.6em;
-  right: .6em; 
+  left: .6em; 
 }
 .digging-vid-wrapper .credit-detail{
   top: auto; 
@@ -924,11 +965,11 @@ video[data-on] + .credit{
   height: auto;
 }
 
-.digging-vid-wrapper .credit {
+.crosshair-vid-wrapper .credit {
   bottom: 0.6em;
-  right: .6em; 
+  left: .6em; 
 }
-.digging-vid-wrapper .credit-detail{
+.crosshair-vid-wrapper .credit-detail{
   top: auto; 
   bottom: 160%; 
   left: auto;
@@ -959,15 +1000,15 @@ video[data-on] + .credit{
   z-index: 6;
   display: grid;
   place-items: center;
-  width: 1.15em;
-  height: 1.15em;
-  border: 1.5px solid currentColor;
+  width: 1.3em;
+  height: 1.3em;
+  border: 2.5px solid currentColor;
   border-radius: 50%;
   font-family: var(--sans);
   font-size: var(--t-ui);
   font-style: normal;
   line-height: 1;
-  color: var(--bone);
+  color: var(--ink);
   cursor: help;
   opacity: calc(var(--fade, 1) * .55);
   transition: opacity .2s, color .2s;
@@ -1021,6 +1062,28 @@ video[data-on] + .credit{
 .sub.quote .credit{ 
   position: absolute; 
 }        
+
+
+#film {
+   padding-bottom: 100vh;
+   }
+
+#end{
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  background: rgba(11,12,12,.75);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s;
+}
+#end[data-on]{
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 
 
