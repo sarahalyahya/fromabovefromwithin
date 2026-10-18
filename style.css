@@ -91,7 +91,9 @@ body{
   align-items: center;
   gap: 1.1rem;
   font-family: var(--sans);
-  font-size: var(--t-ui);
+  /* font-size: var(--t-ui); */
+  font-size: clamp(0.8rem, 1.1vw, 2.4rem); 
+  font-weight: 600;
   letter-spacing: var(--track);
   text-transform: uppercase;
   color: var(--stone);
@@ -129,7 +131,8 @@ body{
   justify-items:center; 
   gap: 1em; 
   font-family: var(--sans);
-  font-size: var(--t-ui); 
+  /* font-size: var(--t-ui);  */
+  font-size: clamp(0.9rem, 1.2vw, 2.6rem); 
   letter-spacing: var(--track);
   text-transform: uppercase;
   color: var(--bone);
@@ -331,8 +334,9 @@ background: none;
   border: 1px solid var(--stone);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: var(--t-ui);
-  font-weight: 700;
+  /* font-size: var(--t-ui); */
+  font-size: clamp(0.9rem, 1.2vw, 2.6rem); 
+  font-weight: 900;
   letter-spacing: var(--track);
   text-transform: uppercase;
   padding: 1.1em 3em;
