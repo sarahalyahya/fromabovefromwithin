@@ -31,6 +31,37 @@
     guide.showModal();
   });
 
+  // trackpads fling too fast: gather the wheel, then scroll at most MAX_SPEED each frame
+  const WHEEL_SCALE = 0.5; // how much of the trackpad's distance we use
+  const MAX_SPEED = 900; // px per second: the fastest the film can ever move
+  let pending = 0;
+
+  window.addEventListener(
+    "wheel",
+    function (e) {
+      if (guide.open || e.ctrlKey) return; // let the guide dialog scroll; ctrlKey = pinch-zoom
+      e.preventDefault();
+      let d = e.deltaY;
+      if (e.deltaMode === 1) d *= 16; // some mice report lines
+      else if (e.deltaMode === 2) d *= innerHeight; // or pages
+      pending += d * WHEEL_SCALE;
+    },
+    { passive: false },
+  );
+
+  let lastT = 0;
+  function applyWheel(now) {
+    const dt = lastT ? Math.min((now - lastT) / 1000, 0.1) : 0;
+    lastT = now;
+    if (pending !== 0) {
+      const max = MAX_SPEED * dt;
+      window.scrollBy({ top: Math.max(-max, Math.min(max, pending)), behavior: "instant" });
+      pending = 0; // drop the excess, so no glide queues up
+    }
+    requestAnimationFrame(applyWheel);
+  }
+  requestAnimationFrame(applyWheel);
+
   const gate = document.getElementById("gate");
   document.getElementById("launch").addEventListener("click", function () {
     gate.hidden = true;
