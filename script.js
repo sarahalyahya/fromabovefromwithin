@@ -33,7 +33,7 @@
 
   // trackpads fling too fast: gather the wheel, then scroll at most MAX_SPEED each frame
   const WHEEL_SCALE = 0.5; // how much of the trackpad's distance we use
-  const MAX_SPEED = 900; // px per second: the fastest the film can ever move
+  const MAX_SPEED = 1200; // px per second: the fastest the film can ever move
   let pending = 0;
 
   window.addEventListener(
