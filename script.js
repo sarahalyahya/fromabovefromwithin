@@ -32,6 +32,10 @@
   });
   guide.showModal(); // open on arrival; the Instructions button reopens it
 
+  document.getElementById("restart").addEventListener("click", function () {
+    location.reload();
+  });
+
   // trackpads fling too fast: gather the wheel, then scroll at most MAX_SPEED each frame
   const WHEEL_SCALE = 0.85; // how much of the trackpad's distance we use
   const MAX_SPEED = 4500; // px per second: the fastest the film can ever move
