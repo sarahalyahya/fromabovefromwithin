@@ -336,7 +336,7 @@ background: none;
   color: var(--testing3);
 }
 
-#restart{
+#restart-corner{
   position: fixed;
   top: 1.5vh;
   right: 1.5vw;
@@ -350,8 +350,8 @@ background: none;
   padding: .3em .5em;
   cursor: pointer;
 }
-#restart:hover{ color: var(--testing3); }
-#restart::after{
+#restart-corner:hover{ color: var(--testing3); }
+#restart-corner::after{
   content: attr(aria-label);
   position: absolute;
   right: 100%;
@@ -366,7 +366,7 @@ background: none;
   transition: opacity .3s;
   pointer-events: none;
 }
-#restart:hover::after{ opacity: 1; }
+#restart-corner:hover::after{ opacity: 1; }
 
 .gate-btn{
   background: none;

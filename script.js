@@ -32,7 +32,7 @@
   });
   guide.showModal(); // open on arrival; the Instructions button reopens it
 
-  document.getElementById("restart").addEventListener("click", function () {
+  document.getElementById("restart-corner").addEventListener("click", function () {
     location.reload();
   });
 
