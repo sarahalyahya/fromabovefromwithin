@@ -26,6 +26,7 @@ export default function overlook(stage, s, ctx) {
   const PHI_FROM = 45, PHI_TO = 3; /* 0 is straight down; 3 dodges the pole */
   const R_FROM = 95, R_TO = 121; /* dial this to fit the outline */
   const THETA_FROM = 370, THETA_TO = 336;
+  let last = -1;
 
   return {
     update: function (p, fade, t) {
@@ -45,11 +46,14 @@ export default function overlook(stage, s, ctx) {
         box.setAttribute("width", mix(BOX_FROM.w, BOX_TO.w, land));
         box.setAttribute("height", mix(BOX_FROM.h, BOX_TO.h, land));
       }
-      if (mv)
+      if (mv) {
         mv.cameraOrbit =
           mix(THETA_FROM, THETA_TO, land) + "deg " +
           mix(PHI_FROM, PHI_TO, land) + "deg " +
           mix(R_FROM, R_TO, land) + "%";
+        if (last < 0 || Math.abs(p - last) > 0.02) mv.jumpCameraToGoal(); /* no spin after a jump */
+      }
+      last = p;
     },
   };
 }

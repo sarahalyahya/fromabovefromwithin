@@ -329,17 +329,31 @@ function setAuto(on, byInput) {
    Auto never scrolls back: if you are ahead of the voice, it waits. */
 function autoStep(dt) {
   const s = currentScene || SCENES[0];
-  let target = Math.min(s.start + PACE * VH * sceneClock(s), filmLen);
+  let target = Math.min(s.start + PACE * VH * smoothClock(s, dt), filmLen);
   target = Math.max(target, autoY);
 
   const max = AUTO_MAX * VH * dt;
   autoY += Math.min(max, (target - autoY) * (1 - Math.exp(-dt * AUTO_EASE)));
 
-  const y = Math.round(autoY);
-  if (Math.abs(window.scrollY - y) >= 1) {
-    window.scrollTo({ top: y, behavior: "instant" });
-    readScroll();
+  if (Math.abs(window.scrollY - autoY) >= 0.5) window.scrollTo({ top: autoY, behavior: "instant" });
+  /* everything on screen is fixed, so draw from the exact position rather than
+     the scroll offset the browser rounds to whole device pixels */
+  raw = Math.max(0, Math.min(filmLen, autoY - filmEl.offsetTop));
+}
+
+/* The audio clock ticks unevenly from frame to frame. For motion, run our own
+   clock at frame time and pull it gently toward the voice, so the page glides. */
+function smoothClock(s, dt) {
+  const t = sceneClock(s);
+  if (s.clock == null || s.clockFor !== s.vo || Math.abs(t - s.clock) > 0.5) {
+    s.clock = t;
+    s.clockFor = s.vo;
+    return t;
   }
+  const running = !s.vo || s.vo.ended || !s.vo.paused;
+  if (running) s.clock += dt;
+  s.clock += (t - s.clock) * 0.1;
+  return s.clock;
 }
 
 /* ---------- pause ---------- */
@@ -355,7 +369,8 @@ function setPaused(on) {
     held = Array.from(document.querySelectorAll("audio, video")).filter((m) => !m.paused);
     held.forEach((m) => m.pause());
   } else {
-    held.forEach(play);
+    const voice = currentScene && currentScene.vo;
+    held.forEach((m) => (m.tagName === "VIDEO" || m === voice) && play(m));
     held = [];
     SCENES.forEach((s) => (s.retryAt = 0));
   }
@@ -365,17 +380,22 @@ function setPaused(on) {
 
 function jumpTo(i) {
   i = Math.max(0, Math.min(SCENES.length - 1, i));
-  /* everything from the target on starts fresh */
   SCENES.forEach(function (s) {
-    if (s.index < i || !s.vo) return;
+    if (!s.vo) return;
+    /* a jump cuts every voice at once instead of fading it, so two never overlap */
     s.vo.pause();
-    s.vo.currentTime = 0;
     s.gain = 0;
+    if (s.index < i) return;
+    /* everything from the target on starts fresh */
+    s.vo.currentTime = 0;
     s.post = 0;
     s.retryAt = 0;
+    s.clock = null;
     caption(s, -1);
   });
+  held = held.filter((m) => m.tagName === "VIDEO");
   const s = SCENES[i];
+  currentScene = s;
   const y = s.start + entryOf(s);
   window.scrollTo({ top: y, behavior: "instant" });
   autoY = y;
@@ -463,6 +483,9 @@ function frame(now) {
       cue(s);
     }
 
+    /* a voice outside its scene never keeps playing */
+    if (s.vo && !s.active && s.gain === 0 && !s.vo.paused) s.vo.pause();
+
     /* ramp a departing voice down over VOICE_FADE, then park it */
     if (s.vo && !s.active && s.gain > 0) {
       s.gain = Math.max(0, s.gain - dt / VOICE_FADE);
@@ -497,8 +520,8 @@ function frame(now) {
   end.toggleAttribute("data-on", endFor > RESTART_AT);
   if (END_RESET && endFor > END_RESET) location.reload();
 
-  const state = updatePace(dt);
-  hud.update(currentScene, raw, sceneClock(currentScene), state === "scroll");
+  updatePace(dt);
+  hud.update(currentScene, raw);
 
   requestAnimationFrame(frame);
 }
@@ -521,7 +544,6 @@ function updatePace(dt) {
   }
   pace.dataset.scene = s ? s.id : "";
   pace.dataset.state = state;
-  return state;
 }
 
 /* ---------- input ---------- */

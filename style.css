@@ -523,6 +523,9 @@ video[data-on] + .credit{
     transform-style: preserve-3d; 
     /* transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg)); */
     transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull) * -1 * var(--depth))) rotateY(calc(var(--turn)*1deg)) rotateX(calc(var(--tilt)*1deg));
+    /* the stack moves every frame in auto mode: keep it on the GPU so it glides
+       instead of being redrawn and snapped to whole pixels (which read as shaking) */
+    will-change: transform;
 
   }
 
@@ -541,6 +544,8 @@ video[data-on] + .credit{
     outline: var(--edge) solid var(--ink);
     /* transform: translateZ(calc(var(--k)*var(--spread)*200px)); */
     transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* kinda like a shadow dropping between eahc layer */
@@ -1216,7 +1221,7 @@ video[data-on] + .credit{
 /* ---------- controls: auto scroll, pause, restart ---------- */
 body{ --hud-ink: var(--bone); --hud-halo: rgba(11,12,12,.75); }
 body[data-scene="tabsoun"]{ --hud-ink: #1b1c1a; --hud-halo: rgba(241,236,224,.6); }
-#controls, #alt, #chapters{ text-shadow: 0 0 6px var(--hud-halo), 0 0 2px var(--hud-halo); }
+#controls, #chapters{ text-shadow: 0 0 6px var(--hud-halo), 0 0 2px var(--hud-halo); }
 
 #controls{
   position: fixed;
@@ -1291,76 +1296,6 @@ body[data-scene="tabsoun"]{ --hud-ink: #1b1c1a; --hud-halo: rgba(241,236,224,.6)
 }
 #say[data-on]{ opacity: 1; }
 
-/* ---------- altimeter: where the film is looking from ---------- */
-#alt{
-  position: fixed;
-  left: 2.2vw;
-  top: 50%;
-  translate: 0 -50%;
-  height: 34vh;
-  z-index: 100;
-  pointer-events: none;
-  font-family: var(--mono);
-  font-size: clamp(.6rem, .7vw, 1.35rem);
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  color: var(--hud-ink);
-  transition: color 2s ease 1.5s;
-}
-#alt::before{
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: currentColor;
-  opacity: .35;
-}
-.alt-scale{ list-style: none; position: relative; height: 100%; }
-.alt-scale li{
-  position: absolute;
-  left: 1.2em;
-  translate: 0 -50%;
-  white-space: nowrap;
-  opacity: .45;
-  transition: opacity .8s;
-}
-.alt-scale li::before{
-  content: "";
-  position: absolute;
-  left: -1.2em;
-  top: 50%;
-  width: .65em;
-  height: 1px;
-  background: currentColor;
-}
-.alt-scale li:nth-child(1){ top: 0%; }
-.alt-scale li:nth-child(2){ top: 25%; }
-.alt-scale li:nth-child(3){ top: 50%; }
-.alt-scale li:nth-child(4){ top: 75%; }
-.alt-scale li:nth-child(5){ top: 100%; }
-.alt-scale li[data-here]{ opacity: 1; }
-.alt-mark{
-  position: absolute;
-  left: 0;
-  top: calc(var(--lv, 2) * 25%);
-  width: .75em;
-  height: .75em;
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: currentColor;
-  border: 1px solid currentColor;
-  transition: background .8s;
-}
-#alt[data-shut] .alt-mark{ background: transparent; }
-#alt[data-shut] li{ opacity: .2; }
-#alt[data-waiting] .alt-mark{ animation: breathe 2.4s ease-in-out infinite; }
-@keyframes breathe{
-  0%, 100%{ scale: 1; }
-  50%{ scale: 1.8; }
-}
-
 /* ---------- chapter strip ---------- */
 #chapters{
   position: fixed;
@@ -1427,7 +1362,6 @@ body[data-scene="tabsoun"]{ --hud-ink: #1b1c1a; --hud-halo: rgba(241,236,224,.6)
 
 /* nothing of the interface shows through the gate */
 body:not([data-launched]) #controls,
-body:not([data-launched]) #alt,
 body:not([data-launched]) #chapters{ opacity: 0; pointer-events: none; }
 
 /* ---------- phones and portrait screens ---------- */
@@ -1438,8 +1372,6 @@ body:not([data-launched]) #chapters{ opacity: 0; pointer-events: none; }
   .sh-img-wrapper, .digging-vid-wrapper, .crosshair-vid-wrapper{ width: 92vw; }
 }
 @media (max-width: 640px){
-  #alt{ left: 3vw; height: 26vh; }
-  .alt-scale li{ visibility: hidden; }
   #chapters{ left: 6vw; right: 6vw; bottom: 2vh; }
   .ch-act{ display: none; }
   .ctl-word{ display: none; }

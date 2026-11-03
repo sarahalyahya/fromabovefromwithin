@@ -75,18 +75,6 @@
     <span class="track"><i></i></span>
    </div>
 
-   <!-- left edge: where the film is looking from -->
-   <div id="alt" aria-hidden="true">
-    <ol class="alt-scale">
-      <li data-level="0">≈ 500 km</li>
-      <li data-level="1">air</li>
-      <li data-level="2">700 m</li>
-      <li data-level="3">ground</li>
-      <li data-level="4">rock</li>
-    </ol>
-    <i class="alt-mark"></i>
-   </div>
-
    <!-- bottom: one segment per scene, grouped by act; click to jump -->
    <nav id="chapters" aria-label="Chapters">
     <div class="ch-labels"><span class="ch-act"></span><span class="ch-n"></span></div>
@@ -264,18 +252,17 @@
       Pacing: each scene is as long as its voice (data-duration, seconds) plus data-tail
       (default 3 s), times one film-wide pace set in src/main.js. data-duration is only a
       head start: the real length is read from the audio file once it loads.
-      data-alt: where the film is looking from, as "level" or "level@seconds ..." (orbit, air, summit, ground, rock, none).
       data-in: how the scene arrives: cross (default) or cut.
       data-mark on a subtitle: a name a scene uses to time a reveal to that line, so retiming
       the line retimes the reveal.
     -->
     <section class="scene" data-scene="castle" data-act="I" data-title="Qal’at al-Shqif"
-      data-duration="26.8" data-alt="summit">
+      data-duration="26.8">
       <div class="stage">
         <!-- <p class="prose">text text text text </p> -->
         <model-viewer class="fill" src="assets/beaufort-optimized.glb" loading="eager" disable-zoom
           interaction-prompt="none" exposure="0.9" shadow-intensity="0" environment-image="neutral"
-          camera-orbit="0deg 75deg 70%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
+          camera-orbit="100deg 78deg 55%" orientation="0deg -90deg 0deg" field-of-view="35deg"> </model-viewer>
         <audio class="vo" src="assets/audio/VO__1.mp3" preload="auto"></audio>
 
         <p class="slate">
@@ -299,7 +286,7 @@
 
 
     <section class="scene" data-scene="overlook" data-act="I" data-title="The overlook"
-      data-duration="27.7" data-alt="summit">
+      data-duration="27.7">
       <div class="stage">
        
 
@@ -379,7 +366,7 @@
 
 
     <section class="scene" data-scene="drone-footage" data-act="I" data-title="Seized"
-      data-duration="84.1" data-alt="summit@0 air@47.9" data-stack>
+      data-duration="84.1" data-stack>
       <div class="stage" id="drone-footage-stg">
         
         <audio class="vo" src="assets/audio/VO__3.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -447,7 +434,7 @@
 
 
     <section class="scene" data-scene="all-altitudes" data-act="II" data-title="All altitudes"
-      data-duration="37.0" data-alt="air@0 orbit@21.1" data-stack>
+      data-duration="37.0" data-stack>
       <div class="stage">
       
         <audio class="vo" src="assets/audio/VO__4.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -468,7 +455,7 @@
 
 
     <section class="scene" data-scene="feed" data-act="II" data-title="The feed"
-      data-duration="25.0" data-alt="orbit" data-stack>
+      data-duration="25.0" data-stack>
       <div class="stage">
         <audio class="vo" src="assets/audio/VO__5.mp3" data-volume="0.7" preload="metadata"></audio>
 
@@ -488,7 +475,7 @@
 
 
     <section class="scene" data-scene="planet" data-act="II" data-title="Withheld"
-      data-duration="34.4" data-alt="orbit" data-stack>
+      data-duration="34.4" data-stack>
       <div class="stage">
       
         <audio class="vo" src="assets/audio/VO__6.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -511,23 +498,23 @@
 
 
     <section class="scene" data-scene="kyl-bingaman" data-act="II" data-title="Kyl–Bingaman"
-      data-duration="35.8" data-alt="orbit" data-stack>
+      data-duration="35.8" data-stack>
       <div class="stage">
       
         <audio class="vo" src="assets/audio/VO__7.mp3" data-volume="0.7" preload="metadata"></audio>
 
         <div class="subs" lang="en">
           <p data-t=0.3 class="sub">This restriction has a precedent</p>
-          <p data-t=3.0 class="sub">Between 1997 and 2020, the Kyl-Bingaman Amendment in US law</p>
-          <p data-t=8.5 class="sub">prevented satellite companies from distributing high-resolution imagery of
+          <p data-t=3.0 class="sub" data-mark="law">Between 1997 and 2020, the Kyl-Bingaman Amendment in US law</p>
+          <p data-t=8.5 class="sub" data-mark="vehicles">prevented satellite companies from distributing high-resolution imagery of
             occupied
             Palestine</p>
           <p data-t=15.3 class="sub" data-mark="pixel">Imagery was capped at 2-meters-per-pixel, the ground distance each pixel represents
           </p>
-          <p data-t=22.9 class="sub" data-mark="grid">This was sufficient to identify broad urban features, like roads and neighborhoods,
+          <p data-t=22.9 class="sub">This was sufficient to identify broad urban features, like roads and neighborhoods,
           </p>
-          <p data-t=28.5 class="sub" data-mark="vehicles">but not enough to reliably distinguish</p>
-          <p data-t=31.5 class="sub" data-mark="cells"> for example, between a car and a tank</p>
+          <p data-t=28.5 class="sub" data-mark="cells">but not enough to reliably distinguish</p>
+          <p data-t=31.5 class="sub" data-mark="blend"> for example, between a car and a tank</p>
 
         </div>
       </div>
@@ -535,7 +522,7 @@
 
 
     <section class="scene" data-scene="govmap" data-act="II" data-title="GovMap"
-      data-duration="29.9" data-alt="air" data-stack>
+      data-duration="29.9" data-stack>
       <div class="stage">
         <!-- maybe just loading the imgs fading in -->
         <audio class="vo" src="assets/audio/VO__8.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -554,7 +541,7 @@
 
 
     <section class="scene" data-scene="visibility" data-act="II" data-title="The shutter"
-      data-duration="38.1" data-tail="4" data-alt="none">
+      data-duration="38.1" data-tail="4">
       <div class="stage">
         <!-- the last pixel of GovMap, carried over; it narrows, then opens as a crack into scene 10 -->
         <i class="last-pixel"></i>
@@ -577,7 +564,7 @@
 
 
     <section class="scene" data-scene="tabsoun" data-act="III" data-title="Al Tabsoun"
-      data-duration="80.6" data-tail="4" data-in="cut" data-alt="summit@0 ground@14.3 rock@34.3 ground@39.7">
+      data-duration="80.6" data-tail="4" data-in="cut">
       <div class="stage">
 
         <audio class="vo" src="assets/audio/VO__10.mp3" preload="metadata"></audio>
@@ -648,7 +635,7 @@
 
 
     <section class="scene" data-scene="sh-1982" data-act="III" data-title="June 1982"
-      data-duration="54.0" data-alt="ground@0 air@15.1 summit@22.7 rock@43.4">
+      data-duration="54.0">
       <div class="stage">
         
         <audio class="vo" src="assets/audio/VO__11.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -679,7 +666,7 @@
 
 
     <section class="scene" data-scene="into-the-rock" data-act="III" data-title="Into the rock"
-      data-duration="55.7" data-alt="rock">
+      data-duration="55.7">
       <div class="stage">
         
         <audio class="vo" src="assets/audio/VO__12.mp3" data-volume="0.7" preload="metadata"></audio>
@@ -711,7 +698,7 @@
 
 
     <section class="scene" data-scene="crosshair-return" data-act="III" data-title="The return"
-      data-duration="62.4" data-tail="4" data-alt="air@0 ground@20.9">
+      data-duration="62.4" data-tail="4">
       <div class="stage">
      
         <audio class="vo" src="assets/audio/VO__13.mp3" preload="metadata"></audio>

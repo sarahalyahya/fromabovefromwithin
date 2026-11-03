@@ -15,6 +15,8 @@ export default function castle(stage, s, ctx) {
   const PHI_FROM = 78, PHI_TO = 45; /* 90 is eye level, 0 is straight down */
   const R_FROM = 55, R_TO = 95; /* per cent of the framing distance */
 
+  let last = -1;
+
   return {
     update: function (p, fade, t) {
       const spin = easeOut(Math.min(p / HOLD, 1));
@@ -24,6 +26,10 @@ export default function castle(stage, s, ctx) {
         mix(SPIN_FROM, SPIN_TO, spin) + "deg " +
         mix(PHI_FROM, PHI_TO, lift) + "deg " +
         mix(R_FROM, R_TO, lift) + "%";
+      /* the viewer eases the camera toward each new angle; on the first frame or
+         after a jump, place it there at once instead of spinning to it */
+      if (last < 0 || Math.abs(p - last) > 0.02) mv.jumpCameraToGoal();
+      last = p;
 
       if (slate) {
         slate.toggleAttribute("data-more", t >= DATE_AT);

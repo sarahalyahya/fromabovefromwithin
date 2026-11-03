@@ -1,7 +1,9 @@
 import { smooth, clamp01, ramp } from "../util.js";
 
-/* Scene 7. A 20 m square of ground at 2 m per pixel. Each part of the drawing
-   appears on the line that explains it. */
+/* Scene 7. A 20 m square of ground. The drawing builds with the narration:
+   the law and its dates, then a car and a tank as sharp imagery shows them,
+   then the 2 m pixel and its grid, and finally the two vehicles dissolve into
+   the same blocks of pixels, impossible to tell apart. */
 export default function kylBingaman(stage, s, ctx) {
   const layer = ctx.stackView.querySelector('[data-layer="kyl"]');
   const cv = layer.querySelector(".gsd");
@@ -16,10 +18,12 @@ export default function kylBingaman(stage, s, ctx) {
 
   /* story cues, in seconds of narration, read from the subtitles */
   const CUES = {
-    pixel: ctx.at(s, "pixel"),
-    grid: ctx.at(s, "grid"),
-    vehicles: ctx.at(s, "vehicles"),
-    cells: ctx.at(s, "cells"),
+    law: ctx.at(s, "law"), /* "Between 1997 and 2020, the Kyl-Bingaman Amendment" */
+    vehicles: ctx.at(s, "vehicles"), /* "...high-resolution imagery" */
+    pixel: ctx.at(s, "pixel"), /* "capped at 2 meters per pixel" */
+    grid: ctx.at(s, "pixel") + 3, /* "...the ground distance each pixel represents" */
+    cells: ctx.at(s, "cells"), /* "but not enough to reliably distinguish" */
+    blend: ctx.at(s, "blend"), /* "between a car and a tank" */
   };
   const RISE = 1.0; /* seconds each part takes to fade in */
   const on = (t, at) => ramp(t, at, RISE);
@@ -102,9 +106,15 @@ export default function kylBingaman(stage, s, ctx) {
     c.fillStyle = "#b8b3a8";
     c.textAlign = "center";
 
+    /* the law, under the square */
+    c.fillStyle = "#b8b3a8";
+    c.globalAlpha = on(t, CUES.law);
+    label("KYL–BINGAMAN AMENDMENT · US LAW · 1997–2020", 10, 21.9);
+    c.globalAlpha = on(t, CUES.pixel);
+    label("IMAGERY CAPPED AT 2 M PER PIXEL", 10, 23.0);
+
     /* the grid, a line every 2 m */
     c.globalAlpha = on(t, CUES.grid);
-    label("2 m", 9, 17.7);
     c.strokeStyle = GRID;
     c.lineWidth = (px * 0.5) / k;
     c.beginPath();
@@ -125,6 +135,7 @@ export default function kylBingaman(stage, s, ctx) {
 
     /* one 2 m pixel and its dimension line */
     c.globalAlpha = on(t, CUES.pixel);
+    label("2 m", 9, 17.7);
     c.strokeRect(8, 14, 2, 2);
     c.beginPath();
     c.moveTo(8, 16.6);
@@ -142,14 +153,17 @@ export default function kylBingaman(stage, s, ctx) {
       c.fillRect(cell.x, cell.y, CELL, CELL);
     });
 
-    /* the car and the tank, gone once they are only pixels */
-    c.globalAlpha = on(t, CUES.vehicles) * (1 - on(t, CUES.cells));
+    /* the car and the tank, sharp, until they are only pixels */
+    c.globalAlpha = on(t, CUES.vehicles) * (1 - on(t, CUES.blend));
     c.strokeStyle = INK;
     c.lineWidth = px / k;
     outline(CAR);
     outline(HULL);
     outline(TURRET);
     outline(BARREL);
+    c.fillStyle = "#b8b3a8";
+    label("CAR", CAR.x + CAR.w / 2, CAR.y - 0.7);
+    label("TANK", HULL.x + HULL.w / 2, HULL.y - 0.7);
   }
 
   resize();
