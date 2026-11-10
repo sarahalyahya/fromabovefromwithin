@@ -13,8 +13,15 @@
   --testing4: #d6b97a;
 
 
-  --serif: Georgia, 'Times New Roman', serif;          /* vo caption */
+  --serif: Georgia, 'Times New Roman', serif;
   --sans:  'Cabin','Helvetica Neue', Arial, sans-serif;        /* the interface */
+  --voice: 'Newsreader', Georgia, 'Times New Roman', serif;    /* narration; set to var(--sans) for the old look */
+  --mono:  'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; /* facts: slates, units, the altimeter */
+  --arabic: 'Noto Naskh Arabic', 'Geeza Pro', serif;
+
+  /* the measured square shared by the Kyl-Bingaman drawing, GovMap and the last pixel */
+  --S: min(90vw, 68vh);
+  --last-pixel: rgb(74, 70, 67);   /* GovMap's mean colour; recomputed from the image once it loads */
 
   /* type scale */
 --t-vo:  clamp(1.3rem, 2.2vw, 5rem);
@@ -48,20 +55,25 @@ body{
 
 .scene{
   position: relative;
-  --fade: 1;   
-  
+  --fade: 0;
 }
 
+/* every stage is pinned full screen; the engine crossfades them with --fade.
+   Only scenes near the scroll position are rendered at all. */
 .stage{
-  position: sticky;
-  top: 0;
+  position: fixed;
+  inset: 0;
   height: 100vh;
-  height: 100dvh;      
-  overflow: hidden;     
-  
+  height: 100dvh;
+  overflow: hidden;
+  opacity: var(--fade, 0);
+  pointer-events: none;
+
   display: grid;
   place-items: center;
 }
+.scene:not([data-near]) .stage{ visibility: hidden; }
+.scene[data-active="true"] .credit{ pointer-events: auto; }
 
 .fill{
   position: absolute;
@@ -72,7 +84,8 @@ body{
 }
 
 /* no JavaScript: let the scenes stack and just read as a document */
-.no-js .stage{ position: static; height: auto; overflow: visible; padding: 12vh 0; }
+.no-js .stage{ position: static; height: auto; overflow: visible; padding: 12vh 0; opacity: 1; visibility: visible; }
+.no-js .sub{ visibility: visible; opacity: 1; }
 
 /* content styles */ 
 .prose{
@@ -86,47 +99,6 @@ body{
   opacity: var(--fade, 0);
 }
 
-
-#hud{
-  position: fixed;
-  left: 8vw;
-  right: 8vw;
-  bottom: 5vh;
-  z-index: 100;
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  gap: 1.1rem;
-  font-family: var(--sans);
-  /* font-size: var(--t-ui); */
-  font-size: clamp(0.8rem, 1.1vw, 2.4rem); 
-  font-weight: 600;
-  letter-spacing: var(--track);
-  text-transform: uppercase;
-  color: var(--stone);
-  pointer-events: none;
-
-  #hud .grp{
-    display: flex; 
-    align-items: center; 
-    gap: 1em; 
-  }
-}
-
-
-#hud .bar{
-  width: 14vw; 
-  height:  max(2px, 0.3vh);
-  background: rgba(255,255,255,.14);
-}
-#hud .bar i{
-  display: block;
-  height: 100%;
-  background: var(--testing3);
-  transform-origin: left;
- 
-  transform: scaleX(0);
-}
 
 #pace{
   position: fixed; 
@@ -190,6 +162,7 @@ body{
 #pace[data-scene="tabsoun"] .track i{
    background: var(--ground);
   }
+body[data-auto] #pace{ display: none; }
 
 
 @keyframes drop{
@@ -336,38 +309,6 @@ background: none;
   color: var(--testing3);
 }
 
-#restart-corner{
-  position: fixed;
-  top: 1.5vh;
-  right: 1.5vw;
-  z-index: 100;
-  background: none;
-  border: none;
-  color: var(--bone);
-  font-family: var(--sans);
-  font-size: var(--t-vo);
-  line-height: 1;
-  padding: .3em .5em;
-  cursor: pointer;
-}
-#restart-corner:hover{ color: var(--testing3); }
-#restart-corner::after{
-  content: attr(aria-label);
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: clamp(0.7rem, 0.9vw, 1.4rem);
-  font-weight: 900;
-  letter-spacing: var(--track);
-  text-transform: uppercase;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity .3s;
-  pointer-events: none;
-}
-#restart-corner:hover::after{ opacity: 1; }
-
 .gate-btn{
   background: none;
   border: 1px solid var(--stone);
@@ -396,7 +337,6 @@ model-viewer.fill{
     height: 100%;
     background: transparent;
     --poster-color: transparent;
-    opacity: var(--fade,1);
 }
 
 .subs{
@@ -410,18 +350,34 @@ model-viewer.fill{
   padding: 0 8vw 9vh;
   text-align: center;
 }
+.subs{ display: grid; align-items: end; }
 .sub{
-  display: none;
+  grid-area: 1 / 1;
   max-width: 28em;
   margin: 0 auto;
-  font-family: var(--sans);
-  font-weight: 500; 
-  font-size: var(--t-vo);
-  line-height: 1.5;
-  /* background-color: #175002; */
+  font-family: var(--voice);
+  font-weight: 450;
+  font-size: calc(var(--t-vo) * 1.08);
+  line-height: 1.42;
   color: white;
+  text-wrap: balance;
+  text-shadow: 0 0 1.2em rgba(0,0,0,.55);
+  /* lines fade instead of switching */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
 }
-.sub[data-on]{ display: block; }
+.sub[data-on]{
+  opacity: 1;
+  visibility: inherit; /* never show through a stage that is hidden */
+  transition: opacity .35s ease, visibility 0s;
+}
+/* only the scene you are in speaks: no two lines overlap during a crossfade */
+.scene:not([data-active="true"]) .sub[data-on]{
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
 
 .sub.quote{
   font-style: italic;
@@ -445,7 +401,6 @@ model-viewer.fill{
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: var(--fade, 1);
   overflow: visible;
 }
 
@@ -478,17 +433,23 @@ model-viewer.fill{
 /* svg text scales with the viewBox, so these are user units, not px */
 .fan-label{
   fill: var(--bone);
-  font-family: var(--sans);
-  font-size: 16px;
+  font-family: var(--mono);
+  font-size: 15px;
   font-weight: 400;
-  letter-spacing: .05em;
+  letter-spacing: .08em;
+}
+.fan-label-ar{
+  font-family: var(--arabic);
+  font-size: 19px;
+  letter-spacing: 0;
 }
 .ref-label{
   fill: var(--stone);
-  font-family: var(--sans);
-  font-size: 14px;
-  letter-spacing: .05em;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: .08em;
 }
+.ref-label .fan-label-ar{ font-size: 15px; }
 .ref-line{
   fill: none;
   stroke: var(--stone);
@@ -518,7 +479,7 @@ model-viewer.fill{
  }
 
  .clip video[data-on]{
-  opacity: var(--fade,1);
+  opacity: 1;
  }
 
 .clip .credit{ 
@@ -562,6 +523,9 @@ video[data-on] + .credit{
     transform-style: preserve-3d; 
     /* transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull)* -1500px)) rotateX(calc(var(--tilt)*1deg)) rotateY(calc(var(--turn)*1deg)); */
     transform: translateY(calc(var(--lift)*-1vh)) translateZ(calc(var(--pull) * -1 * var(--depth))) rotateY(calc(var(--turn)*1deg)) rotateX(calc(var(--tilt)*1deg));
+    /* the stack moves every frame in auto mode: keep it on the GPU so it glides
+       instead of being redrawn and snapped to whole pixels (which read as shaking) */
+    will-change: transform;
 
   }
 
@@ -580,6 +544,8 @@ video[data-on] + .credit{
     outline: var(--edge) solid var(--ink);
     /* transform: translateZ(calc(var(--k)*var(--spread)*200px)); */
     transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* kinda like a shadow dropping between eahc layer */
@@ -866,7 +832,7 @@ video[data-on] + .credit{
   bottom: calc(100% + var(--size) * 0.5 / 26);    /* half a metre above the square, as on the canvas */
   left: 50%;
   translate: -50% 0;
-  font-family: var(--sans);
+  font-family: var(--mono);
   font-size: max(12px, calc(var(--size) * 0.022));   /* same as fontPx */
   color: var(--bone);
   white-space: nowrap;
@@ -885,14 +851,44 @@ video[data-on] + .credit{
 }
 
 /* hyrax and pano scene */
+/* the panorama opens out of a crack: --open (set on the stage) goes 0 → 1 with the first line */
 .pano{
-
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: var(--fade, 1);
+  clip-path: inset(
+    calc((6vh + var(--S) / 2 - 32vh) * (1 - var(--open, 0)))
+    calc((50% - 1px) * (1 - var(--open, 0)))
+    calc((100vh - 6vh - var(--S) / 2 - 32vh) * (1 - var(--open, 0)))
+    calc((50% - 1px) * (1 - var(--open, 0))));
+}
+.crack{
+  position: absolute;
+  left: 50%;
+  top: calc(6vh + var(--S) / 2);
+  width: 2px;
+  height: 64vh;
+  translate: -50% -50%;
+  background: #f1e7cf;
+  box-shadow: 0 0 18px 3px rgba(241,231,207,.55);
+  opacity: calc(1 - var(--open, 0) * 1.6);
+  z-index: 1;
+  pointer-events: none;
+}
 
+/* scene 9: the last pixel, then the crack */
+.last-pixel{
+  --size: 1;
+  --crack: 0;
+  position: absolute;
+  left: 50%;
+  top: calc(6vh + var(--S) / 2);
+  translate: -50% -50%;
+  width:  calc(var(--S) * 20 / 26 * var(--size) * (1 - var(--crack)) + 2px * var(--crack));
+  height: calc(var(--S) * 20 / 26 * var(--size) * (1 - var(--crack)) + 64vh * var(--crack));
+  background: color-mix(in srgb, var(--last-pixel), #f1e7cf calc(var(--crack) * 100%));
+  box-shadow: 0 0 calc(18px * var(--crack)) calc(3px * var(--crack)) rgba(241,231,207,.55);
 }
 
 
@@ -1064,14 +1060,15 @@ video[data-on] + .credit{
   line-height: 1;
   color: var(--ink);
   cursor: help;
-  opacity: calc(var(--fade, 1) * .55);
+  opacity: .7;
   transition: opacity .2s, color .2s;
 }
 .credit::before{ content: 'i'; }
 
 .credit:hover,
-.credit:focus-visible{
-  opacity: var(--fade, 1);
+.credit:focus-visible,
+.credit[data-open]{
+  opacity: 1;
   color: var(--ink);
 }
 
@@ -1079,7 +1076,10 @@ video[data-on] + .credit{
   position: absolute;
   top: 160%;
   left: 0;
-  white-space: nowrap;
+  width: max-content;
+  max-width: min(36ch, 70vw);
+  white-space: normal;
+  line-height: 1.45;
   padding: .7em 1em;
   background: rgba(11,12,12,.92);
   border: 3px solid rgba(255,255,255,.14);
@@ -1092,7 +1092,8 @@ video[data-on] + .credit{
   transition: opacity .2s;
 }
 .credit:hover .credit-detail,
-.credit:focus-visible .credit-detail{ opacity: 1; }
+.credit:focus-visible .credit-detail,
+.credit[data-open] .credit-detail{ opacity: 1; }
 
 /* for a mark near the left edge, so the tooltip doesn't run off screen */
 .credit.flip .credit-detail{ right: auto; left: 0; }
@@ -1128,7 +1129,7 @@ video[data-on] + .credit{
   z-index: 150;
   display: grid;
   place-items: center;
-  background: rgba(11,12,12,.75);
+  background: rgba(11,12,12,.9);
   opacity: 0;
   pointer-events: none;
   transition: opacity 1.5s;
@@ -1140,6 +1141,242 @@ video[data-on] + .credit{
 
 
 
+
+.end-inner{
+  display: grid;
+  justify-items: center;
+  gap: 2.4rem;
+  width: min(1100px, 88vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 7vh 0;
+  text-align: center;
+}
+.end-title{
+  font-family: var(--voice);
+  font-style: italic;
+  font-size: clamp(1.8rem, 3.4vw, 4.6rem);
+  line-height: 1.1;
+  color: var(--ink);
+}
+.end-k{
+  font-family: var(--mono);
+  font-size: clamp(.66rem, .8vw, 1.5rem);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--stone);
+}
+.end-sources{
+  list-style: none;
+  columns: 2 32ch;
+  column-gap: 3.5rem;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: clamp(.68rem, .8vw, 1.45rem);
+  line-height: 1.55;
+  color: var(--bone);
+}
+.end-sources li{ break-inside: avoid; margin-bottom: .9em; }
+
+/* ---------- castle slate ---------- */
+.slate{
+  position: absolute;
+  top: 3.4vh;
+  left: 2.2vw;
+  z-index: 2;
+  display: grid;
+  gap: .3em;
+  padding: .35em 0 .35em .95em;
+  border-left: 2px solid var(--ink);
+  font-family: var(--mono);
+  font-size: clamp(.66rem, .8vw, 1.5rem);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--bone);
+  transition: opacity 1.2s;
+}
+.slate [lang="ar"]{
+  font-family: var(--arabic);
+  font-size: 1.55em;
+  letter-spacing: 0;
+  line-height: 1.3;
+  text-transform: none;
+  color: var(--ink);
+  justify-self: start;
+}
+.slate-more{ opacity: 0; transition: opacity 1.2s; color: var(--ink); }
+.slate[data-more] .slate-more{ opacity: 1; }
+.slate[data-gone]{ opacity: 0; }
+
+/* ---------- GovMap's last pixel, and the satellite layer once imagery is withheld ---------- */
+.govmap .gm-flat{
+  position: absolute;
+  inset: 0;
+  background: var(--last-pixel);
+  opacity: 0;
+}
+[data-layer="satellite"] img{ transition: filter 2s ease; }
+.stack[data-withheld] [data-layer="satellite"] img{ filter: grayscale(1) brightness(.22); }
+
+/* ---------- controls: auto scroll, pause, restart ---------- */
+body{ --hud-ink: var(--bone); --hud-halo: rgba(11,12,12,.75); }
+body[data-scene="tabsoun"]{ --hud-ink: #1b1c1a; --hud-halo: rgba(241,236,224,.6); }
+#controls, #chapters{ text-shadow: 0 0 6px var(--hud-halo), 0 0 2px var(--hud-halo); }
+
+#controls{
+  position: fixed;
+  top: 1.4vh;
+  right: 1.2vw;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: .2rem;
+  font-family: var(--mono);
+  font-size: clamp(.7rem, .82vw, 1.55rem);
+  color: var(--hud-ink);
+  transition: color 2s ease 1.5s;
+}
+.ctl{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .55em;
+  min-height: 2.6em;
+  padding: .5em .75em;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ctl:hover{ color: var(--testing3); }
+.ctl:focus-visible{ outline: 1px solid var(--testing3); outline-offset: 2px; }
+.ctl::after{
+  content: attr(data-label);
+  position: absolute;
+  top: 100%;
+  right: .4em;
+  font-size: .82em;
+  letter-spacing: .1em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+}
+.ctl:hover::after{ opacity: 1; }
+#restart-corner{ font-family: var(--sans); font-size: 1.6em; letter-spacing: 0; padding: .1em .45em; }
+#restart-corner::after{ font-family: var(--mono); font-size: .52em; }
+
+.ctl-dot{
+  width: .7em;
+  height: .7em;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  transition: background .3s, border-color .3s;
+}
+#auto[aria-pressed="true"] .ctl-dot{ background: var(--testing3); border-color: var(--testing3); }
+#auto[aria-pressed="false"] .ctl-word{ opacity: .6; }
+
+#pause svg{ width: 1.05em; height: 1.05em; fill: currentColor; display: block; }
+#pause .i-play{ display: none; }
+#pause[aria-pressed="true"] .i-play{ display: inline; }
+#pause[aria-pressed="true"] .i-pause{ display: none; }
+#pause[aria-pressed="true"]{ color: var(--testing3); }
+
+#say{
+  margin-right: .6em;
+  font-size: .86em;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .5s;
+  pointer-events: none;
+}
+#say[data-on]{ opacity: 1; }
+
+/* ---------- chapter strip ---------- */
+#chapters{
+  position: fixed;
+  left: 8vw;
+  right: 8vw;
+  bottom: 3vh;
+  z-index: 100;
+  font-family: var(--mono);
+  font-size: clamp(.6rem, .7vw, 1.35rem);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--hud-ink);
+  transition: color 2s ease 1.5s;
+}
+.ch-labels{
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  margin-bottom: .5em;
+  opacity: .7;
+  pointer-events: none;
+  white-space: pre;
+}
+.ch-track{ display: flex; gap: 1.4vw; }
+.ch-group{ display: flex; gap: 3px; }
+.ch-seg{
+  position: relative;
+  flex: 1 1 0;
+  min-width: 6px;
+  height: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+}
+.ch-seg::before,
+.ch-seg i{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  translate: 0 -50%;
+}
+.ch-seg::before{ background: currentColor; opacity: .2; transition: opacity .2s; }
+.ch-seg i{ background: currentColor; opacity: .55; transform-origin: left; transform: scaleX(0); }
+.ch-seg[data-now] i{ background: var(--testing3); opacity: 1; }
+.ch-seg:hover::before{ opacity: .6; }
+.ch-seg:focus-visible{ outline: 1px solid var(--testing3); outline-offset: 2px; }
+.ch-seg::after{
+  content: attr(data-title);
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  translate: -50% 0;
+  white-space: pre;
+  opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;
+}
+.ch-seg:hover::after{ opacity: 1; }
+
+/* nothing of the interface shows through the gate */
+body:not([data-launched]) #controls,
+body:not([data-launched]) #chapters{ opacity: 0; pointer-events: none; }
+
+/* ---------- phones and portrait screens ---------- */
+@media (orientation: portrait){
+  .tl-vid-wrapper{ width: 46vw; }
+  .pair{ grid-template-columns: minmax(0, 1fr); align-content: start; gap: 3vh; padding: 12vh 10vw 0; }
+  .hyrax{ width: calc(var(--w) * 1.9); }
+  .sh-img-wrapper, .digging-vid-wrapper, .crosshair-vid-wrapper{ width: 92vw; }
+}
+@media (max-width: 640px){
+  #chapters{ left: 6vw; right: 6vw; bottom: 2vh; }
+  .ch-act{ display: none; }
+  .ctl-word{ display: none; }
+  .slate{ font-size: .62rem; }
+}
 
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior: auto; }
